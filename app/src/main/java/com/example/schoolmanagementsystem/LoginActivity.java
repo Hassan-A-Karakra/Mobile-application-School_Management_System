@@ -17,21 +17,7 @@ package com.example.schoolmanagementsystem;
         Button buttonLogin;
 
         SharedPreferences sharedPreferences;
-///     /////////////////// this is the coment for the message hi to adooooooood al shami
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
+        //this commit was done by abd
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
