@@ -18,6 +18,7 @@ package com.example.schoolmanagementsystem;
 
         SharedPreferences sharedPreferences;
         //this commit was done by abd
+        //this commit was done by test2
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
