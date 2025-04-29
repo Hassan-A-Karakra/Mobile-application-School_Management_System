@@ -32,13 +32,6 @@ package com.example.schoolmanagementsystem;
 ///
 ///
 ///
-///
-///
-///
-///
-///
-///
-///
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
