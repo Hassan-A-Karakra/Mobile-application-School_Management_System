@@ -18,13 +18,6 @@ package com.example.schoolmanagementsystem;
 
         SharedPreferences sharedPreferences;
 
- ///
- ///
- ///
- /// hi aboood
-
-
-
          @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
