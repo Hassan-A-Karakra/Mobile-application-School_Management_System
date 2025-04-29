@@ -17,10 +17,15 @@ package com.example.schoolmanagementsystem;
         Button buttonLogin;
 
         SharedPreferences sharedPreferences;
-        //this commit was done by abd
-        //this commit was done by test2
-        //this commit was done by test3
-        @Override
+
+ ///
+ ///
+ ///
+ /// hi aboood
+
+
+
+         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
