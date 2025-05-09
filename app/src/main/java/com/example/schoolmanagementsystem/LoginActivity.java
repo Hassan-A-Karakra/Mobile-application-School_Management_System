@@ -14,7 +14,7 @@ package com.example.schoolmanagementsystem;
 
         EditText editTextUsername, editTextPassword;
         CheckBox checkboxRememberMe;
-        Button buttonLogin;
+        Button buttonLogin, buttonRegister, buttonForgotPassword;
 
         SharedPreferences sharedPreferences;
 
@@ -27,6 +27,8 @@ package com.example.schoolmanagementsystem;
             editTextPassword = findViewById(R.id.editTextPassword);
             checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
             buttonLogin = findViewById(R.id.buttonLogin);
+            buttonRegister = findViewById(R.id.buttonRegister);
+            buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
 
             sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
@@ -63,6 +65,24 @@ package com.example.schoolmanagementsystem;
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+                }
+            });
+
+            // Register button click listener
+            buttonRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: Implement registration functionality
+                    Toast.makeText(LoginActivity.this, "Registration feature coming soon", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // Forgot Password button click listener
+            buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: Implement forgot password functionality
+                    Toast.makeText(LoginActivity.this, "Password recovery feature coming soon", Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -52,4 +52,22 @@
                         android:text="Login"
                         android:layout_below="@id/checkboxRememberMe"
                         android:layout_marginTop="30dp" />
+                        
+                    <!-- Register Button -->
+                    <Button
+                        android:id="@+id/buttonRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Register"
+                        android:layout_below="@id/buttonLogin"
+                        android:layout_marginTop="10dp" />
+                        
+                    <!-- Forgot Password Button -->
+                    <Button
+                        android:id="@+id/buttonForgotPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Forgot Password"
+                        android:layout_below="@id/buttonRegister"
+                        android:layout_marginTop="10dp" />
                 </RelativeLayout>
