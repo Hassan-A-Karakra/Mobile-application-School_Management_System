@@ -4,7 +4,6 @@
                     android:layout_height="match_parent"
                     android:padding="16dp">
 
-                    <!-- Background Image -->
                     <ImageView
                         android:id="@+id/backgroundImage"
                         android:layout_width="match_parent"
@@ -14,7 +13,6 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginBottom="20dp" />
 
-                    <!-- Username Field -->
                     <EditText
                         android:id="@+id/editTextUsername"
                         android:layout_width="match_parent"
@@ -24,7 +22,6 @@
                         android:layout_below="@id/backgroundImage"
                         android:layout_marginTop="20dp" />
 
-                    <!-- Password Field -->
                     <EditText
                         android:id="@+id/editTextPassword"
                         android:layout_width="match_parent"
@@ -35,7 +32,6 @@
                         android:layout_below="@id/editTextUsername"
                         android:layout_marginTop="20dp" />
 
-                    <!-- Remember Me Checkbox -->
                     <CheckBox
                         android:id="@+id/checkboxRememberMe"
                         android:layout_width="wrap_content"
@@ -44,7 +40,6 @@
                         android:layout_below="@id/editTextPassword"
                         android:layout_marginTop="20dp" />
 
-                    <!-- Login Button -->
                     <Button
                         android:id="@+id/buttonLogin"
                         android:layout_width="match_parent"
@@ -53,7 +48,6 @@
                         android:layout_below="@id/checkboxRememberMe"
                         android:layout_marginTop="30dp" />
                         
-                    <!-- Register Button -->
                     <Button
                         android:id="@+id/buttonRegister"
                         android:layout_width="match_parent"
@@ -62,7 +56,6 @@
                         android:layout_below="@id/buttonLogin"
                         android:layout_marginTop="10dp" />
                         
-                    <!-- Forgot Password Button -->
                     <Button
                         android:id="@+id/buttonForgotPassword"
                         android:layout_width="match_parent"

@@ -44,8 +44,6 @@ public class StudentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
-
-        // Initialize views
         scheduleRecyclerView = findViewById(R.id.scheduleRecyclerView);
         gradesTextView = findViewById(R.id.gradesTextView);
         selectFileButton = findViewById(R.id.selectFileButton);
@@ -53,13 +51,8 @@ public class StudentActivity extends AppCompatActivity {
         messageEditText = findViewById(R.id.messageEditText);
         sendMessageButton = findViewById(R.id.sendMessageButton);
 
-        // Setup RecyclerView
         setupScheduleRecyclerView();
-
-        // Setup file upload
         setupFileUpload();
-
-        // Setup messaging
         setupMessaging();
     }
 
@@ -90,7 +83,6 @@ public class StudentActivity extends AppCompatActivity {
         sendMessageButton.setOnClickListener(v -> {
             String message = messageEditText.getText().toString().trim();
             if (!message.isEmpty()) {
-                // TODO: Implement actual message sending logic
                 Toast.makeText(this, "تم إرسال الرسالة بنجاح", Toast.LENGTH_SHORT).show();
                 messageEditText.setText("");
             } else {

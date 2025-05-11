@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Schedule Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +26,6 @@
             android:layout_height="200dp"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Grades Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +56,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Homework Upload Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,7 +93,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Teacher Communication Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

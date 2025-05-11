@@ -32,7 +32,6 @@ package com.example.schoolmanagementsystem;
 
             sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
-            // Retrieve saved login data if "Remember Me" was checked
             if (sharedPreferences.getBoolean("rememberMe", false)) {
                 editTextUsername.setText(sharedPreferences.getString("username", ""));
                 editTextPassword.setText(sharedPreferences.getString("password", ""));
@@ -50,25 +49,22 @@ package com.example.schoolmanagementsystem;
                         return;
                     }
 
-                    // Save login data if "Remember Me" is checked
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     if (checkboxRememberMe.isChecked()) {
                         editor.putString("username", username);
                         editor.putString("password", password);
                         editor.putBoolean("rememberMe", true);
                     } else {
-                        editor.clear(); // Clear saved data if "Remember Me" is unchecked
+                        editor.clear();
                     }
                     editor.apply();
 
-                    // Navigate to MainActivity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
             });
 
-            // Register button click listener
             buttonRegister.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,7 +73,6 @@ package com.example.schoolmanagementsystem;
                 }
             });
 
-            // Forgot Password button click listener
             buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
