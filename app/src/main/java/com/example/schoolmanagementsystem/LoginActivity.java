@@ -59,7 +59,7 @@ package com.example.schoolmanagementsystem;
                     }
                     editor.apply();
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, TeacherActivity.class);
                     startActivity(intent);
                     finish();
                 }

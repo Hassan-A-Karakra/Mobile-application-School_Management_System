@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         buttonRegistrar = findViewById(R.id.buttonRegistrar);
         buttonTeacher = findViewById(R.id.buttonTeacher);
         buttonStudent = findViewById(R.id.buttonStudent);
+
         buttonRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         buttonTeacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TeacherActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

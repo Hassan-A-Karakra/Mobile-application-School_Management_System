@@ -12,27 +12,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SchoolManagementSystem"
         tools:targetApi="31">
-
+        <activity
+            android:name=".CommunicateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReportsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GradeInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentListActivity"
+            android:exported="false" />
         <activity
             android:name=".StudentActivity"
             android:exported="false" />
         <activity
             android:name=".TeacherActivity"
-            android:exported="false" />
+            android:exported="true" /> <!-- تأكد من أن هذا "true" للوصول إلى الشاشة من "LoginActivity" -->
         <activity
             android:name=".RegistrarActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> <!-- إزالة intent-filter من LoginActivity لأنك لا تريد أن تظهر أولًا -->
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true" />
     </application>
 
