@@ -33,8 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="16dp"/>
 
-    <!-- يمكنك إضافة RecyclerView أو ListView لعرض الطلاب هنا -->
-    <!-- مثلا، هذا هو مكان إضافة RecyclerView لعرض قائمة الطلاب -->
+    <!-- RecyclerView لعرض الطلاب -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewStudentList"
         android:layout_width="0dp"
@@ -44,5 +43,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

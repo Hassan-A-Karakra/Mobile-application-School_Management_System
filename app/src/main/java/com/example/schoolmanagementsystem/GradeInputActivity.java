@@ -7,48 +7,41 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class GradeInputActivity extends AppCompatActivity {
 
     private EditText editTextStudentName, editTextGrade;
-    private Button buttonSubmitGrade;
+    private Button buttonSaveGrade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade_input);
 
-        // تهيئة العناصر في واجهة المستخدم
+        // ربط العناصر بالـ XML
         editTextStudentName = findViewById(R.id.editTextStudentName);
         editTextGrade = findViewById(R.id.editTextGrade);
-        buttonSubmitGrade = findViewById(R.id.buttonSubmitGrade);
+        buttonSaveGrade = findViewById(R.id.buttonSaveGrade);
 
-        // التعامل مع الضغط على زر "إرسال الدرجات"
-        buttonSubmitGrade.setOnClickListener(new View.OnClickListener() {
+        // التعامل مع الضغط على زر حفظ الدرجة
+        buttonSaveGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // الحصول على بيانات الطالب والدرجة
-                String studentName = editTextStudentName.getText().toString().trim();
-                String grade = editTextGrade.getText().toString().trim();
+                // الحصول على البيانات المدخلة
+                String studentName = editTextStudentName.getText().toString();
+                String grade = editTextGrade.getText().toString();
 
-                // التحقق من صحة المدخلات
                 if (!studentName.isEmpty() && !grade.isEmpty()) {
-                    // هنا يمكننا إرسال البيانات إلى قاعدة البيانات أو معالجتها
-                    Toast.makeText(GradeInputActivity.this, "Grade for " + studentName + " is " + grade, Toast.LENGTH_SHORT).show();
+                    // حفظ الدرجة (مثال بسيط: عرض رسالة Toast)
+                    Toast.makeText(GradeInputActivity.this, "Grade for " + studentName + ": " + grade, Toast.LENGTH_SHORT).show();
+
+                    // هنا يمكن إضافة الكود لحفظ البيانات في قاعدة البيانات أو API
+                    // على سبيل المثال، يمكنك تخزين البيانات في SQLite أو إرسالها إلى API باستخدام Retrofit
                 } else {
-                    Toast.makeText(GradeInputActivity.this, "Please enter both student name and grade", Toast.LENGTH_SHORT).show();
+                    // إذا كانت الحقول فارغة
+                    Toast.makeText(GradeInputActivity.this, "Please enter both student name and grade.", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-
-        // إعداد الحواف (Insets) للأشرطة العلوية والسفلية
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
         });
     }
 }

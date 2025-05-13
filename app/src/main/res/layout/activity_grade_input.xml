@@ -2,43 +2,73 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GradeInputActivity">
 
-    <!-- حقل نص لإدخال اسم الطالب -->
+    <!-- عنوان النشاط -->
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Grades"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- حقل إدخال الدرجة -->
+    <TextView
+        android:id="@+id/textViewStudentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Student Name:"
+        android:textSize="18sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/editTextStudentName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter student name"
-        android:inputType="text"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:hint="Student Name"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewStudentName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="16dp"/>
 
-    <!-- حقل نص لإدخال الدرجة -->
+    <TextView
+        android:id="@+id/textViewGrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Grade:"
+        android:textSize="18sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/editTextStudentName"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/editTextGrade"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter grade"
-        android:inputType="number"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextStudentName"
+        android:hint="Grade"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewGrade"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:inputType="numberDecimal" />
 
-    <!-- زر إرسال الدرجات -->
+    <!-- زر لحفظ البيانات -->
     <Button
-        android:id="@+id/buttonSubmitGrade"
+        android:id="@+id/buttonSaveGrade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit Grade"
+        android:text="Save Grade"
         android:textSize="18sp"
         android:layout_marginTop="30dp"
         app:layout_constraintTop_toBottomOf="@id/editTextGrade"

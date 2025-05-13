@@ -3,34 +3,57 @@ package com.example.schoolmanagementsystem;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AttendanceActivity extends AppCompatActivity {
+
+    private Button buttonReports;
+    private TextView textViewReport;
+    private List<Student> studentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
-        // إعداد الحواف (Insets) لعرض الأشرطة العلوية والسفلية
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        // ربط العناصر من XML
+        buttonReports = findViewById(R.id.buttonReports);
+        textViewReport = findViewById(R.id.textViewReport);  // تأكد من إضافة TextView في XML لعرض التقرير
 
-        // إضافة التفاعل مع زر الحضور
-        Button buttonMarkAttendance = findViewById(R.id.buttonMarkAttendance);
-        buttonMarkAttendance.setOnClickListener(new View.OnClickListener() {
+        // إعداد بيانات الطلاب (يمكنك جلبها من قاعدة بيانات أو API)
+        studentList = new ArrayList<>();
+        studentList.add(new Student("Student 1", true, "A"));
+        studentList.add(new Student("Student 2", false, "B"));
+        studentList.add(new Student("Student 3", true, "A+"));
+        studentList.add(new Student("Student 4", false, "C"));
+
+        // عندما يتم الضغط على زر التقارير
+        buttonReports.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // الكود الذي سيتم تنفيذه عند الضغط على زر الحضور
-                Toast.makeText(AttendanceActivity.this, "Attendance Marked", Toast.LENGTH_SHORT).show();
+                // إنشاء التقرير
+                StringBuilder report = new StringBuilder();
+                report.append("Student Report:\n\n");
+
+                // بناء التقرير بناءً على بيانات الطلاب
+                for (Student student : studentList) {
+                    report.append("Name: ").append(student.getName())
+                            .append("\nAttendance: ").append(student.isPresent() ? "Present" : "Absent")
+                            .append("\nGrade: ").append(student.getGrade())
+                            .append("\n\n");
+                }
+
+                // عرض التقرير في TextView
+                textViewReport.setText(report.toString());
+
+                // عرض Toast لتأكيد إنشاء التقرير
+                Toast.makeText(AttendanceActivity.this, "Report Generated!", Toast.LENGTH_SHORT).show();
             }
         });
     }

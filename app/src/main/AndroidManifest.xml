@@ -17,10 +17,10 @@
             android:exported="false" />
         <activity
             android:name=".ReportsActivity"
-            android:exported="false" />
+            android:exported="true" /> <!-- تغيير إلى true إذا كنت بحاجة للوصول إليها باستخدام Intent -->
         <activity
             android:name=".AttendanceActivity"
-            android:exported="false" />
+            android:exported="true" /> <!-- تغيير إلى true إذا كنت بحاجة للوصول إليها باستخدام Intent -->
         <activity
             android:name=".GradeInputActivity"
             android:exported="false" />
