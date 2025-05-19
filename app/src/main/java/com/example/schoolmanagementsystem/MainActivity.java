@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         buttonTeacher = findViewById(R.id.buttonTeacher);
         buttonStudent = findViewById(R.id.buttonStudent);
 
+        // Registrar access
         buttonRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Teacher login
         buttonTeacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,14 +37,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // ✅ Fixed: Student now goes to StudentLoginActivity (not StudentActivity)
         buttonStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StudentActivity.class);
+                Intent intent = new Intent(MainActivity.this, StudentLoginActivity.class);
                 startActivity(intent);
             }
         });
-
-
     }
 }

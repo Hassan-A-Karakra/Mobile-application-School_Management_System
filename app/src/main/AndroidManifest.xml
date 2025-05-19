@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.schoolmanagementsystem">
 
     <application
         android:allowBackup="true"
@@ -13,29 +14,27 @@
         android:theme="@style/Theme.SchoolManagementSystem"
         tools:targetApi="31">
         <activity
-            android:name=".CommunicateActivity"
+            android:name=".SubmitAssignmentActivity"
             android:exported="false" />
+        <!-- Student-related activities -->
+        <activity android:name=".ClassScheduleActivity" />
+        <activity android:name=".StudentDashboardActivity" />
+        <activity android:name=".StudentLoginActivity" />
+        <activity android:name=".AssignmentViewActivity" /> <!-- Teacher and common activities -->
+        <activity android:name=".CommunicateActivity" />
         <activity
             android:name=".ReportsActivity"
-            android:exported="true" /> <!-- تغيير إلى true إذا كنت بحاجة للوصول إليها باستخدام Intent -->
+            android:exported="true" />
         <activity
             android:name=".AttendanceActivity"
-            android:exported="true" /> <!-- تغيير إلى true إذا كنت بحاجة للوصول إليها باستخدام Intent -->
-        <activity
-            android:name=".GradeInputActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StudentListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StudentActivity"
-            android:exported="false" />
+            android:exported="true" />
+        <activity android:name=".GradeInputActivity" />
+        <activity android:name=".StudentListActivity" />
+        <activity android:name=".StudentActivity" />
         <activity
             android:name=".TeacherActivity"
-            android:exported="true" /> <!-- تأكد من أن هذا "true" للوصول إلى الشاشة من "LoginActivity" -->
-        <activity
-            android:name=".RegistrarActivity"
-            android:exported="false" />
+            android:exported="true" />
+        <activity android:name=".RegistrarActivity" /> <!-- Entry point -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -44,7 +43,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- إزالة intent-filter من LoginActivity لأنك لا تريد أن تظهر أولًا -->
+        </activity> <!-- Teacher login -->
         <activity
             android:name=".LoginActivity"
             android:exported="true" />

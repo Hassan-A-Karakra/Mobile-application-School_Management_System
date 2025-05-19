@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FAFAFA"
+    android:padding="16dp"
+    android:layout_marginBottom="10dp"
+    android:elevation="2dp">
+
+    <TextView
+        android:id="@+id/assignment_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/assignment_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/assignment_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Due Date"
+        android:textSize="14sp"
+        android:textColor="#666"
+        android:layout_marginTop="4dp" />
+
+    <Button
+        android:id="@+id/button_submit_assignment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#7C4DFF"
+        android:textColor="#FFFFFF"/>
+</LinearLayout>
