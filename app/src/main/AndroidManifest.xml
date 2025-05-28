@@ -17,6 +17,7 @@
             android:name=".SubmitAssignmentActivity"
             android:exported="false" />
         <!-- Student-related activities -->
+        <activity android:name=".AddSubjectActivity"/>
         <activity android:name=".ClassScheduleActivity" />
         <activity android:name=".StudentDashboardActivity" />
         <activity android:name=".StudentLoginActivity" />
