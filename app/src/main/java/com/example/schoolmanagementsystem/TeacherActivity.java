@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TeacherActivity extends AppCompatActivity {
 
-    Button buttonStudentList, buttonGradeInput, buttonAttendance, buttonReports, buttonCommunicate, buttonSchedule, buttonAssignments;
+    Button buttonStudentList, buttonGradeInput, buttonAttendance, buttonReports,
+            buttonCommunicate, buttonSchedule, buttonAssignments, buttonProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class TeacherActivity extends AppCompatActivity {
         buttonCommunicate = findViewById(R.id.buttonCommunicate);
         buttonSchedule = findViewById(R.id.buttonSchedule);  // زر لعرض الجدول
         buttonAssignments = findViewById(R.id.buttonAssignments);  // زر لعرض الواجبات
+        buttonProfile = findViewById(R.id.buttonProfile);  // زر الملف الشخصي
 
         // عند الضغط على زر "قائمة الطلاب"
         buttonStudentList.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +85,15 @@ public class TeacherActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, AssignmentsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // عند الضغط على زر "الملف الشخصي"
+        buttonProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeacherActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
