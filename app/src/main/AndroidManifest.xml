@@ -14,10 +14,15 @@
         android:theme="@style/Theme.SchoolManagementSystem"
         tools:targetApi="31">
         <activity
-            android:name=".SubmitAssignmentActivity"
+            android:name=".AssignmentsActivity"
             android:exported="false" />
-        <!-- Student-related activities -->
-        <activity android:name=".AddSubjectActivity"/>
+        <activity
+            android:name=".ScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SubmitAssignmentActivity"
+            android:exported="false" /> <!-- Student-related activities -->
+        <activity android:name=".AddSubjectActivity" />
         <activity android:name=".ClassScheduleActivity" />
         <activity android:name=".StudentDashboardActivity" />
         <activity android:name=".StudentLoginActivity" />

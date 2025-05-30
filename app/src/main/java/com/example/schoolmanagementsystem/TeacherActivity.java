@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TeacherActivity extends AppCompatActivity {
 
-    Button buttonStudentList, buttonGradeInput, buttonAttendance, buttonReports, buttonCommunicate;
+    Button buttonStudentList, buttonGradeInput, buttonAttendance, buttonReports, buttonCommunicate, buttonSchedule, buttonAssignments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +21,8 @@ public class TeacherActivity extends AppCompatActivity {
         buttonAttendance = findViewById(R.id.buttonAttendance);
         buttonReports = findViewById(R.id.buttonReports);
         buttonCommunicate = findViewById(R.id.buttonCommunicate);
+        buttonSchedule = findViewById(R.id.buttonSchedule);  // زر لعرض الجدول
+        buttonAssignments = findViewById(R.id.buttonAssignments);  // زر لعرض الواجبات
 
         // عند الضغط على زر "قائمة الطلاب"
         buttonStudentList.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +65,24 @@ public class TeacherActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, CommunicateActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // عند الضغط على زر "عرض الجدول"
+        buttonSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeacherActivity.this, ScheduleActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // عند الضغط على زر "إدارة الواجبات"
+        buttonAssignments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeacherActivity.this, AssignmentsActivity.class);
                 startActivity(intent);
             }
         });
