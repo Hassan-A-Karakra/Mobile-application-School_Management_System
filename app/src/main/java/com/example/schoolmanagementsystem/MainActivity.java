@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 //omar commit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+/// Again commit test by hassan ahmad karakra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, StudentLoginActivity.class);
                 startActivity(intent);
             }
+
         });
     }
 }
