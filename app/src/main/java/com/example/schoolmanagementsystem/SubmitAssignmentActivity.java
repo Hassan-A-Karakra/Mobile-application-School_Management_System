@@ -1,50 +1,48 @@
 package com.example.schoolmanagementsystem;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
-import java.util.List;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONObject;
 
 public class SubmitAssignmentActivity extends AppCompatActivity {
 
-    private Spinner spinnerAssignments;
-    private Button buttonSubmit;
+    private EditText assignmentIdInput, studentIdInput, contentInput;
+    private Button submitButton;
+    private static final String SUBMIT_URL = "http://10.0.2.2/student_system/submit_assignment.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_assignment);
 
-        spinnerAssignments = findViewById(R.id.spinnerAssignments);
-        buttonSubmit = findViewById(R.id.buttonSubmitNow);
+        assignmentIdInput = findViewById(R.id.assignmentIdInput);
+        studentIdInput = findViewById(R.id.studentIdInput);
+        contentInput = findViewById(R.id.contentInput);
+        submitButton = findViewById(R.id.submitButton);
 
-        // 📝 Example assignments (in production, you could load this from DB or intent extras)
-        List<String> assignments = new ArrayList<>();
-        assignments.add("رياضيات: صفحة 45 - تمارين 1-5");
-        assignments.add("علوم: بحث عن الطاقة");
-        assignments.add("لغة عربية: تعبير عن الوطن");
+        submitButton.setOnClickListener(v -> {
+            try {
+                JSONObject data = new JSONObject();
+                data.put("assignment_id", Integer.parseInt(assignmentIdInput.getText().toString()));
+                data.put("student_id", Integer.parseInt(studentIdInput.getText().toString()));
+                data.put("content", contentInput.getText().toString());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                assignments
-        );
-        spinnerAssignments.setAdapter(adapter);
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SUBMIT_URL, data,
+                        response -> Toast.makeText(this, "Submitted!", Toast.LENGTH_SHORT).show(),
+                        error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+                );
 
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String selectedAssignment = spinnerAssignments.getSelectedItem().toString();
-                Toast.makeText(SubmitAssignmentActivity.this,
-                        "تم تسليم الواجب: " + selectedAssignment,
-                        Toast.LENGTH_LONG).show();
-
-                // You can add file upload or DB entry here
+                Volley.newRequestQueue(this).add(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show();
             }
         });
-    }}
+    }
+}

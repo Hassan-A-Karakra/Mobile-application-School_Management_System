@@ -1,41 +1,34 @@
 package com.example.schoolmanagementsystem;
 
-
 public class Student {
     private String name;
-    private boolean isPresent;  // حالة الحضور
-    private String grade;  // الدرجة
+    private boolean present;
+    private String grade;
 
-    // Constructor
-    public Student(String name, boolean isPresent, String grade) {
+    private int id;
+    private String email;
+    private int age;
+
+    public Student(String name, boolean present, String grade) {
         this.name = name;
-        this.isPresent = isPresent;
+        this.present = present;
         this.grade = grade;
     }
 
-    // Getter methods
-    public String getName() {
-        return name;
-    }
-
-    public boolean isPresent() {
-        return isPresent;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    // Setter methods (إذا كانت مطلوبة)
-    public void setName(String name) {
+    public Student(int id, String name, String email, int age) {
+        this.id = id;
         this.name = name;
+        this.email = email;
+        this.age = age;
     }
 
-    public void setPresent(boolean present) {
-        isPresent = present;
-    }
+    public String getName() { return name; }
+    public boolean isPresent() { return present; }
+    public String getGrade() { return grade; }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
+    public void setPresent(boolean present) { this.present = present; }
+
+    public int getId() { return id; }
+    public String getEmail() { return email; }
+    public int getAge() { return age; }
 }
