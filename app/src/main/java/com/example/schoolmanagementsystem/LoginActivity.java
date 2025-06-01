@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 JSONObject studentData = response.getJSONObject("student");
 
-                                Intent intent = new Intent(LoginActivity.this, TeacherActivity.class); // Or StudentDashboardActivity
+                                Intent intent = new Intent(LoginActivity.this, TeacherActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {

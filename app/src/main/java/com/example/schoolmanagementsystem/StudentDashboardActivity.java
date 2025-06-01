@@ -6,29 +6,29 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class StudentDashboardActivity extends AppCompatActivity {
+
     private int studentId;
     private String studentName;
     private String studentEmail;
+    private String studentGrade;
+    private int studentAge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_dashboard);
 
-        // Initialize NetworkUtils
-        NetworkUtils.init(this);
-
-        // Get student data from intent
+        // Get student data from login
         studentId = getIntent().getIntExtra("student_id", -1);
         studentName = getIntent().getStringExtra("student_name");
         studentEmail = getIntent().getStringExtra("student_email");
+        studentGrade = getIntent().getStringExtra("student_grade");
+        studentAge = getIntent().getIntExtra("student_age", -1);
 
         if (studentId == -1) {
-            Toast.makeText(this, "Error: Student data not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Missing student data", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -37,6 +37,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         TextView welcomeText = findViewById(R.id.textWelcome);
         welcomeText.setText("Welcome, " + studentName);
 
+        // Buttons
         Button btnSchedule = findViewById(R.id.btnSchedule);
         Button btnGrades = findViewById(R.id.btnGrades);
         Button btnAssignments = findViewById(R.id.btnAssignments);
@@ -44,35 +45,46 @@ public class StudentDashboardActivity extends AppCompatActivity {
         Button btnCommunicate = findViewById(R.id.btnCommunicate);
         Button btnLogout = findViewById(R.id.btnLogout);
 
-        // View class schedule
-        btnSchedule.setOnClickListener(v ->
-                startActivity(new Intent(StudentDashboardActivity.this, ClassScheduleActivity.class)));
+        // Schedule
+        btnSchedule.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ClassScheduleActivity.class);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
+        });
 
-        // View grades
-        btnGrades.setOnClickListener(v ->
-                startActivity(new Intent(StudentDashboardActivity.this, ReportsActivity.class)));
+        // Grades
+        btnGrades.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ReportsActivity.class);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
+        });
 
-        // View assignments
+        // Assignments
         btnAssignments.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentDashboardActivity.this, AssignmentViewActivity.class);
+            Intent intent = new Intent(this, AssignmentsActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
 
-        // Submit assignments
+        // Submit Assignments
         btnSubmit.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentDashboardActivity.this, SubmitAssignmentActivity.class);
+            Intent intent = new Intent(this, SubmitAssignmentActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
 
-        // Message teacher
-        btnCommunicate.setOnClickListener(v ->
-                startActivity(new Intent(StudentDashboardActivity.this, CommunicateActivity.class)));
+        // Communicate
+        btnCommunicate.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CommunicateActivity.class);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
+        });
 
         // Logout
         btnLogout.setOnClickListener(v -> {
-            // Clear any stored data if needed
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
         });
     }
