@@ -1,84 +1,92 @@
 package com.example.schoolmanagementsystem;
 
-    import android.content.Intent;
-    import android.content.SharedPreferences;
-    import android.os.Bundle;
-    import android.view.View;
-    import android.widget.Button;
-    import android.widget.CheckBox;
-    import android.widget.EditText;
-    import android.widget.Toast;
-    import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
-    public class LoginActivity extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        EditText editTextUsername, editTextPassword;
-        CheckBox checkboxRememberMe;
-        Button buttonLogin, buttonRegister, buttonForgotPassword;
+public class LoginActivity extends AppCompatActivity {
 
-        SharedPreferences sharedPreferences;
+    EditText editTextUsername, editTextPassword;
+    CheckBox checkboxRememberMe;
+    Button buttonLogin, buttonRegister, buttonForgotPassword;
 
-         @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_login);
+    SharedPreferences sharedPreferences;
 
-            editTextUsername = findViewById(R.id.editTextUsername);
-            editTextPassword = findViewById(R.id.editTextPassword);
-            checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
-            buttonLogin = findViewById(R.id.buttonLogin);
-            buttonRegister = findViewById(R.id.buttonRegister);
-            buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-            sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        editTextUsername = findViewById(R.id.editTextUsername);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
+        buttonLogin = findViewById(R.id.buttonLogin);
+        buttonRegister = findViewById(R.id.buttonRegister);
+        buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
 
-            if (sharedPreferences.getBoolean("rememberMe", false)) {
-                editTextUsername.setText(sharedPreferences.getString("username", ""));
-                editTextPassword.setText(sharedPreferences.getString("password", ""));
-                checkboxRememberMe.setChecked(true);
-            }
+        sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
-            buttonLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String username = editTextUsername.getText().toString();
-                    String password = editTextPassword.getText().toString();
-
-                    if (username.isEmpty() || password.isEmpty()) {
-                        Toast.makeText(LoginActivity.this, "Please enter username and password", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    if (checkboxRememberMe.isChecked()) {
-                        editor.putString("username", username);
-                        editor.putString("password", password);
-                        editor.putBoolean("rememberMe", true);
-                    } else {
-                        editor.clear();
-                    }
-                    editor.apply();
-
-                    Intent intent = new Intent(LoginActivity.this, TeacherActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-
-            buttonRegister.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: Implement registration functionality
-                    Toast.makeText(LoginActivity.this, "Registration feature coming soon", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: Implement forgot password functionality
-                    Toast.makeText(LoginActivity.this, "Password recovery feature coming soon", Toast.LENGTH_SHORT).show();
-                }
-            });
+        if (sharedPreferences.getBoolean("rememberMe", false)) {
+            editTextUsername.setText(sharedPreferences.getString("username", ""));
+            editTextPassword.setText(sharedPreferences.getString("password", ""));
+            checkboxRememberMe.setChecked(true);
         }
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = editTextUsername.getText().toString().trim().toLowerCase();
+                String password = editTextPassword.getText().toString().trim();
+
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                NetworkUtils.loginStudent(LoginActivity.this, email, password, new NetworkUtils.NetworkCallback() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        try {
+                            if ("success".equals(response.optString("status"))) {
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                if (checkboxRememberMe.isChecked()) {
+                                    editor.putString("username", email);
+                                    editor.putString("password", password);
+                                    editor.putBoolean("rememberMe", true);
+                                } else {
+                                    editor.clear();
+                                }
+                                editor.apply();
+
+                                JSONObject studentData = response.getJSONObject("student");
+
+                                Intent intent = new Intent(LoginActivity.this, TeacherActivity.class); // Or StudentDashboardActivity
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                String message = response.optString("message", "Login failed");
+                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(LoginActivity.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(LoginActivity.this, "Login failed: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
+}

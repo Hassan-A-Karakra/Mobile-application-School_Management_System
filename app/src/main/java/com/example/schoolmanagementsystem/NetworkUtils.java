@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -20,7 +19,7 @@ public class NetworkUtils {
 
     public static void init(Context context) {
         if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(context.getApplicationContext());
         }
     }
 
@@ -46,13 +45,15 @@ public class NetworkUtils {
                         }
                     } catch (JSONException e) {
                         callback.onError("Invalid response format: " + e.getMessage());
+                        Log.e(TAG, "JSON parse error: " + e.getMessage(), e);
                     }
                 },
                 error -> {
                     String errorMessage = "Network error occurred";
-                    if (error.networkResponse != null) {
-                        errorMessage += " (HTTP " + error.networkResponse.statusCode + ")";
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        errorMessage = new String(error.networkResponse.data);
                     }
+                    Log.e(TAG, "Volley error: " + errorMessage, error);
                     callback.onError(errorMessage);
                 });
 
@@ -69,7 +70,7 @@ public class NetworkUtils {
 
             makeRequest(context, "register_student.php", Request.Method.POST, params, callback);
         } catch (JSONException e) {
-            callback.onError("Error creating JSON request");
+            callback.onError("Error creating JSON request: " + e.getMessage());
         }
     }
 
@@ -81,7 +82,7 @@ public class NetworkUtils {
 
             makeRequest(context, "login_student.php", Request.Method.POST, params, callback);
         } catch (JSONException e) {
-            callback.onError("Error creating JSON request");
+            callback.onError("Error creating JSON request: " + e.getMessage());
         }
     }
 
@@ -102,7 +103,7 @@ public class NetworkUtils {
 
             makeRequest(context, "submit_assignment.php", Request.Method.POST, params, callback);
         } catch (JSONException e) {
-            callback.onError("Error creating JSON request");
+            callback.onError("Error creating JSON request: " + e.getMessage());
         }
     }
 }
