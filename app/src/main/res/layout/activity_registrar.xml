@@ -80,6 +80,15 @@
             android:hint="Grade (for students)"
             android:layout_marginBottom="12dp"
             android:visibility="gone" />
+        <EditText
+            android:id="@+id/editTextAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Age (for students)"
+            android:inputType="number"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"/>
+
 
         <!-- Spinner للمعلمين فقط -->
         <Spinner
