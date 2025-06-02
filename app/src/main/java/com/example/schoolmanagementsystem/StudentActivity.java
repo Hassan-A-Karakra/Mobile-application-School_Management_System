@@ -65,9 +65,9 @@ public class StudentActivity extends AppCompatActivity {
 
     private List<ScheduleItem> getDummyScheduleData() {
         List<ScheduleItem> items = new ArrayList<>();
-        items.add(new ScheduleItem("الرياضيات", "9:00 - 10:30", "أ. أحمد محمد"));
-        items.add(new ScheduleItem("العلوم", "10:45 - 12:15", "أ. سارة علي"));
-        items.add(new ScheduleItem("اللغة العربية", "12:30 - 2:00", "أ. محمد خالد"));
+        items.add(new ScheduleItem("Mathematics", "9:00 - 10:30", "Mr. Ahmed Mohamed"));
+        items.add(new ScheduleItem("Science", "10:45 - 12:15", "Ms. Sara Ali"));
+        items.add(new ScheduleItem("Arabic", "12:30 - 2:00", "Mr. Mohamed Khaled"));
         return items;
     }
 
@@ -83,10 +83,10 @@ public class StudentActivity extends AppCompatActivity {
         sendMessageButton.setOnClickListener(v -> {
             String message = messageEditText.getText().toString().trim();
             if (!message.isEmpty()) {
-                Toast.makeText(this, "تم إرسال الرسالة بنجاح", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Message sent successfully", Toast.LENGTH_SHORT).show();
                 messageEditText.setText("");
             } else {
-                Toast.makeText(this, "الرجاء كتابة رسالة", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please write a message", Toast.LENGTH_SHORT).show();
             }
         });
     }

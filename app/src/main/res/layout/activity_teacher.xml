@@ -9,8 +9,7 @@
     android:background="@drawable/teacher_background"
     tools:context=".TeacherActivity">
 
-    <!-- عنوان النشاط -->
-    <TextView
+     <TextView
         android:id="@+id/textViewWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,8 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- زر قائمة الطلاب -->
-    <Button
+     <Button
         android:id="@+id/buttonStudentList"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -39,8 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر إدخال الدرجات -->
-    <Button
+     <Button
         android:id="@+id/buttonGradeInput"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -55,8 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر الحضور -->
-    <Button
+     <Button
         android:id="@+id/buttonAttendance"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -71,8 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر التقارير -->
-    <Button
+     <Button
         android:id="@+id/buttonReports"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -87,8 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر التواصل مع الطلاب -->
-    <Button
+     <Button
         android:id="@+id/buttonCommunicate"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -103,8 +97,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر عرض الجدول -->
-    <Button
+     <Button
         android:id="@+id/buttonSchedule"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -119,8 +112,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر إدارة الواجبات -->
-    <Button
+     <Button
         android:id="@+id/buttonAssignments"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -135,8 +127,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر الملف الشخصي -->
-    <Button
+     <Button
         android:id="@+id/buttonProfile"
         android:layout_width="0dp"
         android:layout_height="56dp"

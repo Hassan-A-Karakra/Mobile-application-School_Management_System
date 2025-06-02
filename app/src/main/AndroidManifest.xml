@@ -31,12 +31,12 @@
             android:exported="false" />
         <activity
             android:name=".SubmitAssignmentActivity"
-            android:exported="false" /> <!-- Student-related activities -->
+            android:exported="false" />
         <activity android:name=".AddSubjectActivity" />
         <activity android:name=".ClassScheduleActivity" />
         <activity android:name=".StudentDashboardActivity" />
         <activity android:name=".StudentLoginActivity" />
-        <activity android:name=".AssignmentViewActivity" /> <!-- Teacher and common activities -->
+        <activity android:name=".AssignmentViewActivity" />
         <activity android:name=".CommunicateActivity" />
         <activity
             android:name=".ReportsActivity"
@@ -50,7 +50,7 @@
         <activity
             android:name=".TeacherActivity"
             android:exported="true" />
-        <activity android:name=".RegistrarActivity" /> <!-- Entry point -->
+        <activity android:name=".RegistrarActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -59,7 +59,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Teacher login -->
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true" />

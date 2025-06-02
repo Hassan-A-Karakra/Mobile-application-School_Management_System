@@ -29,8 +29,7 @@ public class RegistrarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
 
-        // ربط العناصر
-        radioStudent = findViewById(R.id.radioStudent);
+         radioStudent = findViewById(R.id.radioStudent);
         radioTeacher = findViewById(R.id.radioTeacher);
         nameField = findViewById(R.id.editTextName);
         emailField = findViewById(R.id.editTextEmail);
@@ -40,29 +39,25 @@ public class RegistrarActivity extends AppCompatActivity {
         spinnerSubjects = findViewById(R.id.spinnerSubjects);
         registerBtn = findViewById(R.id.buttonRegister);
 
-        // إعداد Spinner المواد
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
+         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSubjects.setAdapter(adapter);
 
-        // عند اختيار الطالب
-        radioStudent.setOnClickListener(v -> {
+         radioStudent.setOnClickListener(v -> {
             userType = "student";
             gradeField.setVisibility(View.VISIBLE);
             ageField.setVisibility(View.VISIBLE);
             spinnerSubjects.setVisibility(View.GONE);
         });
 
-        // عند اختيار المعلم
-        radioTeacher.setOnClickListener(v -> {
+         radioTeacher.setOnClickListener(v -> {
             userType = "teacher";
             gradeField.setVisibility(View.GONE);
             ageField.setVisibility(View.GONE);
             spinnerSubjects.setVisibility(View.VISIBLE);
         });
 
-        // عند الضغط على تسجيل
-        registerBtn.setOnClickListener(v -> {
+         registerBtn.setOnClickListener(v -> {
             String name = nameField.getText().toString().trim();
             String email = emailField.getText().toString().trim();
             String pass = passwordField.getText().toString().trim();

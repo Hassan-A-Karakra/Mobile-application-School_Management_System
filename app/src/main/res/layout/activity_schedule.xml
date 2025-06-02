@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ScheduleActivity">
 
-    <!-- عرض الجدول -->
-    <TextView
+     <TextView
         android:id="@+id/scheduleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,8 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- تفاصيل الجدول -->
-    <TextView
+     <TextView
         android:id="@+id/scheduleDetailsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

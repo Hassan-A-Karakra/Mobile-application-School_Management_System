@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         buttonChangePhoto.setOnClickListener(v -> openImageChooser());
 
         buttonSave.setOnClickListener(v -> {
-            // هنا تحفظ البيانات في SharedPreferences أو ترسلها للسيرفر حسب تصميمك
+
             Toast.makeText(ProfileActivity.this, "Profile saved!", Toast.LENGTH_SHORT).show();
         });
     }

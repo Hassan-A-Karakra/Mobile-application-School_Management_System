@@ -24,8 +24,7 @@ public class GroupMessageActivity extends AppCompatActivity {
         editMessage = findViewById(R.id.editMessage);
         buttonSend = findViewById(R.id.buttonSend);
 
-        // مثال لفصول - استبدلها بالبيانات الحقيقية من قاعدة البيانات
-        String[] classes = {"Class 1", "Class 2", "Class 3"};
+         String[] classes = {"Class 1", "Class 2", "Class 3"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, classes);
         spinnerClasses.setAdapter(adapter);
 
@@ -38,8 +37,7 @@ public class GroupMessageActivity extends AppCompatActivity {
                 return;
             }
 
-            // هنا تضيف كود إرسال الرسالة لكل طلاب الصف المحدد (مثلاً عبر API)
-            Toast.makeText(GroupMessageActivity.this, "Message sent to " + selectedClass, Toast.LENGTH_SHORT).show();
+             Toast.makeText(GroupMessageActivity.this, "Message sent to " + selectedClass, Toast.LENGTH_SHORT).show();
             editMessage.setText("");
         });
     }

@@ -23,9 +23,9 @@ public class AssignmentViewActivity extends AppCompatActivity {
 
         // Temporary sample data
         assignmentList = new ArrayList<>();
-        assignmentList.add(new Assignment("رياضيات", "صفحة 45، تمارين 1-5", "2025-05-25"));
-        assignmentList.add(new Assignment("علوم", "بحث عن الطاقة", "2025-05-27"));
-        assignmentList.add(new Assignment("لغة عربية", "كتابة تعبير عن الوطن", "2025-05-30"));
+        assignmentList.add(new Assignment("Math", "Page 45, exercises 1-5", "2025-05-25"));
+        assignmentList.add(new Assignment("Science", "Research about energy", "2025-05-27"));
+        assignmentList.add(new Assignment("Arabic", "Write an essay about the homeland", "2025-05-30"));
 
         adapter = new AssignmentAdapter(this, assignmentList);
         recyclerView.setAdapter(adapter);

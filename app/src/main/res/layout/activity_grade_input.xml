@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".GradeInputActivity">
 
-    <!-- عنوان النشاط -->
-    <TextView
+     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,8 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- حقل إدخال الدرجة -->
-    <TextView
+     <TextView
         android:id="@+id/textViewStudentName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,8 +61,7 @@
         android:padding="16dp"
         android:inputType="numberDecimal" />
 
-    <!-- زر لحفظ البيانات -->
-    <Button
+     <Button
         android:id="@+id/buttonSaveGrade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

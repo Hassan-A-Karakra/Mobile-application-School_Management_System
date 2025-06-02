@@ -10,8 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- العنوان -->
-        <TextView
+         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create an Account"
@@ -20,8 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp" />
 
-        <!-- اختيار النوع -->
-        <RadioGroup
+         <RadioGroup
             android:id="@+id/radioGroupType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,8 +40,7 @@
                 android:layout_marginStart="24dp" />
         </RadioGroup>
 
-        <!-- الاسم -->
-        <EditText
+         <EditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,8 +48,7 @@
             android:hint="Full Name"
             android:layout_marginBottom="12dp" />
 
-        <!-- الإيميل -->
-        <EditText
+         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,8 +57,7 @@
             android:inputType="textEmailAddress"
             android:layout_marginBottom="12dp" />
 
-        <!-- كلمة المرور -->
-        <EditText
+         <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -72,8 +67,7 @@
             android:inputType="textPassword"
             android:layout_marginBottom="12dp" />
 
-        <!-- للطلاب فقط -->
-        <EditText
+         <EditText
             android:id="@+id/editTextGrade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,16 +84,14 @@
             android:layout_marginBottom="12dp"/>
 
 
-        <!-- Spinner للمعلمين فقط -->
-        <Spinner
+         <Spinner
             android:id="@+id/spinnerSubjects"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_marginBottom="12dp" />
 
-        <!-- زر التسجيل -->
-        <Button
+         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

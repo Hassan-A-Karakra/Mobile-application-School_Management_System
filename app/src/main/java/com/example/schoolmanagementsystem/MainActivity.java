@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ✅ Fixed: Student now goes to StudentLoginActivity (not StudentActivity)
-        buttonStudent.setOnClickListener(new View.OnClickListener() {
+         buttonStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StudentLoginActivity.class);

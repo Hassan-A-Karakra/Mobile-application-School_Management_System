@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".CommunicateActivity">
 
-    <!-- حقل إدخال الرسالة -->
-    <EditText
+     <EditText
         android:id="@+id/editTextMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,8 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- زر إرسال الرسالة -->
-    <Button
+     <Button
         android:id="@+id/buttonSendMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

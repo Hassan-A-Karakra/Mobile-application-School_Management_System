@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AssignmentsActivity">
 
-    <!-- حقل إدخال الواجب -->
-    <EditText
+     <EditText
         android:id="@+id/assignmentEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -19,8 +18,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
 
-    <!-- زر إرسال الواجب -->
-    <Button
+     <Button
         android:id="@+id/submitAssignmentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

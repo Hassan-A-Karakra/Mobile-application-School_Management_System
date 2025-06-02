@@ -16,18 +16,16 @@ public class TeacherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
 
-        // ربط الأزرار الخاصة بكل خيار
-        buttonStudentList = findViewById(R.id.buttonStudentList);
+         buttonStudentList = findViewById(R.id.buttonStudentList);
         buttonGradeInput = findViewById(R.id.buttonGradeInput);
         buttonAttendance = findViewById(R.id.buttonAttendance);
         buttonReports = findViewById(R.id.buttonReports);
         buttonCommunicate = findViewById(R.id.buttonCommunicate);
-        buttonSchedule = findViewById(R.id.buttonSchedule);  // زر لعرض الجدول
-        buttonAssignments = findViewById(R.id.buttonAssignments);  // زر لعرض الواجبات
-        buttonProfile = findViewById(R.id.buttonProfile);  // زر الملف الشخصي
+        buttonSchedule = findViewById(R.id.buttonSchedule);
+        buttonAssignments = findViewById(R.id.buttonAssignments);
+        buttonProfile = findViewById(R.id.buttonProfile);
 
-        // عند الضغط على زر "قائمة الطلاب"
-        buttonStudentList.setOnClickListener(new View.OnClickListener() {
+         buttonStudentList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, StudentListActivity.class);
@@ -35,8 +33,7 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        // عند الضغط على زر "إدخال الدرجات"
-        buttonGradeInput.setOnClickListener(new View.OnClickListener() {
+         buttonGradeInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, GradeInputActivity.class);
@@ -44,8 +41,7 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        // عند الضغط على زر "إدارة الحضور"
-        buttonAttendance.setOnClickListener(new View.OnClickListener() {
+         buttonAttendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, AttendanceActivity.class);
@@ -53,8 +49,7 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        // عند الضغط على زر "التقارير"
-        buttonReports.setOnClickListener(new View.OnClickListener() {
+         buttonReports.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, ReportsActivity.class);
@@ -62,8 +57,7 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        // عند الضغط على زر "التواصل مع الطلاب"
-        buttonCommunicate.setOnClickListener(new View.OnClickListener() {
+         buttonCommunicate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, CommunicateActivity.class);
@@ -71,8 +65,7 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        // عند الضغط على زر "عرض الجدول"
-        buttonSchedule.setOnClickListener(new View.OnClickListener() {
+         buttonSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, ScheduleActivity.class);
@@ -80,8 +73,7 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        // عند الضغط على زر "إدارة الواجبات"
-        buttonAssignments.setOnClickListener(new View.OnClickListener() {
+         buttonAssignments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, AssignmentsActivity.class);
@@ -89,8 +81,7 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        // عند الضغط على زر "الملف الشخصي"
-        buttonProfile.setOnClickListener(new View.OnClickListener() {
+         buttonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TeacherActivity.this, ProfileActivity.class);
