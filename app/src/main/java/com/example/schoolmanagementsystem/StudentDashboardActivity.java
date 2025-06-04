@@ -82,7 +82,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
 
         // Logout
         btnLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, TeacherLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

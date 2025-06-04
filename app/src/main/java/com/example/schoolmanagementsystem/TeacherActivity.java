@@ -16,7 +16,7 @@ public class TeacherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
 
-         buttonStudentList = findViewById(R.id.buttonStudentList);
+        buttonStudentList = findViewById(R.id.buttonStudentList);
         buttonGradeInput = findViewById(R.id.buttonGradeInput);
         buttonAttendance = findViewById(R.id.buttonAttendance);
         buttonReports = findViewById(R.id.buttonReports);
