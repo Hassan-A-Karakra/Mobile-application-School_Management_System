@@ -12,8 +12,9 @@ import org.json.JSONObject;
 
 public class SubmitAssignmentActivity extends AppCompatActivity {
 
-    private EditText assignmentIdInput, studentIdInput, contentInput;
+    private EditText contentInput;
     private Button submitButton;
+    private int assignmentId, studentId;
     private static final String SUBMIT_URL = "http://10.0.2.2/student_system/submit_assignment.php";
 
     @Override
@@ -21,28 +22,40 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_assignment);
 
-        assignmentIdInput = findViewById(R.id.assignmentIdInput);
-        studentIdInput = findViewById(R.id.studentIdInput);
         contentInput = findViewById(R.id.contentInput);
         submitButton = findViewById(R.id.submitButton);
 
-        submitButton.setOnClickListener(v -> {
-            try {
-                JSONObject data = new JSONObject();
-                data.put("assignment_id", Integer.parseInt(assignmentIdInput.getText().toString()));
-                data.put("student_id", Integer.parseInt(studentIdInput.getText().toString()));
-                data.put("content", contentInput.getText().toString());
+        assignmentId = getIntent().getIntExtra("assignment_id", -1);
+        studentId = getIntent().getIntExtra("student_id", -1);
 
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SUBMIT_URL, data,
-                        response -> Toast.makeText(this, "Submitted!", Toast.LENGTH_SHORT).show(),
-                        error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+        if (assignmentId == -1 || studentId == -1) {
+            Toast.makeText(this, "Missing assignment or student info", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-                Volley.newRequestQueue(this).add(request);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show();
-            }
-        });
+        submitButton.setOnClickListener(v -> submitAssignment());
+    }
+
+    private void submitAssignment() {
+        try {
+            JSONObject data = new JSONObject();
+            data.put("assignment_id", assignmentId);
+            data.put("student_id", studentId);
+            data.put("content", contentInput.getText().toString());
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SUBMIT_URL, data,
+                    response -> {
+                        Toast.makeText(this, "Submitted!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    },
+                    error -> Toast.makeText(this, "Submission error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+            );
+
+            Volley.newRequestQueue(this).add(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error submitting assignment", Toast.LENGTH_SHORT).show();
+        }
     }
 }

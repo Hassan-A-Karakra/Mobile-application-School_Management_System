@@ -6,16 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SubmitAssignmentActivity"
-    android:padding="16dp"
-    android:background="#F8F6FC">
+    android:padding="24dp"
+    android:background="#F4F4F4">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Submit Assignment"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
 
     <!-- Spinner to select assignment -->
     <Spinner
         android:id="@+id/assignmentSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintTop_toBottomOf="@id/textTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -24,24 +38,28 @@
         android:id="@+id/contentInput"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:hint="Enter your answer..."
+        android:hint="Type your answer here..."
         android:gravity="start|top"
-        android:background="@android:drawable/editbox_background"
+        android:background="@drawable/edittext_background"
         android:inputType="textMultiLine"
-        android:layout_marginTop="20dp"
         android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/assignmentSpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
     <!-- Submit Button -->
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Submit Assignment"
+        android:text="Submit"
         android:textAllCaps="false"
+        android:backgroundTint="#3F51B5"
+        android:textColor="#FFF"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="12dp"
+        app:cornerRadius="12dp"
         app:layout_constraintTop_toBottomOf="@id/contentInput"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

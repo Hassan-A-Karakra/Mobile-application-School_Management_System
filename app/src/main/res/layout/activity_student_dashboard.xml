@@ -20,13 +20,14 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
+            android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Student Dashboard"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#333333"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="24dp" />
 
         <TextView
             android:id="@+id/textWelcome"
@@ -36,9 +37,9 @@
             android:textSize="18sp"
             android:textStyle="italic"
             android:textColor="#666666"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
-        <!-- Action Buttons -->
+        <!-- Buttons -->
         <Button
             android:id="@+id/btnSchedule"
             style="@style/Widget.MaterialComponents.Button"
@@ -47,7 +48,7 @@
             android:text="View Class Schedule"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7C4DFF"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/btnGrades"
@@ -57,7 +58,7 @@
             android:text="View Grades"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7C4DFF"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/btnAssignments"
@@ -67,7 +68,7 @@
             android:text="View Assignments"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7C4DFF"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/btnSubmit"
@@ -77,7 +78,7 @@
             android:text="Submit Assignments"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7C4DFF"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/btnCommunicate"
@@ -87,7 +88,7 @@
             android:text="Message Teacher"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7C4DFF"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/btnLogout"
@@ -96,6 +97,6 @@
             android:layout_height="wrap_content"
             android:text="Logout"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#7C4DFF"/>
+            android:backgroundTint="#7C4DFF" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

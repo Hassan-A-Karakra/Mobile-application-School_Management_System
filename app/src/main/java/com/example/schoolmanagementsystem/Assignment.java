@@ -1,25 +1,20 @@
 package com.example.schoolmanagementsystem;
 
 public class Assignment {
-    private String subject;
+    private int id;
+    private String title;
     private String description;
     private String dueDate;
 
-    public Assignment(String subject, String description, String dueDate) {
-        this.subject = subject;
+    public Assignment(int id, String title, String description, String dueDate) {
+        this.id = id;
+        this.title = title;
         this.description = description;
         this.dueDate = dueDate;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getDueDate() { return dueDate; }
 }

@@ -26,9 +26,9 @@ public class StudentLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_login);
 
-        emailInput = findViewById(R.id.editTextEmail);
-        passwordInput = findViewById(R.id.editTextPassword);
-        loginButton = findViewById(R.id.buttonLogin);
+        emailInput = findViewById(R.id.emailInput);
+        passwordInput = findViewById(R.id.passwordInput);
+        loginButton = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(v -> {
             String email = emailInput.getText().toString().trim().toLowerCase();

@@ -1,45 +1,58 @@
 package com.example.schoolmanagementsystem;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.ViewHolder> {
 
-    private List<Assignment> assignments;
-    private Context context;
-
-    public AssignmentAdapter(Context context, List<Assignment> assignments) {
-        this.context = context;
-        this.assignments = assignments;
+    public interface OnAssignmentClickListener {
+        void onAssignmentClick(Assignment assignment);
     }
 
+    private Context context;
+    private List<Assignment> assignments;
+    private OnAssignmentClickListener listener;
+
+    public AssignmentAdapter(Context context, List<Assignment> assignments, OnAssignmentClickListener listener) {
+        this.context = context;
+        this.assignments = assignments;
+        this.listener = listener;
+    }
+
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_assignment, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Assignment assignment = assignments.get(position);
-        holder.subject.setText(assignment.getSubject());
-        holder.description.setText(assignment.getDescription());
-        holder.dueDate.setText("Due: " + assignment.getDueDate());
-        holder.submitButton.setOnClickListener(v -> {
-            Intent intent = new Intent(context, SubmitAssignmentActivity.class);
-            intent.putExtra("subject", assignment.getSubject());
-            intent.putExtra("description", assignment.getDescription());
-            intent.putExtra("dueDate", assignment.getDueDate());
-            context.startActivity(intent);
+        holder.title.setText(assignment.getTitle());
+        holder.desc.setText(assignment.getDescription());
+        holder.due.setText("Due: " + assignment.getDueDate());
+
+        // Clicking the whole item view also works
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onAssignmentClick(assignment);
+            }
         });
 
+        // Clicking the "Submit" button
+        holder.submitButton.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onAssignmentClick(assignment);
+            }
+        });
     }
 
     @Override
@@ -48,16 +61,15 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subject, description, dueDate;
+        TextView title, desc, due;
         Button submitButton;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            subject = itemView.findViewById(R.id.assignment_subject);
-            description = itemView.findViewById(R.id.assignment_description);
-            dueDate = itemView.findViewById(R.id.assignment_due_date);
+            title = itemView.findViewById(R.id.assignmentTitle);
+            desc = itemView.findViewById(R.id.assignmentDescription);
+            due = itemView.findViewById(R.id.assignmentDueDate);
             submitButton = itemView.findViewById(R.id.button_submit_assignment);
         }
     }
-
 }
