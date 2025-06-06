@@ -1,7 +1,8 @@
 package com.example.schoolmanagementsystem;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,45 +25,59 @@ public class ReportsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
 
-        studentId = getIntent().getIntExtra("student_id", -1);
         gradeContainer = findViewById(R.id.gradeContainer);
         buttonGenerateReport = findViewById(R.id.buttonGenerateReport);
 
+        // ✅ Use consistent shared preferences
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        studentId = prefs.getInt("student_id", -1);
+
         if (studentId == -1) {
-            Toast.makeText(this, "Student ID missing", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Student not logged in", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        buttonGenerateReport.setOnClickListener(v -> {
-            loadGrades();
-        });
+        buttonGenerateReport.setOnClickListener(v -> loadGrades());
     }
 
     private void loadGrades() {
-        String url = "http://10.0.2.2/student_system/get_grades.php?student_id=" + studentId;
+        String url = "http://10.0.2.2/student_system/get_grades.php";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("student_id", studentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
                 response -> {
-                    if ("success".equals(response.optString("status"))) {
-                        try {
-                            gradeContainer.removeAllViews();  // Clear old content
+                    try {
+                        if ("success".equals(response.optString("status"))) {
                             JSONArray grades = response.getJSONArray("grades");
+                            gradeContainer.removeAllViews();
 
                             for (int i = 0; i < grades.length(); i++) {
-                                JSONObject g = grades.getJSONObject(i);
-                                String title = g.getString("title");
-                                String grade = g.getString("grade");
+                                JSONObject item = grades.getJSONObject(i);
+                                String title = item.getString("title");
+                                String grade = item.getString("grade");
 
-                                TextView item = new TextView(this);
-                                item.setText("📘 " + title + ": " + grade);
-                                item.setTextSize(16);
-                                item.setPadding(12, 12, 12, 12);
-                                gradeContainer.addView(item);
+                                TextView tv = new TextView(this);
+                                tv.setLayoutParams(new LinearLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tv.setText(title + ": " + grade);
+                                tv.setTextSize(16);
+                                tv.setPadding(24, 16, 24, 16);
+
+                                gradeContainer.addView(tv);
                             }
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Error reading grades", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "No grades found.", Toast.LENGTH_SHORT).show();
                         }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error parsing grades", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> Toast.makeText(this, "Failed to load grades", Toast.LENGTH_SHORT).show()

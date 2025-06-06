@@ -2,6 +2,7 @@ package com.example.schoolmanagementsystem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +20,6 @@ import java.util.List;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-
 public class StudentActivity extends AppCompatActivity {
     private RecyclerView scheduleRecyclerView;
     private TextView gradesTextView;
@@ -27,7 +27,9 @@ public class StudentActivity extends AppCompatActivity {
     private TextView selectedFileNameTextView;
     private EditText messageEditText;
     private Button sendMessageButton;
+    private Button viewScheduleButton;
     private Uri selectedFileUri;
+    private int studentId;
 
     private final ActivityResultLauncher<Intent> filePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -44,16 +46,40 @@ public class StudentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
+
+        // Get student ID from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        studentId = prefs.getInt("student_id", -1);
+
+        if (studentId == -1) {
+            Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        initializeViews();
+        setupScheduleRecyclerView();
+        setupFileUpload();
+        setupMessaging();
+        setupScheduleButton();
+    }
+
+    private void initializeViews() {
         scheduleRecyclerView = findViewById(R.id.scheduleRecyclerView);
         gradesTextView = findViewById(R.id.gradesTextView);
         selectFileButton = findViewById(R.id.selectFileButton);
         selectedFileNameTextView = findViewById(R.id.selectedFileNameTextView);
         messageEditText = findViewById(R.id.messageEditText);
         sendMessageButton = findViewById(R.id.sendMessageButton);
+        viewScheduleButton = findViewById(R.id.viewScheduleButton);
+    }
 
-        setupScheduleRecyclerView();
-        setupFileUpload();
-        setupMessaging();
+    private void setupScheduleButton() {
+        viewScheduleButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ClassScheduleActivity.class);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
+        });
     }
 
     private void setupScheduleRecyclerView() {

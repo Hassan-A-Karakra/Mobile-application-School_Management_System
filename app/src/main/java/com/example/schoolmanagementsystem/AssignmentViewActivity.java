@@ -1,6 +1,5 @@
 package com.example.schoolmanagementsystem;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -20,7 +19,7 @@ public class AssignmentViewActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AssignmentAdapter adapter;
     private List<Assignment> assignmentList;
-    private int studentId;
+    private static final String ASSIGNMENT_URL = "http://10.0.2.2/student_system/get_assignments.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,62 +29,63 @@ public class AssignmentViewActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewAssignments);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         assignmentList = new ArrayList<>();
-
-        SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
-        studentId = prefs.getInt("student_id", -1);
-
-        if (studentId == -1) {
-            Toast.makeText(this, "Student not logged in", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         adapter = new AssignmentAdapter(this, assignmentList, assignment -> {
-            Intent intent = new Intent(this, SubmitAssignmentActivity.class);
-            intent.putExtra("assignment_id", assignment.getId());
-            intent.putExtra("student_id", studentId);
-            startActivity(intent);
+            Toast.makeText(this, "Clicked: " + assignment.getTitle(), Toast.LENGTH_SHORT).show();
         });
-
         recyclerView.setAdapter(adapter);
+
         loadAssignments();
     }
 
     private void loadAssignments() {
-        String url = "http://10.0.2.2/student_system/get_assignments.php";
-        try {
-            JSONObject postData = new JSONObject();
-            postData.put("student_id", studentId);
+        SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
+        String studentGrade = prefs.getString("student_grade", null);
+        if (studentGrade == null) {
+            Toast.makeText(this, "Student not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
+        try {
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("grade", studentGrade);
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ASSIGNMENT_URL, requestBody,
                     response -> {
-                        try {
-                            if ("success".equals(response.optString("status"))) {
-                                assignmentList.clear();
-                                JSONArray arr = response.optJSONArray("assignments");
+                        if ("success".equals(response.optString("status"))) {
+                            assignmentList.clear();
+                            JSONArray arr = response.optJSONArray("assignments");
+                            if (arr != null) {
                                 for (int i = 0; i < arr.length(); i++) {
-                                    JSONObject obj = arr.getJSONObject(i);
-                                    Assignment assignment = new Assignment(
-                                            obj.getInt("id"),
-                                            obj.getString("title"),
-                                            obj.getString("description"),
-                                            obj.getString("due_date")
-                                    );
-                                    assignmentList.add(assignment);
+                                    try {
+                                        JSONObject obj = arr.getJSONObject(i);
+                                        Assignment assignment = new Assignment(
+                                                obj.getInt("id"),
+                                                obj.getString("title"),
+                                                obj.getString("description"),
+                                                obj.getString("due_date")
+                                        );
+                                        assignmentList.add(assignment);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                                 adapter.notifyDataSetChanged();
                             }
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Error parsing assignment data", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
+                        } else {
+                            Toast.makeText(this, "No assignments found", Toast.LENGTH_SHORT).show();
                         }
                     },
-                    error -> Toast.makeText(this, "Failed to load assignments", Toast.LENGTH_SHORT).show()
+                    error -> {
+                        error.printStackTrace();
+                        Toast.makeText(this, "Error loading assignments", Toast.LENGTH_SHORT).show();
+                    }
             );
 
             Volley.newRequestQueue(this).add(request);
+
         } catch (Exception e) {
-            Toast.makeText(this, "Error building request", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
+            Toast.makeText(this, "Error building request", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,93 +1,86 @@
-
 package com.example.schoolmanagementsystem;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import android.graphics.Typeface;
-import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
+import java.util.*;
 
 public class ClassScheduleActivity extends AppCompatActivity {
 
-    int studentId;
-    LinearLayout scheduleContainer;
+    private static final String TAG = "ClassScheduleActivity";
+    private RecyclerView dayRecyclerView;
+    private static final String BASE_URL = "http://10.0.2.2/student_system/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_schedule);
 
-        scheduleContainer = findViewById(R.id.scheduleContainer);
-        studentId = getIntent().getIntExtra("student_id", -1);
+        dayRecyclerView = findViewById(R.id.dayRecyclerView);
+        dayRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if (studentId != -1) {
-            loadSchedule();
-        } else {
-            Toast.makeText(this, "Student ID missing", Toast.LENGTH_SHORT).show();
+        // Get student ID from intent or SharedPreferences
+        int studentId = getIntent().getIntExtra("student_id", -1);
+        if (studentId == -1) {
+            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            studentId = prefs.getInt("student_id", -1);
         }
+        if (studentId == -1) {
+            Toast.makeText(this, "Invalid student ID. Please login again.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        loadSchedule(studentId);
     }
 
-    private void loadSchedule() {
-        String url = "http://10.0.2.2/student_system/get_schedule.php?student_id=" + studentId;
-
+    private void loadSchedule(int studentId) {
+        String url = BASE_URL + "get_schedule.php?student_id=" + studentId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    if ("success".equals(response.optString("status"))) {
-                        try {
+                    try {
+                        if ("success".equals(response.optString("status"))) {
                             JSONArray schedule = response.getJSONArray("schedule");
+                            // Group by day
+                            Map<String, List<ClassSession>> dayMap = new LinkedHashMap<>();
                             for (int i = 0; i < schedule.length(); i++) {
-                                JSONObject item = schedule.getJSONObject(i);
-                                String subject = item.getString("subject");
-                                String start = item.getString("start_time");
-                                String end = item.getString("end_time");
-                                String teacher = item.getString("teacher_name");
-                                String day = item.getString("day");
-
-                                // Create card layout
-                                LinearLayout card = new LinearLayout(this);
-                                card.setOrientation(LinearLayout.VERTICAL);
-                                card.setPadding(32, 24, 32, 24);
-                                card.setBackgroundResource(R.drawable.card_background);
-
-                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.WRAP_CONTENT
-                                );
-                                layoutParams.setMargins(0, 0, 0, 24);
-                                card.setLayoutParams(layoutParams);
-
-                                // Subject
-                                TextView tvSubject = new TextView(this);
-                                tvSubject.setText(day + ": " + subject + " - " + start + " to " + end);
-                                tvSubject.setTextSize(16);
-                                tvSubject.setTypeface(null, Typeface.BOLD);
-                                tvSubject.setTextColor(0xFF000000);
-                                card.addView(tvSubject);
-
-                                // Teacher
-                                TextView tvTeacher = new TextView(this);
-                                tvTeacher.setText(teacher);
-                                tvTeacher.setTextSize(14);
-                                tvTeacher.setTextColor(0xFF555555);
-                                card.addView(tvTeacher);
-
-                                scheduleContainer.addView(card);
+                                JSONObject row = schedule.getJSONObject(i);
+                                String day = row.getString("day");
+                                String subject = row.getString("subject");
+                                String time = row.getString("time");
+                                String teacher = row.has("teacher") && !row.isNull("teacher") ? row.getString("teacher") : "";
+                                if (!dayMap.containsKey(day)) {
+                                    dayMap.put(day, new ArrayList<>());
+                                }
+                                dayMap.get(day).add(new ClassSession(subject, time, teacher));
                             }
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Error parsing schedule", Toast.LENGTH_SHORT).show();
+                            List<DaySchedule> daySchedules = new ArrayList<>();
+                            for (Map.Entry<String, List<ClassSession>> entry : dayMap.entrySet()) {
+                                daySchedules.add(new DaySchedule(entry.getKey(), entry.getValue()));
+                            }
+                            dayRecyclerView.setAdapter(new DayScheduleAdapter(daySchedules));
+                        } else {
+                            String errorMessage = response.optString("message", "Unknown error occurred");
+                            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
                         }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing schedule", e);
+                        Toast.makeText(this, "Error reading schedule: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Failed to load schedule", Toast.LENGTH_SHORT).show()
-        );
+                error -> {
+                    Log.e(TAG, "Network error", error);
+                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                });
 
         Volley.newRequestQueue(this).add(request);
     }

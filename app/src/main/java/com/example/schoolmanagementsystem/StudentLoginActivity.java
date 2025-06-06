@@ -1,9 +1,7 @@
-
 package com.example.schoolmanagementsystem;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,18 +51,23 @@ public class StudentLoginActivity extends AppCompatActivity {
                             try {
                                 JSONObject student = response.getJSONObject("student");
 
-                                Intent intent = new Intent(this, StudentDashboardActivity.class);
-                                intent.putExtra("student_id", student.getInt("id"));
-                                intent.putExtra("student_name", student.getString("name"));
-                                intent.putExtra("student_email", student.getString("email"));
-                                intent.putExtra("student_grade", student.getString("grade"));
-                                intent.putExtra("student_age", student.getInt("age"));
+                                // Save student info to SharedPreferences
+                                SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putInt("student_id", student.getInt("id"));
+                                editor.putString("student_name", student.getString("name"));
+                                editor.putString("student_email", student.getString("email"));
+                                editor.putString("student_grade", student.getString("grade"));
+                                editor.putInt("student_age", student.getInt("age"));
+                                editor.apply();
 
-                                Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+                                // Launch dashboard
+                                Intent intent = new Intent(this, StudentDashboardActivity.class);
                                 startActivity(intent);
                                 finish();
+
                             } catch (JSONException e) {
-                                Toast.makeText(this, "Error: Student data not found", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Missing student data", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();

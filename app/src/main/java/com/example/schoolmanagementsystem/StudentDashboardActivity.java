@@ -1,6 +1,7 @@
 package com.example.schoolmanagementsystem;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,12 +21,13 @@ public class StudentDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_dashboard);
 
-        // Get student data from login
-        studentId = getIntent().getIntExtra("student_id", -1);
-        studentName = getIntent().getStringExtra("student_name");
-        studentEmail = getIntent().getStringExtra("student_email");
-        studentGrade = getIntent().getStringExtra("student_grade");
-        studentAge = getIntent().getIntExtra("student_age", -1);
+        // Get student data from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        studentId = prefs.getInt("student_id", -1);
+        studentName = prefs.getString("student_name", "Student");
+        studentEmail = prefs.getString("student_email", "unknown@example.com");
+        studentGrade = prefs.getString("student_grade", "N/A");
+        studentAge = prefs.getInt("student_age", -1);
 
         if (studentId == -1) {
             Toast.makeText(this, "Missing student data", Toast.LENGTH_SHORT).show();
@@ -33,11 +35,11 @@ public class StudentDashboardActivity extends AppCompatActivity {
             return;
         }
 
-        // Set welcome message
+        // Welcome text
         TextView welcomeText = findViewById(R.id.textWelcome);
         welcomeText.setText("Welcome, " + studentName);
 
-        // Buttons
+        // Initialize buttons
         Button btnSchedule = findViewById(R.id.btnSchedule);
         Button btnGrades = findViewById(R.id.btnGrades);
         Button btnAssignments = findViewById(R.id.btnAssignments);
@@ -45,14 +47,14 @@ public class StudentDashboardActivity extends AppCompatActivity {
         Button btnCommunicate = findViewById(R.id.btnCommunicate);
         Button btnLogout = findViewById(R.id.btnLogout);
 
-        // Schedule
+        // Schedule Activity
         btnSchedule.setOnClickListener(v -> {
             Intent intent = new Intent(this, ClassScheduleActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
 
-        // Grades
+        // Grades Activity
         btnGrades.setOnClickListener(v -> {
             Intent intent = new Intent(this, ReportsActivity.class);
             intent.putExtra("student_id", studentId);
@@ -82,6 +84,10 @@ public class StudentDashboardActivity extends AppCompatActivity {
 
         // Logout
         btnLogout.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.clear();
+            editor.apply();
+
             Intent intent = new Intent(this, StudentLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

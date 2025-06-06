@@ -12,10 +12,17 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <Button
+            android:id="@+id/viewScheduleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Full Schedule"
+            android:layout_marginBottom="16dp"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Class Schedule"
+            android:text="Today's Schedule"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
