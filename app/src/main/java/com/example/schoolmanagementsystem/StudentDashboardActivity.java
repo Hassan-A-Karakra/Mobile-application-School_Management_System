@@ -39,7 +39,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         TextView welcomeText = findViewById(R.id.textWelcome);
         welcomeText.setText("Welcome, " + studentName);
 
-        // Initialize buttons
+        // Buttons
         Button btnSchedule = findViewById(R.id.btnSchedule);
         Button btnGrades = findViewById(R.id.btnGrades);
         Button btnAssignments = findViewById(R.id.btnAssignments);
@@ -54,9 +54,9 @@ public class StudentDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Grades Activity
+        // Grades Activity (pass studentId!)
         btnGrades.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ReportsActivity.class);
+            Intent intent = new Intent(this, GradesActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });

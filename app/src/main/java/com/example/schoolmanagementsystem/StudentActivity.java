@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,32 +18,20 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 public class StudentActivity extends AppCompatActivity {
-    private RecyclerView scheduleRecyclerView;
-    private TextView gradesTextView;
-    private Button selectFileButton;
-    private TextView selectedFileNameTextView;
-    private EditText messageEditText;
-    private Button sendMessageButton;
-    private Button viewScheduleButton;
-    private Uri selectedFileUri;
+    private static final String TAG = "StudentActivity";
+    private TextView textWelcome;
+    private MaterialButton btnSchedule;
+    private MaterialButton btnGrades;
+    private MaterialButton btnAssignments;
+    private MaterialButton btnSubmit;
+    private MaterialButton btnCommunicate;
+    private MaterialButton btnLogout;
     private int studentId;
-
-    private final ActivityResultLauncher<Intent> filePickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    selectedFileUri = result.getData().getData();
-                    if (selectedFileUri != null) {
-                        selectedFileNameTextView.setText(selectedFileUri.getLastPathSegment());
-                    }
-                }
-            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +41,7 @@ public class StudentActivity extends AppCompatActivity {
         // Get student ID from SharedPreferences
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         studentId = prefs.getInt("student_id", -1);
+        String studentName = prefs.getString("student_name", "Student");
 
         if (studentId == -1) {
             Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
@@ -58,119 +50,85 @@ public class StudentActivity extends AppCompatActivity {
         }
 
         initializeViews();
-        setupScheduleRecyclerView();
-        setupFileUpload();
-        setupMessaging();
-        setupScheduleButton();
+        setupWelcomeText(studentName);
+        setupButtons();
     }
 
     private void initializeViews() {
-        scheduleRecyclerView = findViewById(R.id.scheduleRecyclerView);
-        gradesTextView = findViewById(R.id.gradesTextView);
-        selectFileButton = findViewById(R.id.selectFileButton);
-        selectedFileNameTextView = findViewById(R.id.selectedFileNameTextView);
-        messageEditText = findViewById(R.id.messageEditText);
-        sendMessageButton = findViewById(R.id.sendMessageButton);
-        viewScheduleButton = findViewById(R.id.viewScheduleButton);
+        try {
+            textWelcome = findViewById(R.id.textWelcome);
+            btnSchedule = findViewById(R.id.btnSchedule);
+            btnGrades = findViewById(R.id.btnGrades);
+            btnAssignments = findViewById(R.id.btnAssignments);
+            btnSubmit = findViewById(R.id.btnSubmit);
+            btnCommunicate = findViewById(R.id.btnCommunicate);
+            btnLogout = findViewById(R.id.btnLogout);
+        } catch (Exception e) {
+            Log.e(TAG, "Error initializing views", e);
+            Toast.makeText(this, "Error initializing views: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
-    private void setupScheduleButton() {
-        viewScheduleButton.setOnClickListener(v -> {
+    private void setupWelcomeText(String studentName) {
+        textWelcome.setText("Welcome, " + studentName);
+    }
+
+    private void setupButtons() {
+        // Schedule Button
+        btnSchedule.setOnClickListener(v -> {
             Intent intent = new Intent(this, ClassScheduleActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
-    }
 
-    private void setupScheduleRecyclerView() {
-        scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<ScheduleItem> scheduleItems = getDummyScheduleData();
-        ScheduleAdapter adapter = new ScheduleAdapter(scheduleItems);
-        scheduleRecyclerView.setAdapter(adapter);
-    }
-
-    private List<ScheduleItem> getDummyScheduleData() {
-        List<ScheduleItem> items = new ArrayList<>();
-        items.add(new ScheduleItem("Mathematics", "9:00 - 10:30", "Mr. Ahmed Mohamed"));
-        items.add(new ScheduleItem("Science", "10:45 - 12:15", "Ms. Sara Ali"));
-        items.add(new ScheduleItem("Arabic", "12:30 - 2:00", "Mr. Mohamed Khaled"));
-        return items;
-    }
-
-    private void setupFileUpload() {
-        selectFileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            filePickerLauncher.launch(intent);
-        });
-    }
-
-    private void setupMessaging() {
-        sendMessageButton.setOnClickListener(v -> {
-            String message = messageEditText.getText().toString().trim();
-            if (!message.isEmpty()) {
-                Toast.makeText(this, "Message sent successfully", Toast.LENGTH_SHORT).show();
-                messageEditText.setText("");
-            } else {
-                Toast.makeText(this, "Please write a message", Toast.LENGTH_SHORT).show();
+        // Grades Button
+        btnGrades.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(this, GradesActivity.class);
+                intent.putExtra("student_id", studentId);
+                startActivity(intent);
+            } catch (Exception e) {
+                Log.e(TAG, "Error opening grades", e);
+                Toast.makeText(this, "Error opening grades: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
-    }
-}
 
-class ScheduleItem {
-    private String subject;
-    private String time;
-    private String teacher;
+        // Assignments Button
+        btnAssignments.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AssignmentsActivity.class);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
+        });
 
-    public ScheduleItem(String subject, String time, String teacher) {
-        this.subject = subject;
-        this.time = time;
-        this.teacher = teacher;
-    }
+        // Submit Assignment Button
+        btnSubmit.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SubmitAssignmentActivity.class);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
+        });
 
-    public String getSubject() { return subject; }
-    public String getTime() { return time; }
-    public String getTeacher() { return teacher; }
-}
+        // Communicate Button
+        btnCommunicate.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CommunicateActivity.class);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
+        });
 
-class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
-    private List<ScheduleItem> items;
+        // Logout Button
+        btnLogout.setOnClickListener(v -> {
+            // Clear SharedPreferences
+            SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
+            editor.clear();
+            editor.apply();
 
-    public ScheduleAdapter(List<ScheduleItem> items) {
-        this.items = items;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_schedule, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ScheduleItem item = items.get(position);
-        holder.subjectTextView.setText(item.getSubject());
-        holder.timeTextView.setText(item.getTime());
-        holder.teacherTextView.setText(item.getTeacher());
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectTextView;
-        TextView timeTextView;
-        TextView teacherTextView;
-
-        ViewHolder(View view) {
-            super(view);
-            subjectTextView = view.findViewById(R.id.subjectTextView);
-            timeTextView = view.findViewById(R.id.timeTextView);
-            teacherTextView = view.findViewById(R.id.teacherTextView);
-        }
+            // Return to login screen
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
     }
 }
