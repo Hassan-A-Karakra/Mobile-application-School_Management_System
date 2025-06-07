@@ -60,7 +60,6 @@ public class StudentActivity extends AppCompatActivity {
             btnSchedule = findViewById(R.id.btnSchedule);
             btnGrades = findViewById(R.id.btnGrades);
             btnAssignments = findViewById(R.id.btnAssignments);
-            btnSubmit = findViewById(R.id.btnSubmit);
             btnCommunicate = findViewById(R.id.btnCommunicate);
             btnLogout = findViewById(R.id.btnLogout);
         } catch (Exception e) {

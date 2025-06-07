@@ -9,7 +9,6 @@
         android:id="@+id/textWelcome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Welcome, Ali Mohamad"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#3E206D"
@@ -62,19 +61,6 @@
             android:layout_width="300dp"
             android:layout_height="48dp"
             android:text="View Assignments"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:layout_marginBottom="12dp"
-            app:cornerRadius="24dp"
-            app:backgroundTint="#7C4DFF"
-            android:textColor="#FFFFFF"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSubmit"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="300dp"
-            android:layout_height="48dp"
-            android:text="Submit Assignment"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:layout_marginBottom="12dp"

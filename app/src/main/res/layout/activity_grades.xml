@@ -38,12 +38,13 @@
                 android:textStyle="bold"
                 android:textColor="#3E206D"/>
 
+            <!-- Displaying the student's class here -->
             <TextView
-                android:id="@+id/studentIdText"
+                android:id="@+id/studentClassText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="ID: 12345"
+                android:text="Class: 10"
                 android:textSize="14sp"
                 android:textColor="#666666"/>
 
