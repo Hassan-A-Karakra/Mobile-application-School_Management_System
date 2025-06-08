@@ -19,7 +19,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class AttendanceActivity extends AppCompatActivity {
+
 
     private RecyclerView attendanceRecyclerView;
     private AttendanceAdapter adapter;
@@ -48,6 +50,7 @@ public class AttendanceActivity extends AppCompatActivity {
         buttonReports.setOnClickListener(v -> {
             StringBuilder report = new StringBuilder();
             report.append("Student Report:\n\n");
+/*
 
             for (Student student : studentList) {
                 report.append("Name: ").append(student.getName())
@@ -55,7 +58,7 @@ public class AttendanceActivity extends AppCompatActivity {
                         .append("\nGrade: ").append(student.getGrade())
                         .append("\n\n");
             }
-
+*/
             textViewReport.setVisibility(View.VISIBLE);
             textViewReport.setText(report.toString());
             Toast.makeText(this, "Report Generated", Toast.LENGTH_SHORT).show();
@@ -72,7 +75,7 @@ public class AttendanceActivity extends AppCompatActivity {
                             String name = obj.getString("name");
                             boolean present = obj.optBoolean("present", false);
                             String grade = obj.optString("grade", "N/A");
-                            studentList.add(new Student(name, present, grade));
+                           // studentList.add(new Student(name, present, grade));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -85,3 +88,4 @@ public class AttendanceActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 }
+

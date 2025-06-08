@@ -41,8 +41,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
         Student s = studentList.get(position);
         holder.studentName.setText(s.getName());
-        holder.studentEmail.setText(s.getEmail());
-        holder.studentAge.setText("Age: " + s.getAge());
+      //  holder.studentEmail.setText(s.getEmail());
+       // holder.studentAge.setText("Age: " + s.getAge());
     }
 
     @Override

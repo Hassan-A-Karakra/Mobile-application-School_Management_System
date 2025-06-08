@@ -29,11 +29,11 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
     public void onBindViewHolder(AttendanceViewHolder holder, int position) {
         Student student = studentList.get(position);
         holder.studentNameTextView.setText(student.getName());
-        holder.attendanceCheckBox.setChecked(student.isPresent());
+       // holder.attendanceCheckBox.setChecked(student.isPresent());
 
         // عند تغيير حالة الحضور، نقوم بتحديث القيمة في القائمة
         holder.attendanceCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            student.setPresent(isChecked);
+         //   student.setPresent(isChecked);
         });
     }
 

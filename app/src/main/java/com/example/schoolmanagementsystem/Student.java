@@ -1,46 +1,29 @@
 package com.example.schoolmanagementsystem;
 
 public class Student {
+    private int id;
     private String name;
-    private boolean present;
     private String grade;
 
-    private int id;
-    private String email;
-    private int age;
-
-    // كونستركتور للحضور والتقارير
-    public Student(String name, boolean present, String grade) {
-        this.name = name;
-        this.present = present;
-        this.grade = grade;
-    }
-
-    // كونستركتور لجلب الطلاب من السيرفر (id, name, email, age)
-    public Student(int id, String name, String email, int age) {
+    public Student(int id, String name) {
         this.id = id;
         this.name = name;
-        this.email = email;
-        this.age = age;
+        this.grade = ""; // Initialize with empty string
     }
 
-    // كونستركتور شامل لكل الحقول (للاستخدام المرن)
-    public Student(String name, boolean present, String grade, int id, String email, int age) {
-        this.name = name;
-        this.present = present;
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
         this.grade = grade;
-        this.id = id;
-        this.email = email;
-        this.age = age;
     }
-
-    public String getName() { return name; }
-    public boolean isPresent() { return present; }
-    public String getGrade() { return grade; }
-
-    public void setPresent(boolean present) { this.present = present; }
-
-    public int getId() { return id; }
-    public String getEmail() { return email; }
-    public int getAge() { return age; }
 }

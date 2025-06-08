@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">School Management System</string>
+
+    <string-array name="class_array">
+        <item>Class 1</item>
+        <item>Class 2</item>
+        <item>Class 3</item>
+        <item>Class 4</item>
+        <item>Class 5</item>
+    </string-array>
+
+    <string-array name="subject_array">
+        <item>Math</item>
+        <item>Science</item>
+        <item>English</item>
+        <item>Physics</item>
+        <item>Chemistry</item>
+        <item>Biology</item>
+        <item>History</item>
+        <item>Geography</item>
+        <item>Computer Science</item>
+        <item>Business</item>
+        <item>Art</item>
+        <item>Physical Education</item>
+        <item>Economics</item>
+        <item>Sociology</item>
+        <item>Psychology</item>
+        <item>Music</item>
+        <item>Drama</item>
+        <item>Arabic</item>
+        <item>French</item>
+        <item>German</item>
+    </string-array>
 </resources>

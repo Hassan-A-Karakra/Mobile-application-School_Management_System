@@ -43,13 +43,18 @@ public class StudentListActivity extends AppCompatActivity {
                             org.json.JSONArray studentsArray = response.getJSONArray("students");
                             for (int i = 0; i < studentsArray.length(); i++) {
                                 JSONObject obj = studentsArray.getJSONObject(i);
-                                Student student = new Student(
+
+                               /* Student student = new Student(
                                         obj.getInt("id"),
                                         obj.getString("name"),
                                         obj.getString("email"),
-                                        obj.getInt("age")
+                                   //     obj.getInt("age")
                                 );
+
+
                                 studentList.add(student);
+
+                                */
                             }
                             adapter.notifyDataSetChanged();
                         } else {
