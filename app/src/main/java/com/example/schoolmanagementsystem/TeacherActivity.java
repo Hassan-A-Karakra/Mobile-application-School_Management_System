@@ -28,8 +28,7 @@ public class TeacherActivity extends AppCompatActivity {
          buttonStudentList.setOnClickListener(v -> navigateToActivity(StudentListActivity.class));
         buttonGradeInput.setOnClickListener(v -> navigateToActivity(GradeInputActivity.class));
         buttonAttendance.setOnClickListener(v -> navigateToActivity(AttendanceActivity.class));
-        buttonReports.setOnClickListener(v -> navigateToActivity(ReportsActivity.class));
-        buttonCommunicate.setOnClickListener(v -> navigateToActivity(CommunicateActivity.class));
+         buttonCommunicate.setOnClickListener(v -> navigateToActivity(CommunicateActivity.class));
         buttonSchedule.setOnClickListener(v -> navigateToActivity(ScheduleActivity.class));
         buttonAssignments.setOnClickListener(v -> navigateToActivity(AssignmentsActivity.class));
         buttonProfile.setOnClickListener(v -> navigateToActivity(ProfileActivity.class));

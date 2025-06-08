@@ -6,50 +6,53 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.AttendanceViewHolder> {
+public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
+    private List<Student> students;
 
-    private List<Student> studentList;
+    public AttendanceAdapter(List<Student> students) {
+        this.students = students;
+    }
 
-    public AttendanceAdapter(List<Student> studentList) {
-        this.studentList = studentList;
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_attendance, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public AttendanceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.student_item_attendance, parent, false);
-        return new AttendanceViewHolder(itemView);
-    }
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Student student = students.get(position);
+        holder.textViewName.setText(student.getName());
+        holder.checkBoxPresent.setChecked(student.isPresent());
+        holder.textViewAbsenceCount.setText(String.valueOf(student.getAbsenceCount()));
 
-    @Override
-    public void onBindViewHolder(AttendanceViewHolder holder, int position) {
-        Student student = studentList.get(position);
-        holder.studentNameTextView.setText(student.getName());
-       // holder.attendanceCheckBox.setChecked(student.isPresent());
-
-        // عند تغيير حالة الحضور، نقوم بتحديث القيمة في القائمة
-        holder.attendanceCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-         //   student.setPresent(isChecked);
+        holder.checkBoxPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            student.setPresent(isChecked);
         });
     }
 
     @Override
     public int getItemCount() {
-        return studentList.size();
+        return students.size();
     }
 
-    public static class AttendanceViewHolder extends RecyclerView.ViewHolder {
-        public TextView studentNameTextView;
-        public CheckBox attendanceCheckBox;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewName;
+        CheckBox checkBoxPresent;
+        TextView textViewAbsenceCount;
 
-        public AttendanceViewHolder(View itemView) {
-            super(itemView);
-            studentNameTextView = itemView.findViewById(R.id.studentName);
-            attendanceCheckBox = itemView.findViewById(R.id.attendanceCheckBox);
+        ViewHolder(View view) {
+            super(view);
+            textViewName = view.findViewById(R.id.textViewName);
+            checkBoxPresent = view.findViewById(R.id.checkBoxPresent);
+            textViewAbsenceCount = view.findViewById(R.id.textViewAbsenceCount);
         }
     }
 }

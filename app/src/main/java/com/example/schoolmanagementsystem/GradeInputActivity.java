@@ -241,7 +241,7 @@ public class GradeInputActivity extends AppCompatActivity {
         boolean allGradesFilled = true;
 
         for (Student student : studentGradeAdapter.getStudentList()) {
-            String grade = student.getGrade();
+            String grade = String.valueOf(student.getGrade());
             if (grade.isEmpty() || grade.trim().equals("")) {
                 allGradesFilled = false;
                 break; // نخرج من الحلقة بمجرد العثور على علامة فارغة
