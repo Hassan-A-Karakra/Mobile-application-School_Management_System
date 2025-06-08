@@ -32,8 +32,7 @@
         <activity android:name=".StudentLoginActivity" />
         <activity android:name=".AssignmentViewActivity" />
         <activity android:name=".CommunicateActivity" />
-        <activity android:name=".ReportsActivity" android:exported="true" />
-        <activity android:name=".AttendanceActivity" android:exported="true" />
+         <activity android:name=".AttendanceActivity" android:exported="true" />
         <activity android:name=".GradeInputActivity" />
         <activity android:name=".StudentListActivity" />
         <activity android:name=".StudentActivity" />
@@ -41,6 +40,8 @@
         <activity android:name=".RegistrarActivity" />
         <activity android:name=".TeacherLoginActivity" android:exported="true" />
         <activity android:name=".GradesActivity" android:exported="false" />
+        <activity android:name=".TeacherScheduleActivity"
+            android:exported="false" />
 
         <!-- Admin related activities -->
         <activity android:name=".AdminLoginActivity" android:exported="true" />

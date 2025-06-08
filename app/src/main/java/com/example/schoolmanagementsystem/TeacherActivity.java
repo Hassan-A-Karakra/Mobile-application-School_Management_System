@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TeacherActivity extends AppCompatActivity {
 
-    Button buttonStudentList, buttonGradeInput, buttonAttendance, buttonReports,
+    Button buttonStudentList, buttonGradeInput, buttonAttendance,
             buttonCommunicate, buttonSchedule, buttonAssignments, buttonProfile;
 
     @Override
@@ -19,16 +19,15 @@ public class TeacherActivity extends AppCompatActivity {
         buttonStudentList = findViewById(R.id.buttonStudentList);
         buttonGradeInput = findViewById(R.id.buttonGradeInput);
         buttonAttendance = findViewById(R.id.buttonAttendance);
-        buttonReports = findViewById(R.id.buttonReports);
         buttonCommunicate = findViewById(R.id.buttonCommunicate);
         buttonSchedule = findViewById(R.id.buttonSchedule);
         buttonAssignments = findViewById(R.id.buttonAssignments);
         buttonProfile = findViewById(R.id.buttonProfile);
 
-         buttonStudentList.setOnClickListener(v -> navigateToActivity(StudentListActivity.class));
+        buttonStudentList.setOnClickListener(v -> navigateToActivity(StudentListActivity.class));
         buttonGradeInput.setOnClickListener(v -> navigateToActivity(GradeInputActivity.class));
         buttonAttendance.setOnClickListener(v -> navigateToActivity(AttendanceActivity.class));
-         buttonCommunicate.setOnClickListener(v -> navigateToActivity(CommunicateActivity.class));
+        buttonCommunicate.setOnClickListener(v -> navigateToActivity(CommunicateActivity.class));
         buttonSchedule.setOnClickListener(v -> navigateToActivity(ScheduleActivity.class));
         buttonAssignments.setOnClickListener(v -> navigateToActivity(AssignmentsActivity.class));
         buttonProfile.setOnClickListener(v -> navigateToActivity(ProfileActivity.class));

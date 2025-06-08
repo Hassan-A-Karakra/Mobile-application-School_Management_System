@@ -2,39 +2,252 @@ package com.example.schoolmanagementsystem;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.nio.charset.StandardCharsets; // Import for StandardCharsets
 
 public class CommunicateActivity extends AppCompatActivity {
-
+    private Spinner spinnerGrade;
+    private Spinner spinnerSubject;
+    private LinearLayout studentsContainer;
+    private EditText editTextTitle;
     private EditText editTextMessage;
     private Button buttonSendMessage;
+    private List<CheckBox> studentCheckboxes;
+    private RequestQueue requestQueue;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_communicate);
 
-         editTextMessage = findViewById(R.id.editTextMessage);
+        // Initialize views
+        spinnerGrade = findViewById(R.id.spinnerGrade);
+        spinnerSubject = findViewById(R.id.spinnerSubject);
+        studentsContainer = findViewById(R.id.studentsContainer);
+        editTextTitle = findViewById(R.id.editTextTitle);
+        editTextMessage = findViewById(R.id.editTextMessage);
         buttonSendMessage = findViewById(R.id.buttonSendMessage);
+        progressBar = findViewById(R.id.progressBar);
+        studentCheckboxes = new ArrayList<>();
+        requestQueue = Volley.newRequestQueue(this);
 
-         buttonSendMessage.setOnClickListener(new View.OnClickListener() {
+        // Load grades
+        loadGrades();
+
+        // Set up grade spinner listener
+        spinnerGrade.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                String selectedGrade = parent.getItemAtPosition(position).toString();
+                loadSubjects(selectedGrade);
+                loadStudents(selectedGrade);
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
+        // Set up send button
+        buttonSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String message = editTextMessage.getText().toString();
-
-                if (!message.isEmpty()) {
-
-                    Toast.makeText(CommunicateActivity.this, "Message Sent: " + message, Toast.LENGTH_SHORT).show();
-                    editTextMessage.setText("");
-                } else {
-                    Toast.makeText(CommunicateActivity.this, "Please enter a message", Toast.LENGTH_SHORT).show();
-                }
+                sendMessage();
             }
         });
+    }
+
+    private void showLoading(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        buttonSendMessage.setEnabled(!show);
+    }
+
+    private void loadGrades() {
+        showLoading(true);
+        String url = "http://10.0.2.2/student_system/get_grades.php";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    showLoading(false);
+                    List<String> grades = new ArrayList<>();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            grades.add(response.getString(i));
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                                android.R.layout.simple_spinner_item, grades);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerGrade.setAdapter(adapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(CommunicateActivity.this, "Error parsing grades data", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    showLoading(false);
+                    Toast.makeText(CommunicateActivity.this, "Error loading grades: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        );
+        requestQueue.add(request);
+    }
+
+    private void loadSubjects(String grade) {
+        showLoading(true);
+        String url = "http://10.0.2.2/student_system/get_subjects.php";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    showLoading(false);
+                    List<String> subjects = new ArrayList<>();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            subjects.add(response.getString(i));
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                                android.R.layout.simple_spinner_item, subjects);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerSubject.setAdapter(adapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(CommunicateActivity.this, "Error parsing subjects data", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    showLoading(false);
+                    Toast.makeText(CommunicateActivity.this, "Error loading subjects: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        );
+        requestQueue.add(request);
+    }
+
+    private void loadStudents(String grade) {
+        showLoading(true);
+        String url = "http://10.0.2.2/student_system/get_students_by_grade.php?grade=" + grade;
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    showLoading(false);
+                    studentsContainer.removeAllViews();
+                    studentCheckboxes.clear();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject student = response.getJSONObject(i);
+                            LinearLayout studentRow = new LinearLayout(this);
+                            studentRow.setOrientation(LinearLayout.HORIZONTAL);
+                            studentRow.setLayoutParams(new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                            CheckBox checkBox = new CheckBox(this);
+                            checkBox.setText(student.getString("name"));
+                            checkBox.setTag(student.getInt("id"));
+                            studentCheckboxes.add(checkBox);
+                            studentRow.addView(checkBox);
+                            studentsContainer.addView(studentRow);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(CommunicateActivity.this, "Error parsing students data", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    showLoading(false);
+                    Toast.makeText(CommunicateActivity.this, "Error loading students: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        );
+        requestQueue.add(request);
+    }
+
+    private void sendMessage() {
+        String title = editTextTitle.getText().toString().trim();
+        String message = editTextMessage.getText().toString().trim();
+        List<Integer> selectedStudentIds = new ArrayList<>();
+
+        if (title.isEmpty()) {
+            Toast.makeText(this, "Please enter a title", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (message.isEmpty()) {
+            Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        for (CheckBox checkBox : studentCheckboxes) {
+            if (checkBox.isChecked()) {
+                selectedStudentIds.add((Integer) checkBox.getTag());
+            }
+        }
+
+        if (selectedStudentIds.isEmpty()) {
+            Toast.makeText(this, "Please select at least one student", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        showLoading(true);
+        String url = "http://10.0.2.2/student_system/send_message.php";
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    showLoading(false);
+                    try {
+                        JSONObject jsonResponse = new JSONObject(response);
+                        if (jsonResponse.getString("status").equals("success")) {
+                            Toast.makeText(CommunicateActivity.this, "Message sent successfully", Toast.LENGTH_SHORT).show();
+                            editTextTitle.setText("");
+                            editTextMessage.setText("");
+                            for (CheckBox checkBox : studentCheckboxes) {
+                                checkBox.setChecked(false);
+                            }
+                        } else {
+                            Toast.makeText(CommunicateActivity.this, "Error: " + jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(CommunicateActivity.this, "Error parsing server response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    showLoading(false);
+                    Toast.makeText(CommunicateActivity.this, "Error sending message: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                JSONObject jsonBody = new JSONObject();
+                try {
+                    jsonBody.put("title", title);
+                    jsonBody.put("message", message);
+                    JSONArray jsonStudentIds = new JSONArray(selectedStudentIds);
+                    jsonBody.put("student_ids", jsonStudentIds);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // Handle error if JSON conversion fails
+                }
+                return jsonBody.toString().getBytes(StandardCharsets.UTF_8);
+            }
+        };
+        requestQueue.add(request);
     }
 }
