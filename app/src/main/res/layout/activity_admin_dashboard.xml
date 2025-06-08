@@ -7,17 +7,12 @@
     android:gravity="center"
     android:background="#F8F6FC">
 
-    <Button
-        android:id="@+id/addStudentBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Student" />
 
     <Button
         android:id="@+id/addTeacherBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Teacher"
+        android:text="Add Teacher or Student"
         android:layout_marginTop="12dp" />
 
     <Button
