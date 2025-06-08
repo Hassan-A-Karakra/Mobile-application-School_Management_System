@@ -1,0 +1,36 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#F8F6FC">
+
+    <Button
+        android:id="@+id/addStudentBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Student" />
+
+    <Button
+        android:id="@+id/addTeacherBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Teacher"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/viewStudentsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View All Students"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/viewTeachersBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View All Teachers"
+        android:layout_marginTop="12dp" />
+</LinearLayout>
