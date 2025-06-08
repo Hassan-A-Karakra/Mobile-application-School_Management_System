@@ -25,68 +25,20 @@ public class TeacherActivity extends AppCompatActivity {
         buttonAssignments = findViewById(R.id.buttonAssignments);
         buttonProfile = findViewById(R.id.buttonProfile);
 
-         buttonStudentList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, StudentListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-         buttonGradeInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, GradeInputActivity.class);
-                startActivity(intent);
-            }
-        });
-
-         buttonAttendance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, AttendanceActivity.class);
-                startActivity(intent);
-            }
-        });
-
-         buttonReports.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, ReportsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-         buttonCommunicate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, CommunicateActivity.class);
-                startActivity(intent);
-            }
-        });
-
-         buttonSchedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, ScheduleActivity.class);
-                startActivity(intent);
-            }
-        });
-
-         buttonAssignments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, AssignmentsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-         buttonProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+         buttonStudentList.setOnClickListener(v -> navigateToActivity(StudentListActivity.class));
+        buttonGradeInput.setOnClickListener(v -> navigateToActivity(GradeInputActivity.class));
+        buttonAttendance.setOnClickListener(v -> navigateToActivity(AttendanceActivity.class));
+        buttonReports.setOnClickListener(v -> navigateToActivity(ReportsActivity.class));
+        buttonCommunicate.setOnClickListener(v -> navigateToActivity(CommunicateActivity.class));
+        buttonSchedule.setOnClickListener(v -> navigateToActivity(ScheduleActivity.class));
+        buttonAssignments.setOnClickListener(v -> navigateToActivity(AssignmentsActivity.class));
+        buttonProfile.setOnClickListener(v -> navigateToActivity(ProfileActivity.class));
     }
+
+    // دالة لتقليل التكرار وتحسين الكود
+    private void navigateToActivity(Class<?> activityClass) {
+        Intent intent = new Intent(TeacherActivity.this, activityClass);
+        startActivity(intent);
+    }
+
 }

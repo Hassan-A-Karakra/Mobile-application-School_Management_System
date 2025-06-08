@@ -6,7 +6,7 @@ public class DatabaseUtil {
 
     // اتصال قاعدة البيانات
     public static Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/school_management";  // تحديث مع تفاصيل الاتصال الخاصة بك
+        String url = "jdbc:mysql://localhost:3307/school_management";  // تحديث مع تفاصيل الاتصال الخاصة بك
         String username = "root";  // اسم المستخدم الخاص بك
         String password = "";  // كلمة المرور الخاصة بك
         return DriverManager.getConnection(url, username, password);

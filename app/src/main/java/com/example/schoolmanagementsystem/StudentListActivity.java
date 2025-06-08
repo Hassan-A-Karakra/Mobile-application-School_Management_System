@@ -34,36 +34,28 @@ public class StudentListActivity extends AppCompatActivity {
     }
 
     private void loadStudentData() {
-        com.android.volley.toolbox.JsonObjectRequest request = new com.android.volley.toolbox.JsonObjectRequest(
-                Request.Method.GET, URL, null,
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, URL, null,
                 response -> {
-                    try {
-                        studentList.clear();
-                        if (response.getString("status").equals("success")) {
-                            org.json.JSONArray studentsArray = response.getJSONArray("students");
-                            for (int i = 0; i < studentsArray.length(); i++) {
-                                JSONObject obj = studentsArray.getJSONObject(i);
-                                Student student = new Student(
-                                        obj.getInt("id"),
-                                        obj.getString("name"),
-                                        obj.getString("email"),
-                                        obj.getInt("age")
-                                );
-                                studentList.add(student);
-                            }
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(this, "No students found", Toast.LENGTH_SHORT).show();
+                    studentList.clear();
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+                            Student student = new Student(
+                                    obj.getInt("id"),
+                                    obj.getString("name"),
+                                    obj.getString("email"),
+                                    obj.getInt("age")
+                            );
+                            studentList.add(student);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(this, "Parse error", Toast.LENGTH_SHORT).show();
                     }
+                    adapter.notifyDataSetChanged();
                 },
                 error -> Toast.makeText(this, "Failed to fetch students", Toast.LENGTH_SHORT).show()
         );
 
         Volley.newRequestQueue(this).add(request);
     }
-
 }

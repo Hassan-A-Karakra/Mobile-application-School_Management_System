@@ -18,7 +18,7 @@ public class GradeInputActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade_input);
 
-         editTextStudentName = findViewById(R.id.editTextStudentName);
+        editTextStudentName = findViewById(R.id.editTextStudentName);
         editTextGrade = findViewById(R.id.editTextGrade);
         buttonSaveGrade = findViewById(R.id.buttonSaveGrade);
 
