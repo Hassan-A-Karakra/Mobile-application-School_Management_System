@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.*;
 
-public class ClassScheduleActivity extends AppCompatActivity {
+public class studentClassScheduleActivity extends AppCompatActivity {
 
     private static final String TAG = "ClassScheduleActivity";
     private RecyclerView dayRecyclerView;
@@ -23,7 +23,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_schedule);
+        setContentView(R.layout.activity_student_class_schedule);
 
         dayRecyclerView = findViewById(R.id.dayRecyclerView);
         dayRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -51,7 +51,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         if ("success".equals(response.optString("status"))) {
                             JSONArray schedule = response.getJSONArray("schedule");
                             // Group by day
-                            Map<String, List<ClassSession>> dayMap = new LinkedHashMap<>();
+                            Map<String, List<StudentClassSession>> dayMap = new LinkedHashMap<>();
                             for (int i = 0; i < schedule.length(); i++) {
                                 JSONObject row = schedule.getJSONObject(i);
                                 String day = row.getString("day");
@@ -61,13 +61,13 @@ public class ClassScheduleActivity extends AppCompatActivity {
                                 if (!dayMap.containsKey(day)) {
                                     dayMap.put(day, new ArrayList<>());
                                 }
-                                dayMap.get(day).add(new ClassSession(subject, time, teacher));
+                                dayMap.get(day).add(new StudentClassSession(subject, time, teacher));
                             }
-                            List<DaySchedule> daySchedules = new ArrayList<>();
-                            for (Map.Entry<String, List<ClassSession>> entry : dayMap.entrySet()) {
-                                daySchedules.add(new DaySchedule(entry.getKey(), entry.getValue()));
+                            List<StudentDaySchedule> studentDaySchedules = new ArrayList<>();
+                            for (Map.Entry<String, List<StudentClassSession>> entry : dayMap.entrySet()) {
+                                studentDaySchedules.add(new StudentDaySchedule(entry.getKey(), entry.getValue()));
                             }
-                            dayRecyclerView.setAdapter(new DayScheduleAdapter(daySchedules));
+                            dayRecyclerView.setAdapter(new StudentDayScheduleAdapter(studentDaySchedules));
                         } else {
                             String errorMessage = response.optString("message", "Unknown error occurred");
                             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();

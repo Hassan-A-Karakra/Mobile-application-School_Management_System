@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
-public class ProfileActivity extends AppCompatActivity {
+public class TeacherProfileActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -27,7 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_teacher_profile);
 
         profileImage = findViewById(R.id.profileImage);
         editName = findViewById(R.id.editName);
@@ -40,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         buttonSave.setOnClickListener(v -> {
 
-            Toast.makeText(ProfileActivity.this, "Profile saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TeacherProfileActivity.this, "Profile saved!", Toast.LENGTH_SHORT).show();
         });
     }
 

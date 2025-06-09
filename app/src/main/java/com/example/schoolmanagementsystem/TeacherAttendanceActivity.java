@@ -25,11 +25,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttendanceActivity extends AppCompatActivity {
+public class TeacherAttendanceActivity extends AppCompatActivity {
     private Spinner spinnerGrade;
     private Spinner spinnerSubject;
     private RecyclerView attendanceRecyclerView;
-    private AttendanceAdapter adapter;
+    private TeacherAttendanceAdapter adapter;
     private Button buttonSubmit;
     private List<Student> studentList;
 
@@ -39,7 +39,7 @@ public class AttendanceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attendance);
+        setContentView(R.layout.activity_teacher_attendance);
 
         // Initialize views
         spinnerGrade = findViewById(R.id.spinnerGrade);
@@ -55,7 +55,7 @@ public class AttendanceActivity extends AppCompatActivity {
 
         // Initialize student list and adapter
         studentList = new ArrayList<>();
-        adapter = new AttendanceAdapter(studentList);
+        adapter = new TeacherAttendanceAdapter(studentList);
         attendanceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         attendanceRecyclerView.setAdapter(adapter);
 

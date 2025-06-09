@@ -17,6 +17,9 @@ public class Student {
     public Student(int id, String name) {
     }
 
+    public Student(int id, String name, String email, int age) {
+    }
+
     public int getId() {
         return id;
     }

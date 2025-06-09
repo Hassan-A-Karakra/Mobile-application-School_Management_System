@@ -13,7 +13,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class AssignmentsActivity extends AppCompatActivity {
+public class StudentAssignmentsActivity extends AppCompatActivity {
 
     private LinearLayout assignmentContainer;
     private static final String ASSIGNMENT_URL = "http://10.0.2.2/student_system/get_assignments.php";
@@ -22,7 +22,7 @@ public class AssignmentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assignments);
+        setContentView(R.layout.activity_student_assignments);
 
        // assignmentContainer = findViewById(R.id.assignmentContainer);
 

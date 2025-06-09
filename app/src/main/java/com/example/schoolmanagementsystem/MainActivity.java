@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         buttonRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AdminLoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, RegisterAdminLoginActivity.class);
                 startActivity(intent);
             }
         });

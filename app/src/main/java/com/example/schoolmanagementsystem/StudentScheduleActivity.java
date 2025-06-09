@@ -17,7 +17,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ScheduleActivity extends AppCompatActivity {
+public class StudentScheduleActivity extends AppCompatActivity {
 
     private static final String TAG = "ScheduleActivity";
     private LinearLayout scheduleContainer;
@@ -26,7 +26,7 @@ public class ScheduleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule);
+        setContentView(R.layout.activity_student_schedule);
 
         scheduleContainer = findViewById(R.id.scheduleContainer);
 

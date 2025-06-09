@@ -7,9 +7,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class ClassSessionAdapter extends RecyclerView.Adapter<ClassSessionAdapter.SessionViewHolder> {
-    private List<ClassSession> sessions;
-    public ClassSessionAdapter(List<ClassSession> sessions) {
+public class StudentClassSessionAdapter extends RecyclerView.Adapter<StudentClassSessionAdapter.SessionViewHolder> {
+    private List<StudentClassSession> sessions;
+    public StudentClassSessionAdapter(List<StudentClassSession> sessions) {
         this.sessions = sessions;
     }
     @Override
@@ -19,7 +19,7 @@ public class ClassSessionAdapter extends RecyclerView.Adapter<ClassSessionAdapte
     }
     @Override
     public void onBindViewHolder(SessionViewHolder holder, int position) {
-        ClassSession session = sessions.get(position);
+        StudentClassSession session = sessions.get(position);
         holder.subjectTextView.setText(session.subject);
         holder.timeTextView.setText(session.time);
         holder.teacherTextView.setText(session.teacher != null ? session.teacher : "");

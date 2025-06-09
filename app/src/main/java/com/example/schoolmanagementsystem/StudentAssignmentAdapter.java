@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.ViewHolder> {
+public class StudentAssignmentAdapter extends RecyclerView.Adapter<StudentAssignmentAdapter.ViewHolder> {
 
     public interface OnAssignmentClickListener {
         void onAssignmentClick(Assignment assignment);
@@ -20,7 +20,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.Vi
     private List<Assignment> assignments;
     private OnAssignmentClickListener listener;
 
-    public AssignmentAdapter(Context context, List<Assignment> assignments, OnAssignmentClickListener listener) {
+    public StudentAssignmentAdapter(Context context, List<Assignment> assignments, OnAssignmentClickListener listener) {
         this.context = context;
         this.assignments = assignments;
         this.listener = listener;

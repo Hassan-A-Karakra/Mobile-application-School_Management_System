@@ -2,7 +2,6 @@ package com.example.schoolmanagementsystem;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,13 +23,13 @@ public class TeacherActivity extends AppCompatActivity {
         buttonAssignments = findViewById(R.id.buttonAssignments);
         buttonProfile = findViewById(R.id.buttonProfile);
 
-        buttonStudentList.setOnClickListener(v -> navigateToActivity(StudentListActivity.class));
-        buttonGradeInput.setOnClickListener(v -> navigateToActivity(GradeInputActivity.class));
-        buttonAttendance.setOnClickListener(v -> navigateToActivity(AttendanceActivity.class));
-        buttonCommunicate.setOnClickListener(v -> navigateToActivity(CommunicateActivity.class));
-        buttonSchedule.setOnClickListener(v -> navigateToActivity(ScheduleActivity.class));
-        buttonAssignments.setOnClickListener(v -> navigateToActivity(AssignmentsActivity.class));
-        buttonProfile.setOnClickListener(v -> navigateToActivity(ProfileActivity.class));
+        buttonStudentList.setOnClickListener(v -> navigateToActivity(RegisterStudentListActivity.class));
+        buttonGradeInput.setOnClickListener(v -> navigateToActivity(TeacherGradeInputActivity.class));
+        buttonAttendance.setOnClickListener(v -> navigateToActivity(TeacherAttendanceActivity.class));
+        buttonCommunicate.setOnClickListener(v -> navigateToActivity(TeacherCommunicateActivity.class));
+        buttonSchedule.setOnClickListener(v -> navigateToActivity(StudentScheduleActivity.class));
+        buttonAssignments.setOnClickListener(v -> navigateToActivity(StudentAssignmentsActivity.class));
+        buttonProfile.setOnClickListener(v -> navigateToActivity(TeacherProfileActivity.class));
     }
 
     // دالة لتقليل التكرار وتحسين الكود

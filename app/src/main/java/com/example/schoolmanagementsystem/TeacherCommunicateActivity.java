@@ -20,12 +20,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.nio.charset.StandardCharsets; // Import for StandardCharsets
 
-public class CommunicateActivity extends AppCompatActivity {
+public class TeacherCommunicateActivity extends AppCompatActivity {
     private Spinner spinnerGrade;
     private Spinner spinnerSubject;
     private LinearLayout studentsContainer;
@@ -39,7 +37,7 @@ public class CommunicateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_communicate);
+        setContentView(R.layout.activity_teacher_communicate);
 
         // Initialize views
         spinnerGrade = findViewById(R.id.spinnerGrade);
@@ -99,12 +97,12 @@ public class CommunicateActivity extends AppCompatActivity {
                         spinnerGrade.setAdapter(adapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(CommunicateActivity.this, "Error parsing grades data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherCommunicateActivity.this, "Error parsing grades data", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
                     showLoading(false);
-                    Toast.makeText(CommunicateActivity.this, "Error loading grades: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TeacherCommunicateActivity.this, "Error loading grades: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
         );
         requestQueue.add(request);
@@ -127,12 +125,12 @@ public class CommunicateActivity extends AppCompatActivity {
                         spinnerSubject.setAdapter(adapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(CommunicateActivity.this, "Error parsing subjects data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherCommunicateActivity.this, "Error parsing subjects data", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
                     showLoading(false);
-                    Toast.makeText(CommunicateActivity.this, "Error loading subjects: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TeacherCommunicateActivity.this, "Error loading subjects: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
         );
         requestQueue.add(request);
@@ -164,12 +162,12 @@ public class CommunicateActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(CommunicateActivity.this, "Error parsing students data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherCommunicateActivity.this, "Error parsing students data", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
                     showLoading(false);
-                    Toast.makeText(CommunicateActivity.this, "Error loading students: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TeacherCommunicateActivity.this, "Error loading students: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
         );
         requestQueue.add(request);
@@ -209,23 +207,23 @@ public class CommunicateActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
                         if (jsonResponse.getString("status").equals("success")) {
-                            Toast.makeText(CommunicateActivity.this, "Message sent successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TeacherCommunicateActivity.this, "Message sent successfully", Toast.LENGTH_SHORT).show();
                             editTextTitle.setText("");
                             editTextMessage.setText("");
                             for (CheckBox checkBox : studentCheckboxes) {
                                 checkBox.setChecked(false);
                             }
                         } else {
-                            Toast.makeText(CommunicateActivity.this, "Error: " + jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TeacherCommunicateActivity.this, "Error: " + jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(CommunicateActivity.this, "Error parsing server response", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherCommunicateActivity.this, "Error parsing server response", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
                     showLoading(false);
-                    Toast.makeText(CommunicateActivity.this, "Error sending message: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TeacherCommunicateActivity.this, "Error sending message: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
         ) {
             @Override

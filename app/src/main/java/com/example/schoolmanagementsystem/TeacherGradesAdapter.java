@@ -9,10 +9,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class GradesAdapter extends RecyclerView.Adapter<GradesAdapter.GradeViewHolder> {
-    private List<GradeItem> grades;
+public class TeacherGradesAdapter extends RecyclerView.Adapter<TeacherGradesAdapter.GradeViewHolder> {
+    private List<StudentGradeItem> grades;
 
-    public GradesAdapter(List<GradeItem> grades) {
+    public TeacherGradesAdapter(List<StudentGradeItem> grades) {
         this.grades = grades;
     }
 
@@ -24,7 +24,7 @@ public class GradesAdapter extends RecyclerView.Adapter<GradesAdapter.GradeViewH
 
     @Override
     public void onBindViewHolder(GradeViewHolder holder, int position) {
-        GradeItem item = grades.get(position);
+        StudentGradeItem item = grades.get(position);
         holder.subjectTextView.setText(item.getSubject());
         holder.gradeTextView.setText(item.getGrade());
         holder.teacherTextView.setText("Teacher: " + item.getTeacher());

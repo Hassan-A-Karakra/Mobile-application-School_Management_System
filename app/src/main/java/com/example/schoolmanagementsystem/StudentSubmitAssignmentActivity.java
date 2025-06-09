@@ -10,7 +10,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
-public class SubmitAssignmentActivity extends AppCompatActivity {
+public class StudentSubmitAssignmentActivity extends AppCompatActivity {
 
     private EditText contentInput;
     private Button submitButton;
@@ -20,7 +20,7 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_submit_assignment);
+        setContentView(R.layout.activity_student_submit_assignment);
 
         contentInput = findViewById(R.id.contentInput);
         submitButton = findViewById(R.id.submitButton);

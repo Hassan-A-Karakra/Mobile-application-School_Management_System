@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
+public class TeacherAttendanceAdapter extends RecyclerView.Adapter<TeacherAttendanceAdapter.ViewHolder> {
     private List<Student> students;
 
-    public AttendanceAdapter(List<Student> students) {
+    public TeacherAttendanceAdapter(List<Student> students) {
         this.students = students;
     }
 

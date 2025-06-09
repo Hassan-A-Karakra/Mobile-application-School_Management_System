@@ -26,11 +26,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class GradeInputActivity extends AppCompatActivity {
+public class TeacherGradeInputActivity extends AppCompatActivity {
 
     private Spinner spinnerClass, spinnerSubject;
     private RecyclerView recyclerViewStudents;
@@ -49,7 +47,7 @@ public class GradeInputActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_grade_input);
+        setContentView(R.layout.activity_teacher_grade_input);
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -134,7 +132,7 @@ public class GradeInputActivity extends AppCompatActivity {
                                 Log.e("Volley", "Error parsing class: " + e.getMessage());
                             }
                         }
-                        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(GradeInputActivity.this,
+                        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(TeacherGradeInputActivity.this,
                                 android.R.layout.simple_spinner_item, classes);
                         classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerClass.setAdapter(classAdapter);
@@ -144,7 +142,7 @@ public class GradeInputActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Error fetching classes: " + error.getMessage());
-                        Toast.makeText(GradeInputActivity.this, "فشل في جلب الصفوف: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherGradeInputActivity.this, "فشل في جلب الصفوف: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -166,7 +164,7 @@ public class GradeInputActivity extends AppCompatActivity {
                                 Log.e("Volley", "Error parsing subject: " + e.getMessage());
                             }
                         }
-                        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(GradeInputActivity.this,
+                        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(TeacherGradeInputActivity.this,
                                 android.R.layout.simple_spinner_item, subjects);
                         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerSubject.setAdapter(subjectAdapter);
@@ -176,7 +174,7 @@ public class GradeInputActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Error fetching subjects: " + error.getMessage());
-                        Toast.makeText(GradeInputActivity.this, "فشل في جلب المواد: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherGradeInputActivity.this, "فشل في جلب المواد: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -203,13 +201,13 @@ public class GradeInputActivity extends AppCompatActivity {
                                 }
                                 studentGradeAdapter.notifyDataSetChanged(); // تحديث الـ RecyclerView
                             } else {
-                                Toast.makeText(GradeInputActivity.this, response.getString("message"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TeacherGradeInputActivity.this, response.getString("message"), Toast.LENGTH_SHORT).show();
                                 studentList.clear(); // مسح القائمة إذا لم يكن هناك طلاب
                                 studentGradeAdapter.notifyDataSetChanged();
                             }
                         } catch (JSONException e) {
                             Log.e("Volley", "Error parsing students JSON: " + e.getMessage());
-                            Toast.makeText(GradeInputActivity.this, "خطأ في معالجة بيانات الطلاب.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TeacherGradeInputActivity.this, "خطأ في معالجة بيانات الطلاب.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -217,7 +215,7 @@ public class GradeInputActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Error fetching students: " + error.getMessage());
-                        Toast.makeText(GradeInputActivity.this, "فشل في جلب الطلاب: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherGradeInputActivity.this, "فشل في جلب الطلاب: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                         studentList.clear(); // مسح القائمة في حالة الخطأ
                         studentGradeAdapter.notifyDataSetChanged();
                     }
@@ -284,16 +282,16 @@ public class GradeInputActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             if (response.getBoolean("success")) {
-                                Toast.makeText(GradeInputActivity.this, response.getString("message"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TeacherGradeInputActivity.this, response.getString("message"), Toast.LENGTH_SHORT).show();
                                 // ربما تريد مسح حقول العلامات أو تحديث القائمة بعد الحفظ
                                 // studentList.clear();
                                 // studentGradeAdapter.notifyDataSetChanged();
                             } else {
-                                Toast.makeText(GradeInputActivity.this, "فشل الحفظ: " + response.getString("message"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(TeacherGradeInputActivity.this, "فشل الحفظ: " + response.getString("message"), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             Log.e("Volley", "Error parsing save grades response: " + e.getMessage());
-                            Toast.makeText(GradeInputActivity.this, "خطأ في معالجة رد الخادم.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TeacherGradeInputActivity.this, "خطأ في معالجة رد الخادم.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -301,7 +299,7 @@ public class GradeInputActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Volley", "Error saving grades: " + error.getMessage());
-                        Toast.makeText(GradeInputActivity.this, "فشل في التواصل مع الخادم: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(TeacherGradeInputActivity.this, "فشل في التواصل مع الخادم: " + error.getMessage(), Toast.LENGTH_LONG).show();
                         // عرض تفاصيل الخطأ إذا أمكن
                         if (error.networkResponse != null) {
                             Log.e("Volley", "Error Response code: " + error.networkResponse.statusCode);

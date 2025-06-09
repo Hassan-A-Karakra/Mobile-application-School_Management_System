@@ -1,26 +1,15 @@
 package com.example.schoolmanagementsystem;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.button.MaterialButton;
-import java.util.ArrayList;
-import java.util.List;
 
 public class StudentActivity extends AppCompatActivity {
     private static final String TAG = "StudentActivity";
@@ -77,7 +66,7 @@ public class StudentActivity extends AppCompatActivity {
     private void setupButtons() {
         // Schedule Button
         btnSchedule.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ClassScheduleActivity.class);
+            Intent intent = new Intent(this, studentClassScheduleActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
@@ -85,7 +74,7 @@ public class StudentActivity extends AppCompatActivity {
         // Grades Button
         btnGrades.setOnClickListener(v -> {
             try {
-                Intent intent = new Intent(this, GradesActivity.class);
+                Intent intent = new Intent(this, TeacherGradesActivity.class);
                 intent.putExtra("student_id", studentId);
                 startActivity(intent);
             } catch (Exception e) {
@@ -97,21 +86,21 @@ public class StudentActivity extends AppCompatActivity {
 
         // Assignments Button
         btnAssignments.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AssignmentsActivity.class);
+            Intent intent = new Intent(this, StudentAssignmentsActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
 
         // Submit Assignment Button
         btnSubmit.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SubmitAssignmentActivity.class);
+            Intent intent = new Intent(this, StudentSubmitAssignmentActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
 
         // Communicate Button
         btnCommunicate.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CommunicateActivity.class);
+            Intent intent = new Intent(this, TeacherCommunicateActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });

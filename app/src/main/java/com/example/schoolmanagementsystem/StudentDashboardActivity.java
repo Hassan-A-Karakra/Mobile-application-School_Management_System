@@ -45,13 +45,13 @@ public class StudentDashboardActivity extends AppCompatActivity {
         Button btnLogout = findViewById(R.id.btnLogout);
 
         btnSchedule.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ClassScheduleActivity.class);
+            Intent intent = new Intent(this, studentClassScheduleActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
 
         btnGrades.setOnClickListener(v -> {
-            Intent intent = new Intent(this, GradesActivity.class);
+            Intent intent = new Intent(this, TeacherGradesActivity.class);
             intent.putExtra("student_id", studentId);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("student_name", studentName);
@@ -61,7 +61,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         });
 
         btnAssignments.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AssignmentsActivity.class);
+            Intent intent = new Intent(this, StudentAssignmentsActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
@@ -70,7 +70,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         // The functionality to submit assignments is now handled within the AssignmentsActivity.
 
         btnCommunicate.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CommunicateActivity.class);
+            Intent intent = new Intent(this, TeacherCommunicateActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });

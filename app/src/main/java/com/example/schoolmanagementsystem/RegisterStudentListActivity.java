@@ -7,12 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
-public class StudentListActivity extends AppCompatActivity {
+public class RegisterStudentListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private StudentAdapter adapter;
@@ -22,7 +21,7 @@ public class StudentListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_list);
+        setContentView(R.layout.activity_register_student_list);
 
         recyclerView = findViewById(R.id.recyclerViewStudentList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

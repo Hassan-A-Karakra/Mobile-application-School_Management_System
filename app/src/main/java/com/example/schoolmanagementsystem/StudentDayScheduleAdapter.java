@@ -8,25 +8,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class DayScheduleAdapter extends RecyclerView.Adapter<DayScheduleAdapter.DayViewHolder> {
-    private List<DaySchedule> daySchedules;
-    public DayScheduleAdapter(List<DaySchedule> daySchedules) {
-        this.daySchedules = daySchedules;
+public class StudentDayScheduleAdapter extends RecyclerView.Adapter<StudentDayScheduleAdapter.DayViewHolder> {
+    private List<StudentDaySchedule> studentDaySchedules;
+    public StudentDayScheduleAdapter(List<StudentDaySchedule> studentDaySchedules) {
+        this.studentDaySchedules = studentDaySchedules;
     }
     @Override
     public DayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_day_schedule, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_student_day_schedule, parent, false);
         return new DayViewHolder(view);
     }
     @Override
     public void onBindViewHolder(DayViewHolder holder, int position) {
-        DaySchedule daySchedule = daySchedules.get(position);
-        holder.dayTextView.setText(daySchedule.day);
-        ClassSessionAdapter sessionAdapter = new ClassSessionAdapter(daySchedule.sessions);
+        StudentDaySchedule studentDaySchedule = studentDaySchedules.get(position);
+        holder.dayTextView.setText(studentDaySchedule.day);
+        StudentClassSessionAdapter sessionAdapter = new StudentClassSessionAdapter(studentDaySchedule.sessions);
         holder.sessionsRecyclerView.setAdapter(sessionAdapter);
     }
     @Override
-    public int getItemCount() { return daySchedules.size(); }
+    public int getItemCount() { return studentDaySchedules.size(); }
     static class DayViewHolder extends RecyclerView.ViewHolder {
         TextView dayTextView;
         RecyclerView sessionsRecyclerView;

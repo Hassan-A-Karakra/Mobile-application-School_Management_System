@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TeacherListActivity extends AppCompatActivity {
+public class RegisterTeacherListActivity extends AppCompatActivity {
 
     ListView teacherListView;
     ArrayList<String> teacherList = new ArrayList<>();
@@ -29,7 +29,7 @@ public class TeacherListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_list); // تأكد من أن الملف xml موجود
+        setContentView(R.layout.activity_register_teacher_list); // تأكد من أن الملف xml موجود
 
         teacherListView = findViewById(R.id.teacherListView);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teacherList);

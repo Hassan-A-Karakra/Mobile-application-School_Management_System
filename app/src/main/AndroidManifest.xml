@@ -16,45 +16,71 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.SchoolManagementSystem"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".TeacherStudentListActivity"
+            android:exported="false" />
         <!-- Student and Teacher related activities -->
-        <activity android:name=".GroupMessageActivity" android:exported="false" />
-        <activity android:name=".ProfileActivity" android:exported="false" />
-        <activity android:name=".AssignmentsActivity" android:exported="false" />
-        <activity android:name=".ScheduleActivity" android:exported="false" />
-        <activity android:name=".SubmitAssignmentActivity" android:exported="false" />
+        <activity
+            android:name=".TeacherGroupMessageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TeacherProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentAssignmentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentSubmitAssignmentActivity"
+            android:exported="false" />
         <activity android:name=".AddSubjectActivity" />
-        <activity android:name=".ClassScheduleActivity" />
+        <activity android:name=".studentClassScheduleActivity" />
         <activity android:name=".StudentDashboardActivity" />
         <activity android:name=".StudentLoginActivity" />
-        <activity android:name=".AssignmentViewActivity" />
-        <activity android:name=".CommunicateActivity" />
-         <activity android:name=".AttendanceActivity" android:exported="true" />
-        <activity android:name=".GradeInputActivity" />
-        <activity android:name=".StudentListActivity" />
+        <activity android:name=".StudentAssignmentViewActivity" />
+        <activity android:name=".TeacherCommunicateActivity" />
+        <activity
+            android:name=".TeacherAttendanceActivity"
+            android:exported="true" />
+        <activity android:name=".TeacherGradeInputActivity" />
+        <activity android:name=".RegisterStudentListActivity" />
         <activity android:name=".StudentActivity" />
-        <activity android:name=".TeacherActivity" android:exported="true" />
+        <activity
+            android:name=".TeacherActivity"
+            android:exported="true" />
         <activity android:name=".RegistrarActivity" />
-        <activity android:name=".TeacherLoginActivity" android:exported="true" />
-        <activity android:name=".GradesActivity" android:exported="false" />
-        <activity android:name=".TeacherScheduleActivity"
+        <activity
+            android:name=".TeacherLoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".TeacherGradesActivity"
             android:exported="false" />
-
-        <!-- Admin related activities -->
-        <activity android:name=".AdminLoginActivity" android:exported="true" />
-        <activity android:name=".AdminDashboardActivity" android:exported="true" />
-        <activity android:name=".TeacherListActivity" android:exported="true" />
-        <!-- Launcher -->
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity
+            android:name=".TeacherScheduleActivity"
+            android:exported="false" /> <!-- Admin related activities -->
+        <activity
+            android:name=".RegisterAdminLoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".RegisterAdminDashboardActivity"
+            android:exported="true" />
+        <activity
+            android:name=".RegisterTeacherListActivity"
+            android:exported="true" /> <!-- Launcher -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

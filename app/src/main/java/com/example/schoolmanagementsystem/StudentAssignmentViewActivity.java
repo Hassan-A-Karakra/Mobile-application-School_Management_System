@@ -14,22 +14,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignmentViewActivity extends AppCompatActivity {
+public class StudentAssignmentViewActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private AssignmentAdapter adapter;
+    private StudentAssignmentAdapter adapter;
     private List<Assignment> assignmentList;
     private static final String ASSIGNMENT_URL = "http://10.0.2.2/student_system/get_assignments.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assignment_view);
+        setContentView(R.layout.activity_student_assignment_view);
 
         recyclerView = findViewById(R.id.recyclerViewAssignments);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         assignmentList = new ArrayList<>();
-        adapter = new AssignmentAdapter(this, assignmentList, assignment -> {
+        adapter = new StudentAssignmentAdapter(this, assignmentList, assignment -> {
             Toast.makeText(this, "Clicked: " + assignment.getTitle(), Toast.LENGTH_SHORT).show();
         });
         recyclerView.setAdapter(adapter);

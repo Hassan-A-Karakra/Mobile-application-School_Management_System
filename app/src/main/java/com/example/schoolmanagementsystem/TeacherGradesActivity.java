@@ -16,7 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.*;
 
-public class GradesActivity extends AppCompatActivity {
+public class TeacherGradesActivity extends AppCompatActivity {
 
     private static final String TAG = "GradesActivity";
     private RecyclerView gradesRecyclerView;
@@ -29,7 +29,7 @@ public class GradesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_grades);
+        setContentView(R.layout.activity_teacher_grades);
 
         try {
             // Initialize views
@@ -92,7 +92,7 @@ public class GradesActivity extends AppCompatActivity {
                     try {
                         if ("success".equals(response.optString("status"))) {
                             JSONArray gradesArray = response.getJSONArray("grades");
-                            List<GradeItem> gradeItems = new ArrayList<>();
+                            List<StudentGradeItem> studentGradeItems = new ArrayList<>();
                             Set<String> seenSubjects = new HashSet<>(); // To avoid duplicate subjects if backend sends them
 
                             double totalGrade = 0;
@@ -106,7 +106,7 @@ public class GradesActivity extends AppCompatActivity {
 
                                 // Only add unique subjects to avoid display issues
                                 if (!seenSubjects.contains(subject)) {
-                                    gradeItems.add(new GradeItem(subject, grade, teacher));
+                                    studentGradeItems.add(new StudentGradeItem(subject, grade, teacher));
                                     seenSubjects.add(subject);
 
                                     // Calculate average, try-catch for grade parsing
@@ -130,10 +130,10 @@ public class GradesActivity extends AppCompatActivity {
                             }
 
                             // Sort grades by subject name for consistent display
-                            Collections.sort(gradeItems, (a, b) ->
+                            Collections.sort(studentGradeItems, (a, b) ->
                                     a.getSubject().compareToIgnoreCase(b.getSubject()));
 
-                            gradesRecyclerView.setAdapter(new GradesAdapter(gradeItems));
+                            gradesRecyclerView.setAdapter(new TeacherGradesAdapter(studentGradeItems));
                         } else {
                             String errorMessage = response.optString("message", "Failed to load grades. Unknown error occurred.");
                             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
