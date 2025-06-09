@@ -28,12 +28,11 @@ public class TeacherActivity extends AppCompatActivity {
         buttonAttendance.setOnClickListener(v -> navigateToActivity(TeacherAttendanceActivity.class));
         buttonCommunicate.setOnClickListener(v -> navigateToActivity(TeacherCommunicateActivity.class));
         buttonSchedule.setOnClickListener(v -> navigateToActivity(StudentScheduleActivity.class));
-        buttonAssignments.setOnClickListener(v -> navigateToActivity(StudentAssignmentsActivity.class));
+        buttonAssignments.setOnClickListener(v -> navigateToActivity(TeacherAssignmentsActivity.class));
         buttonProfile.setOnClickListener(v -> navigateToActivity(TeacherProfileActivity.class));
     }
 
-    // دالة لتقليل التكرار وتحسين الكود
-    private void navigateToActivity(Class<?> activityClass) {
+     private void navigateToActivity(Class<?> activityClass) {
         Intent intent = new Intent(TeacherActivity.this, activityClass);
         startActivity(intent);
     }

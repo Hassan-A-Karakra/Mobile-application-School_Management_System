@@ -1,59 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="4dp"
-    android:layout_marginHorizontal="12dp">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@android:color/white">
+        android:padding="16dp">
 
-        <!-- Assignment Title -->
-        <TextView
-            android:id="@+id/assignmentTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Assignment Title"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#212121" />
+            android:orientation="horizontal">
 
-        <!-- Description -->
+            <TextView
+                android:id="@+id/assignmentTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <ImageButton
+                android:id="@+id/menuButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="More options"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_more" />
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/assignmentDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Assignment description goes here..."
-            android:textSize="16sp"
-            android:layout_marginTop="6dp"
-            android:textColor="#424242" />
+            android:layout_marginTop="4dp"
+            android:textAppearance="?attr/textAppearanceBody2" />
 
-        <!-- Due Date -->
         <TextView
-            android:id="@+id/assignmentDueDate"
-            android:layout_width="wrap_content"
+            android:id="@+id/assignmentClass"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Due: YYYY-MM-DD"
-            android:textSize="14sp"
-            android:textColor="#757575"
-            android:layout_marginTop="6dp" />
+            android:layout_marginTop="4dp"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textStyle="bold" />
 
-        <Button
+        <TextView
+            android:id="@+id/assignmentSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textAppearance="?attr/textAppearanceCaption" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/dueDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Due Date: "
+                android:textAppearance="?attr/textAppearanceCaption" />
+
+            <TextView
+                android:id="@+id/dueDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceCaption" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_submit_assignment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
             android:layout_marginTop="10dp"
-            android:backgroundTint="#7C4DFF"
-            android:textColor="#FFFFFF"/>
-
+            android:text="Submit Assignment" />
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+</com.google.android.material.card.MaterialCardView>

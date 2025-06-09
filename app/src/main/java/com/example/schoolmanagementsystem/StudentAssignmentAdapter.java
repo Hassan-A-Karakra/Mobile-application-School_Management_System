@@ -68,7 +68,7 @@ public class StudentAssignmentAdapter extends RecyclerView.Adapter<StudentAssign
             super(itemView);
             title = itemView.findViewById(R.id.assignmentTitle);
             desc = itemView.findViewById(R.id.assignmentDescription);
-            due = itemView.findViewById(R.id.assignmentDueDate);
+            due = itemView.findViewById(R.id.dueDate);
             submitButton = itemView.findViewById(R.id.button_submit_assignment);
         }
     }

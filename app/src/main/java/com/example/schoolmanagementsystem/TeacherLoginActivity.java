@@ -26,12 +26,12 @@ public class TeacherLoginActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
-    private static final String LOGIN_URL = "http://10.0.2.2/student_system/login_teacher.php";  // تأكد من أن الرابط صحيح
+    private static final String LOGIN_URL = "http://10.0.2.2/student_system/teacher_login_teacher.php";  // تأكد من أن الرابط صحيح
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_teacher_login_activity);
 
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
