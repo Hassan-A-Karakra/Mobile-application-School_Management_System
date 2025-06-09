@@ -10,11 +10,16 @@ import com.example.school_management_system1.databinding.ActivityTeacherAssignme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import com.google.android.material.navigation.NavigationView
+import android.content.Intent
 
-class TeacherAssignmentsActivity : AppCompatActivity() {
+class TeacherAssignmentsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var binding: ActivityTeacherAssignmentsBinding
     private val calendar = Calendar.getInstance()
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +30,7 @@ class TeacherAssignmentsActivity : AppCompatActivity() {
         setupRecyclerView()
         setupDatePicker()
         setupClickListeners()
+        setupNavigationDrawer()
     }
 
     private fun setupToolbar() {
@@ -93,11 +99,54 @@ class TeacherAssignmentsActivity : AppCompatActivity() {
         binding.dueDateInput.text?.clear()
     }
 
+    private fun setupNavigationDrawer() {
+        toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolbar,
+            R.string.nav_header_desc,
+            R.string.nav_header_desc
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        binding.navView.setNavigationItemSelectedListener(this)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
+        if (toggle.onOptionsItemSelected(item)) {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_inbox -> {
+                Toast.makeText(this, "Inbox clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_outbox -> {
+                Toast.makeText(this, "Outbox clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_trash -> {
+                Toast.makeText(this, "Trash clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_spam -> {
+                Toast.makeText(this, "Spam clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_profile -> {
+                val intent = Intent(this, TeacherProfileActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 } 
