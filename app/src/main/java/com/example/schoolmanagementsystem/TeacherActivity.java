@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
+    private int currentTeacherId; // متغير لتخزين teacher_id
 
     // Original Button declarations - NOW RESTORED
     Button buttonStudentList, buttonGradeInput, buttonAttendance,
@@ -26,6 +27,14 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
+
+        // جلب teacher_id الذي تم تمريره من TeacherLoginActivity
+        currentTeacherId = getIntent().getIntExtra("teacher_id", -1);
+        if (currentTeacherId == -1) {
+            // يمكنك إضافة رسالة Toast هنا إذا لم يتم جلب الـ ID
+            // Toast.makeText(this, "خطأ: لم يتم جلب معرف المعلم.", Toast.LENGTH_SHORT).show();
+            // يمكنك أيضًا إغلاق النشاط أو إعادة التوجيه لشاشة تسجيل الدخول
+        }
 
         // --- NEW: Navigation Drawer Setup ---
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -48,13 +57,14 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         buttonAssignments = findViewById(R.id.buttonAssignments);
         // buttonProfile = findViewById(R.id.buttonProfile); // This line is still commented out if it was before, assuming it's not implemented yet.
 
-        buttonStudentList.setOnClickListener(v -> navigateToActivity(TeacherStudentListActivity.class));
-        buttonGradeInput.setOnClickListener(v -> navigateToActivity(TeacherGradeInputActivity.class));
-        buttonAttendance.setOnClickListener(v -> navigateToActivity(TeacherAttendanceActivity.class));
-        buttonCommunicate.setOnClickListener(v -> navigateToActivity(TeacherCommunicateActivity.class));
-        buttonSchedule.setOnClickListener(v -> navigateToActivity(StudentScheduleActivity.class));
-        buttonAssignments.setOnClickListener(v -> navigateToActivity(TeacherAssignmentsActivity.class));
-        //buttonProfile.setOnClickListener(v -> navigateToActivity(TeacherProfileActivity.class)); // This line is still commented out if it was before, assuming it's not implemented yet.
+        buttonStudentList.setOnClickListener(v -> navigateToActivity(TeacherStudentListActivity.class, currentTeacherId));
+        buttonGradeInput.setOnClickListener(v -> navigateToActivity(TeacherGradeInputActivity.class, currentTeacherId));
+        buttonAttendance.setOnClickListener(v -> navigateToActivity(TeacherAttendanceActivity.class, currentTeacherId));
+        buttonCommunicate.setOnClickListener(v -> navigateToActivity(TeacherCommunicateActivity.class, currentTeacherId));
+        // تم تصحيح هذا السطر: يفتح TeacherScheduleActivity ويمرر teacher_id
+        buttonSchedule.setOnClickListener(v -> navigateToActivity(TeacherScheduleActivity.class, currentTeacherId));
+        buttonAssignments.setOnClickListener(v -> navigateToActivity(TeacherAssignmentsActivity.class, currentTeacherId));
+        //buttonProfile.setOnClickListener(v -> navigateToActivity(TeacherProfileActivity.class, currentTeacherId)); // This line is still commented out if it was before, assuming it's not implemented yet.
         // --- END RESTORED: Original Button Initializations and Listeners ---
     }
 
@@ -64,19 +74,20 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
 
         if (id == R.id.nav_student_list) {
-            navigateToActivity(RegisterStudentListActivity.class);
+            navigateToActivity(RegisterStudentListActivity.class, currentTeacherId);
         } else if (id == R.id.nav_grade_input) {
-            navigateToActivity(TeacherGradeInputActivity.class);
+            navigateToActivity(TeacherGradeInputActivity.class, currentTeacherId);
         } else if (id == R.id.nav_attendance) {
-            navigateToActivity(TeacherAttendanceActivity.class);
+            navigateToActivity(TeacherAttendanceActivity.class, currentTeacherId);
         } else if (id == R.id.nav_communicate) {
-            navigateToActivity(TeacherCommunicateActivity.class);
+            navigateToActivity(TeacherCommunicateActivity.class, currentTeacherId);
+            // تم تصحيح هذا السطر: يفتح TeacherScheduleActivity ويمرر teacher_id
         } else if (id == R.id.nav_schedule) {
-            navigateToActivity(StudentScheduleActivity.class);
+            navigateToActivity(TeacherScheduleActivity.class, currentTeacherId);
         } else if (id == R.id.nav_assignments) {
-            navigateToActivity(TeacherAssignmentsActivity.class);
+            navigateToActivity(TeacherAssignmentsActivity.class, currentTeacherId);
         } else if (id == R.id.nav_profile) {
-            navigateToActivity(TeacherProfileActivity.class);
+            navigateToActivity(TeacherProfileActivity.class, currentTeacherId);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -94,8 +105,13 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
     }
 
     // Original method to navigate to another activity, used by both buttons and navigation drawer items
-    private void navigateToActivity(Class<?> activityClass) {
+    // تم تعديل هذه الدالة لتقبل teacherId
+    private void navigateToActivity(Class<?> activityClass, int teacherId) {
         Intent intent = new Intent(TeacherActivity.this, activityClass);
+        // تمرير teacher_id إلى النشاط الجديد
+        if (teacherId != -1) {
+            intent.putExtra("teacher_id", teacherId);
+        }
         startActivity(intent);
     }
 }
