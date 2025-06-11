@@ -18,7 +18,7 @@
             android:id="@+id/studentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Student Name"
+            android:text=""
             android:textStyle="bold"
             android:textSize="18sp" />
 
@@ -26,7 +26,7 @@
             android:id="@+id/studentEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="student@example.com"
+            android:text=""
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
 
@@ -34,7 +34,7 @@
             android:id="@+id/studentAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Age: 20"
+            android:text=""
             android:layout_marginTop="2dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

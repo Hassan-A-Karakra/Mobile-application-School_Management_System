@@ -38,9 +38,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        // --- END NEW: Navigation Drawer Setup ---
 
-        // --- RESTORED: Original Button Initializations and Listeners ---
         // These lines are now fully functional alongside the navigation drawer.
         buttonStudentList = findViewById(R.id.buttonStudentList);
         buttonGradeInput = findViewById(R.id.buttonGradeInput);
@@ -50,7 +48,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         buttonAssignments = findViewById(R.id.buttonAssignments);
         // buttonProfile = findViewById(R.id.buttonProfile); // This line is still commented out if it was before, assuming it's not implemented yet.
 
-        buttonStudentList.setOnClickListener(v -> navigateToActivity(RegisterStudentListActivity.class));
+        buttonStudentList.setOnClickListener(v -> navigateToActivity(TeacherStudentListActivity.class));
         buttonGradeInput.setOnClickListener(v -> navigateToActivity(TeacherGradeInputActivity.class));
         buttonAttendance.setOnClickListener(v -> navigateToActivity(TeacherAttendanceActivity.class));
         buttonCommunicate.setOnClickListener(v -> navigateToActivity(TeacherCommunicateActivity.class));

@@ -15,9 +15,19 @@ public class Student {
     }
 
     public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.present = false;
+        this.absenceCount = 0;
     }
 
     public Student(int id, String name, String email, int age) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.present = false;
+        this.absenceCount = 0;
     }
 
     public int getId() {
