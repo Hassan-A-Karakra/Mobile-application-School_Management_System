@@ -3,7 +3,15 @@ require_once 'db.php';
 header('Content-Type: application/json');
 
 // Get POST data
-$data = json_decode(file_get_contents('php://input'), true);
+$raw_post_data = file_get_contents('php://input');
+$data = json_decode($raw_post_data, true);
+
+// For debugging: Log raw input and decoded data
+error_log("Raw POST Data: " . $raw_post_data);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    error_log("JSON Decode Error: " . json_last_error_msg());
+}
+error_log("Decoded POST Data: " . print_r($data, true));
 
 if (!isset($data['title']) || !isset($data['message']) || !isset($data['student_ids'])) {
     echo json_encode([
@@ -50,9 +58,11 @@ try {
     $stmt = $conn->prepare("INSERT INTO messages (title, message, student_id) VALUES (?, ?, ?)");
     
     foreach ($student_ids as $student_id) {
-        $stmt->bind_param("ssi", $title, $message, $student_id);
+        // Ensure student_id is an integer for binding
+        $int_student_id = (int)$student_id;
+        $stmt->bind_param("ssi", $title, $message, $int_student_id);
         if (!$stmt->execute()) {
-            throw new Exception("Failed to send message to student ID: " . $student_id);
+            throw new Exception("Failed to send message to student ID: " . $int_student_id . " - " . $stmt->error);
         }
     }
     
@@ -63,6 +73,7 @@ try {
     ]);
 } catch (Exception $e) {
     $conn->rollback();
+    error_log("Message sending error: " . $e->getMessage()); // Log the error on the server
     echo json_encode([
         'status' => 'error',
         'message' => $e->getMessage()

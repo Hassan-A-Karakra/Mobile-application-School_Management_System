@@ -7,22 +7,32 @@ if (!isset($_GET['grade'])) {
     exit;
 }
 
-$grade = $_GET['grade'];
-
-// Get unique subjects for the selected grade from student_subjects table
-// Assuming student_subjects table has student_id and subject columns, and students table has id and grade columns
-$subjects_query = "SELECT DISTINCT ss.subject FROM student_subjects ss INNER JOIN students s ON ss.student_id = s.id WHERE s.grade = ? ORDER BY ss.subject ASC";
-$stmt = $conn->prepare($subjects_query);
-$stmt->bind_param("s", $grade);
-$stmt->execute();
-$result = $stmt->get_result();
-
+$grade = $conn->real_escape_string($_GET['grade']);
 $subjects = [];
-while ($row = $result->fetch_assoc()) {
-    $subjects[] = $row['subject'];
+$stmt = $conn->prepare("SELECT DISTINCT ss.subject 
+                       FROM student_subjects ss 
+                       JOIN students s ON ss.student_id = s.id 
+                       WHERE s.grade = ? 
+                       ORDER BY ss.subject");
+
+if ($stmt === false) {
+    echo json_encode(["status" => "error", "message" => "Failed to prepare statement: " . $conn->error]);
+    exit();
 }
 
-echo json_encode($subjects);
+$stmt->bind_param("s", $grade);
+
+if ($stmt->execute()) {
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        if (!empty($row['subject'])) {
+            $subjects[] = $row['subject'];
+        }
+    }
+    echo json_encode($subjects);
+} else {
+    echo json_encode(["status" => "error", "message" => "Failed to fetch subjects: " . $stmt->error]);
+}
 
 $stmt->close();
 $conn->close();

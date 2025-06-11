@@ -30,6 +30,7 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
     private EditText editTextTitle;
     private EditText editTextMessage;
     private Button buttonSendMessage;
+    private CheckBox checkBoxSelectAll;
     private List<CheckBox> studentCheckboxes;
     private RequestQueue requestQueue;
     private ProgressBar progressBar;
@@ -47,6 +48,7 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSendMessage = findViewById(R.id.buttonSendMessage);
         progressBar = findViewById(R.id.progressBar);
+        checkBoxSelectAll = findViewById(R.id.checkBoxSelectAll);
         studentCheckboxes = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(this);
 
@@ -59,11 +61,32 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
             public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
                 String selectedGrade = parent.getItemAtPosition(position).toString();
                 loadSubjects(selectedGrade);
-                loadStudents(selectedGrade);
             }
 
             @Override
             public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
+        // Set up subject spinner listener
+        spinnerSubject.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                String selectedGrade = spinnerGrade.getSelectedItem() != null ? 
+                    spinnerGrade.getSelectedItem().toString() : "";
+                if (!selectedGrade.isEmpty()) {
+                    loadStudents(selectedGrade);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
+        // Set up select all checkbox listener
+        checkBoxSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            for (CheckBox checkBox : studentCheckboxes) {
+                checkBox.setChecked(isChecked);
+            }
         });
 
         // Set up send button
@@ -82,7 +105,7 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
 
     private void loadGrades() {
         showLoading(true);
-        String url = "http://10.0.2.2/student_system/get_grades.php";
+        String url = "http://10.0.2.2/student_system/teacher_get_grades.php";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     showLoading(false);
@@ -110,7 +133,7 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
 
     private void loadSubjects(String grade) {
         showLoading(true);
-        String url = "http://10.0.2.2/student_system/get_subjects.php";
+        String url = "http://10.0.2.2/student_system/teacher_get_subjects.php?grade=" + grade;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     showLoading(false);
@@ -137,32 +160,49 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
     }
 
     private void loadStudents(String grade) {
+        String selectedSubject = spinnerSubject.getSelectedItem() != null ? 
+            spinnerSubject.getSelectedItem().toString() : "";
+            
+        if (selectedSubject.isEmpty()) {
+            return;
+        }
+
         showLoading(true);
-        String url = "http://10.0.2.2/student_system/get_students_by_grade.php?grade=" + grade;
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        String url = "http://10.0.2.2/student_system/teacher_get_students_by_class_and_subject.php?grade=" +
+            grade + "&subject=" + selectedSubject;
+        StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     showLoading(false);
                     studentsContainer.removeAllViews();
                     studentCheckboxes.clear();
+                    checkBoxSelectAll.setChecked(false);
                     try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject student = response.getJSONObject(i);
-                            LinearLayout studentRow = new LinearLayout(this);
-                            studentRow.setOrientation(LinearLayout.HORIZONTAL);
-                            studentRow.setLayoutParams(new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.WRAP_CONTENT));
+                        // Parse the full JSON object response
+                        JSONObject jsonResponse = new JSONObject(response);
+                        if (jsonResponse.getBoolean("success")) {
+                            JSONArray studentsArray = jsonResponse.getJSONArray("students");
+                            for (int i = 0; i < studentsArray.length(); i++) {
+                                JSONObject student = studentsArray.getJSONObject(i);
+                                LinearLayout studentRow = new LinearLayout(this);
+                                studentRow.setOrientation(LinearLayout.HORIZONTAL);
+                                studentRow.setLayoutParams(new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                            CheckBox checkBox = new CheckBox(this);
-                            checkBox.setText(student.getString("name"));
-                            checkBox.setTag(student.getInt("id"));
-                            studentCheckboxes.add(checkBox);
-                            studentRow.addView(checkBox);
-                            studentsContainer.addView(studentRow);
+                                CheckBox checkBox = new CheckBox(this);
+                                checkBox.setText(student.getString("name"));
+                                checkBox.setTag(student.getInt("id"));
+                                studentCheckboxes.add(checkBox);
+                                studentRow.addView(checkBox);
+                                studentsContainer.addView(studentRow);
+                            }
+                        } else {
+                            Toast.makeText(TeacherCommunicateActivity.this, 
+                                "Error: " + jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(TeacherCommunicateActivity.this, "Error parsing students data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherCommunicateActivity.this, "Error parsing students data: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> {
@@ -200,7 +240,7 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
         }
 
         showLoading(true);
-        String url = "http://10.0.2.2/student_system/send_message.php";
+        String url = "http://10.0.2.2/student_system/teacher_send_message.php";
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
                     showLoading(false);
