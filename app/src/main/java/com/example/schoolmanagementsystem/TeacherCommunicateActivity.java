@@ -168,7 +168,7 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
         }
 
         showLoading(true);
-        String url = "http://10.0.2.2/student_system/teacher_get_students_by_class_and_subject.php?grade=" +
+        String url = "http://10.0.2.2/student_system/teacher_communicate_with_get_students_by_class_and_subject.php?grade=" +
             grade + "&subject=" + selectedSubject;
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {

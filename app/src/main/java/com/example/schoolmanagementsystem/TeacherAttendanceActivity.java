@@ -149,7 +149,7 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
         Log.d("TeacherAttendance", "Selected Grade: " + selectedGrade);
         Log.d("TeacherAttendance", "Selected Subject: " + selectedSubject);
 
-        String url = API_URL + "teacher_get_students_by_class_and_subject.php?class_name=" + selectedGrade + "&subject=" + selectedSubject;
+        String url = API_URL + "teacher_attendance_get_students_by_class_and_subject.php?class_name=" + selectedGrade + "&subject=" + selectedSubject;
 
         Log.d("TeacherAttendance", "Request URL: " + url);
 

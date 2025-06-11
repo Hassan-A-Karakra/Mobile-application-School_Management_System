@@ -174,7 +174,7 @@ public class TeacherGradeInputActivity extends AppCompatActivity {
             return;
         }
 
-        String url = BASE_URL + "teacher_get_students_by_class_and_subject.php?class_name=" + selectedClass + "&subject=" + selectedSubject;
+        String url = BASE_URL + "teacher_grade_input_get_students_by_class_and_subject.php?class_name=" + selectedClass + "&subject=" + selectedSubject;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
