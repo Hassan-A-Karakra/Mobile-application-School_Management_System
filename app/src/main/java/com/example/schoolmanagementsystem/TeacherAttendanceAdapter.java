@@ -12,47 +12,51 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class TeacherAttendanceAdapter extends RecyclerView.Adapter<TeacherAttendanceAdapter.ViewHolder> {
-    private List<Student> students;
+    private final List<Student> studentList;
 
-    public TeacherAttendanceAdapter(List<Student> students) {
-        this.students = students;
+    public TeacherAttendanceAdapter(List<Student> studentList) {
+        this.studentList = studentList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_attendance, parent, false);
+                .inflate(R.layout.student_item_attendance, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Student student = students.get(position);
-        holder.textViewName.setText(student.getName());
-    //    holder.checkBoxPresent.setChecked(student.isPresent());
-       // holder.textViewAbsenceCount.setText(String.valueOf(student.getAbsenceCount()));
-
-      //  holder.checkBoxPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
-       //     student.setPresent(isChecked);
-       // });
+        Student student = studentList.get(position);
+        holder.studentName.setText(student.getName());
+        holder.absenceCount.setText("عدد الغيابات: " + student.getAbsenceCount());
+        holder.attendanceCheckBox.setChecked(student.isPresent());
+        
+        holder.attendanceCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            student.setPresent(isChecked);
+            if (!isChecked) {
+                student.incrementAbsenceCount();
+                holder.absenceCount.setText("عدد الغيابات: " + student.getAbsenceCount());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return students.size();
+        return studentList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewName;
-        CheckBox checkBoxPresent;
-        TextView textViewAbsenceCount;
+        TextView studentName;
+        TextView absenceCount;
+        CheckBox attendanceCheckBox;
 
         ViewHolder(View view) {
             super(view);
-            textViewName = view.findViewById(R.id.textViewName);
-            checkBoxPresent = view.findViewById(R.id.checkBoxPresent);
-            textViewAbsenceCount = view.findViewById(R.id.textViewAbsenceCount);
+            studentName = view.findViewById(R.id.studentName);
+            absenceCount = view.findViewById(R.id.absenceCount);
+            attendanceCheckBox = view.findViewById(R.id.attendanceCheckBox);
         }
     }
 }

@@ -7,6 +7,8 @@ public class Student {
     private int age;
     private String grade; // This is the class grade, e.g., "10", "11", "12"
     private String currentSubjectScore; // This will hold the score for the current subject
+    private boolean isPresent;
+    private int absenceCount;
 
     // Existing score fields (if still needed for other parts of the app)
     private String quiz_score;
@@ -27,6 +29,8 @@ public class Student {
         this.midterm_score = "";
         this.final_score = "";
         this.total_score = "";
+        this.isPresent = true;
+        this.absenceCount = 0;
     }
 
     // Original constructor for student list without scores (e.g., in Teacher_view_students)
@@ -41,6 +45,8 @@ public class Student {
         this.midterm_score = "";
         this.final_score = "";
         this.total_score = "";
+        this.isPresent = true;
+        this.absenceCount = 0;
     }
 
     // Original constructor for basic student info
@@ -55,8 +61,9 @@ public class Student {
         this.midterm_score = "";
         this.final_score = "";
         this.total_score = "";
+        this.isPresent = true;
+        this.absenceCount = 0;
     }
-
 
     // Getters
     public int getId() {
@@ -103,5 +110,26 @@ public class Student {
 
     public String getTotal_score() {
         return total_score;
+    }
+
+    public boolean isPresent() {
+        return isPresent;
+    }
+
+    public int getAbsenceCount() {
+        return absenceCount;
+    }
+
+    // Setters
+    public void setPresent(boolean present) {
+        isPresent = present;
+    }
+
+    public void setAbsenceCount(int count) {
+        absenceCount = count;
+    }
+
+    public void incrementAbsenceCount() {
+        absenceCount++;
     }
 }

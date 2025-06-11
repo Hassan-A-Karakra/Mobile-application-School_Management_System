@@ -7,18 +7,32 @@
     android:padding="12dp"
     android:background="#FAFAFA">
 
-    <TextView
-        android:id="@+id/studentName"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Student Name"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/studentName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="اسم الطالب"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/absenceCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="عدد الغيابات: 0"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/attendanceCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Present" />
+        android:text="حاضر" />
 </LinearLayout>
