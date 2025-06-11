@@ -30,12 +30,12 @@ public class TeacherAttendanceAdapter extends RecyclerView.Adapter<TeacherAttend
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Student student = students.get(position);
         holder.textViewName.setText(student.getName());
-        holder.checkBoxPresent.setChecked(student.isPresent());
-        holder.textViewAbsenceCount.setText(String.valueOf(student.getAbsenceCount()));
+    //    holder.checkBoxPresent.setChecked(student.isPresent());
+       // holder.textViewAbsenceCount.setText(String.valueOf(student.getAbsenceCount()));
 
-        holder.checkBoxPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            student.setPresent(isChecked);
-        });
+      //  holder.checkBoxPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
+       //     student.setPresent(isChecked);
+       // });
     }
 
     @Override

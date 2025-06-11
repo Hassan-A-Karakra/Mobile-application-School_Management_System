@@ -74,30 +74,15 @@
         app:layout_constraintTop_toBottomOf="@id/spinnerSubject"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonSaveGrades"
+        app:layout_constraintBottom_toTopOf="@id/buttonShareGrades"
         tools:listitem="@layout/item_student_grade" />
 
     <Button
-        android:id="@+id/buttonSaveGrades"
+        android:id="@+id/buttonShareGrades"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Save Grades (without publishing)"
+        android:text="Share Grades"
         android:textSize="18sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonPublishGrades"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
-
-    <Button
-        android:id="@+id/buttonPublishGrades"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Save Grades (with publishing)"
-        android:textSize="18sp"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"

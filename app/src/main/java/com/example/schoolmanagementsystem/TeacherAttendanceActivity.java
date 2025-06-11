@@ -115,10 +115,10 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject obj = response.getJSONObject(i);
-                            Student student = new Student();
-                            student.setId(obj.getInt("id"));
-                            student.setName(obj.getString("name"));
-                            studentList.add(student);
+                          //  Student student = new Student();
+                          //  student.setId(obj.getInt("id"));
+                          //  student.setName(obj.getString("name"));
+                           // studentList.add(student);
                         }
                         adapter.notifyDataSetChanged();
                     } catch (JSONException e) {
@@ -143,8 +143,8 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
             for (Student student : studentList) {
                 JSONObject record = new JSONObject();
                 record.put("student_id", student.getId());
-                record.put("is_present", student.isPresent());
-                record.put("absence_count", student.getAbsenceCount());
+               // record.put("is_present", student.isPresent());
+              //  record.put("absence_count", student.getAbsenceCount());
                 attendance.put(record);
             }
             requestBody.put("attendance", attendance);

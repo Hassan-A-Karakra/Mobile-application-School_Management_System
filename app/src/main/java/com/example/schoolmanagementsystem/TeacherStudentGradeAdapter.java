@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class StudentGradeAdapter extends RecyclerView.Adapter<StudentGradeAdapter.StudentGradeViewHolder> {
+public class TeacherStudentGradeAdapter extends RecyclerView.Adapter<TeacherStudentGradeAdapter.StudentGradeViewHolder> {
 
     private List<Student> studentList;
 
-    public StudentGradeAdapter(List<Student> studentList) {
+    public TeacherStudentGradeAdapter(List<Student> studentList) {
         this.studentList = studentList;
     }
 
@@ -31,22 +31,29 @@ public class StudentGradeAdapter extends RecyclerView.Adapter<StudentGradeAdapte
     @Override
     public void onBindViewHolder(@NonNull StudentGradeViewHolder holder, int position) {
         Student student = studentList.get(position);
-        holder.textViewStudentNameItem.setText(student.getName());
-        holder.editTextGradeItem.setText(student.getGrade());
+        holder.studentNameTextView.setText(student.getName());
 
-        // Set a TextWatcher to update the student's grade in the list when the text changes
-        holder.editTextGradeItem.addTextChangedListener(new TextWatcher() {
+        // Remove previous TextWatcher to prevent infinite loops or incorrect updates
+        if (holder.gradeEditText.getTag() instanceof TextWatcher) {
+            holder.gradeEditText.removeTextChangedListener((TextWatcher) holder.gradeEditText.getTag());
+        }
+
+        holder.gradeEditText.setText(student.getScore());
+
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                student.setGrade(Integer.parseInt(s.toString()));
+                student.setScore(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
-        });
+        };
+        holder.gradeEditText.addTextChangedListener(textWatcher);
+        holder.gradeEditText.setTag(textWatcher); // Store TextWatcher as a tag
     }
 
     @Override
@@ -55,13 +62,14 @@ public class StudentGradeAdapter extends RecyclerView.Adapter<StudentGradeAdapte
     }
 
     public static class StudentGradeViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewStudentNameItem;
-        EditText editTextGradeItem;
+        TextView studentNameTextView;
+        EditText gradeEditText;
 
         public StudentGradeViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewStudentNameItem = itemView.findViewById(R.id.textViewStudentNameItem);
-            editTextGradeItem = itemView.findViewById(R.id.editTextGradeItem);
+
+            studentNameTextView = itemView.findViewById(R.id.studentNameTextView);
+            gradeEditText = itemView.findViewById(R.id.gradeEditText);
         }
     }
 
@@ -73,4 +81,4 @@ public class StudentGradeAdapter extends RecyclerView.Adapter<StudentGradeAdapte
         this.studentList = newStudentList;
         notifyDataSetChanged();
     }
-} 
+}
