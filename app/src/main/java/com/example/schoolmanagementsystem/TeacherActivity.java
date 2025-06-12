@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem; // Import for MenuItem
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView; // Added for TextView
 import android.widget.Toast;
 
@@ -30,6 +32,14 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
 
     private SharedPreferences sharedPreferences; // إضافة SharedPreferences
 
+    // Button declarations
+    private Button buttonStudentList;
+    private Button buttonGradeInput;
+    private Button buttonAttendance;
+    private Button buttonCommunicate;
+    private Button buttonSchedule;
+    private Button buttonAssignments;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +47,20 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
 
         sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE); // تهيئة SharedPreferences
 
+        // Initialize toolbar and navigation drawer
+        setupNavigationDrawer();
+
+        // Initialize buttons
+        initializeButtons();
+
+        // Set up button click listeners
+        setupButtonClickListeners();
+
+        // Update navigation header
+        updateNavigationHeader();
+    }
+
+    private void setupNavigationDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,11 +68,59 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
-        updateNavigationHeader(); // Call to update header on creation
+    private void initializeButtons() {
+        buttonStudentList = findViewById(R.id.buttonStudentList);
+        buttonGradeInput = findViewById(R.id.buttonGradeInput);
+        buttonAttendance = findViewById(R.id.buttonAttendance);
+        buttonCommunicate = findViewById(R.id.buttonCommunicate);
+        buttonSchedule = findViewById(R.id.buttonSchedule);
+        buttonAssignments = findViewById(R.id.buttonAssignments);
+    }
+
+    private void setupButtonClickListeners() {
+        buttonStudentList.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherActivity.this, TeacherStudentListActivity.class);
+            intent.putExtra("teacher_id", currentTeacherId);
+            startActivity(intent);
+        });
+
+        buttonGradeInput.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherActivity.this, TeacherGradeInputActivity.class);
+            intent.putExtra("teacher_id", currentTeacherId);
+            startActivity(intent);
+        });
+
+        buttonAttendance.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherActivity.this, TeacherAttendanceActivity.class);
+            intent.putExtra("teacher_id", currentTeacherId);
+            startActivity(intent);
+        });
+
+        buttonCommunicate.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherActivity.this, TeacherCommunicateActivity.class);
+            intent.putExtra("teacher_id", currentTeacherId);
+            startActivity(intent);
+        });
+
+        buttonSchedule.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherActivity.this, TeacherScheduleActivity.class);
+            intent.putExtra("teacher_id", currentTeacherId);
+            startActivity(intent);
+        });
+
+        buttonAssignments.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherActivity.this, TeacherAssignmentsActivity.class);
+            intent.putExtra("teacher_id", currentTeacherId);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -99,7 +171,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         Log.d(TAG, "Navigation View Header Count: " + navigationView.getHeaderCount()); // Log header count
         if (navigationView.getHeaderCount() > 0) {
-            android.view.View headerView = navigationView.getHeaderView(0);
+            View headerView = navigationView.getHeaderView(0);
             TextView navTeacherName = headerView.findViewById(R.id.teacherNameTextView);
             TextView navTeacherEmail = headerView.findViewById(R.id.teacherEmailTextView);
             TextView navTeacherSubject = headerView.findViewById(R.id.teacherSubjectTextView);
@@ -135,29 +207,33 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.nav_edit_profile) {
             navigateToActivity(TeacherProfileActivity.class, currentTeacherId);
         } else if (id == R.id.nav_logout) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Confirm Logout")
-                    .setMessage("Are you sure you want to log out?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // Clear SharedPreferences on logout
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.clear();
-                        editor.apply();
-                        Log.d(TAG, "Logged out. SharedPreferences cleared."); // Log message
-
-                        Intent intent = new Intent(TeacherActivity.this, TeacherLoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    })
-                    .setNegativeButton("No", (dialog, which) -> {
-                        dialog.dismiss(); // Dismiss the dialog
-                    })
-                    .show();
+            showLogoutConfirmationDialog();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showLogoutConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Logout")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // Clear SharedPreferences on logout
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    Log.d(TAG, "Logged out. SharedPreferences cleared."); // Log message
+
+                    Intent intent = new Intent(TeacherActivity.this, TeacherLoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss(); // Dismiss the dialog
+                })
+                .show();
     }
 
     // Override onBackPressed to handle closing the navigation drawer first
