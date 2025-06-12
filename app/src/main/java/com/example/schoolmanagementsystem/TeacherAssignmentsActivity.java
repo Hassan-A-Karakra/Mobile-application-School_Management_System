@@ -39,64 +39,56 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private EditText assignmentTitleInput;
     private EditText assignmentDescriptionInput;
-    private Spinner classSpinner; // Spinner for Class selection
-    private Spinner subjectSpinner; // Spinner for Subject selection
+    private Spinner classSpinner;
+    private Spinner subjectSpinner;
     private EditText dueDateInput;
     private Button createAssignmentButton;
     private RecyclerView assignmentsRecyclerView;
     private FloatingActionButton fabAddAssignment;
     private TeacherAssignmentAdapter assignmentAdapter;
-    private View assignmentFormLayout; // MaterialCardView for the form
+    private View assignmentFormLayout;
     private Calendar calendar;
     private SimpleDateFormat dateFormatter;
-    private SimpleDateFormat phpDateFormat; // Date format for PHP
-    private String teacherGrade; // The class/grade the teacher teaches
+    private SimpleDateFormat phpDateFormat;
+    private String teacherGrade;
 
-    // URLs for PHP backend files
-    // IMPORTANT: Make sure to replace 192.168.1.103 with the actual IP address of your XAMPP server
-    private static final String BASE_URL = "http://192.168.1.103/student_system/"; // or http://10.0.2.2/student_system/ for emulator
-    private static final String CREATE_ASSIGNMENT_URL = BASE_URL + "create_assignment.php";
-    private static final String GET_ASSIGNMENTS_URL = BASE_URL + "get_teacher_assignments.php";
-    private static final String GET_CLASSES_URL = BASE_URL + "teacher_get_classes.php"; // New URL for fetching classes
-    private static final String GET_SUBJECTS_URL = BASE_URL + "teacher_get_subjects.php"; // New URL for fetching subjects
+    private static final String BASE_URL = "http://10.0.2.2/student_system/";
+    private static final String CREATE_ASSIGNMENT_URL = BASE_URL + "teacher_create_assignment.php";
+    private static final String GET_ASSIGNMENTS_URL = BASE_URL + "teacher_get_teacher_assignments.php";
+    private static final String GET_CLASSES_URL = BASE_URL + "teacher_get_grades.php";
+    private static final String GET_SUBJECTS_URL = BASE_URL + "teacher_get_subjects.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_assignments);
 
-        // Initialize variables
         calendar = Calendar.getInstance();
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        phpDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()); // PHP date format
+        phpDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-        // IMPORTANT: Receive the teacher's grade from the Intent
-        // This value should be passed from the TeacherLoginActivity upon successful login
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             teacherGrade = extras.getString("TEACHER_GRADE");
             if (teacherGrade == null || teacherGrade.isEmpty()) {
-                // Fallback if grade is not provided or empty (should ideally not happen if login passes it)
-                teacherGrade = "DefaultGrade"; // Set a default value if not received
+                teacherGrade = "DefaultGrade";
                 Toast.makeText(this, "No class data received, default value is used.", Toast.LENGTH_LONG).show();
             }
         } else {
-            teacherGrade = "DefaultGrade"; // Default value if no extras are passed at all
+            teacherGrade = "DefaultGrade";
             Toast.makeText(this, "No class data received, default value is used.", Toast.LENGTH_LONG).show();
         }
 
-        // Bind UI elements
         initializeViews();
         setupToolbar();
         setupRecyclerView();
         setupDatePicker();
-        setupSpinners(); // Call this to set up Spinners dynamically
+        setupSpinners();
         setupClickListeners();
 
-        // Hide assignment creation form initially
-        assignmentFormLayout.setVisibility(View.GONE);
+        assignmentFormLayout.setVisibility(View.VISIBLE);
+        fabAddAssignment.setVisibility(View.GONE);
 
-        // Fetch assignments when the activity starts
         fetchAssignments();
     }
 
@@ -104,13 +96,13 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         assignmentTitleInput = findViewById(R.id.assignmentTitleInput);
         assignmentDescriptionInput = findViewById(R.id.assignmentDescriptionInput);
-        classSpinner = findViewById(R.id.classSpinner); // Bind class Spinner
-        subjectSpinner = findViewById(R.id.subjectSpinner); // Bind subject Spinner
+        classSpinner = findViewById(R.id.classSpinner);
+        subjectSpinner = findViewById(R.id.subjectSpinner);
         dueDateInput = findViewById(R.id.dueDateInput);
         createAssignmentButton = findViewById(R.id.createAssignmentButton);
         assignmentsRecyclerView = findViewById(R.id.assignmentsRecyclerView);
         fabAddAssignment = findViewById(R.id.fabAddAssignment);
-        assignmentFormLayout = findViewById(R.id.createAssignmentCard); // Bind the CardView
+        assignmentFormLayout = findViewById(R.id.createAssignmentCard);
     }
 
     private void setupToolbar() {
@@ -126,7 +118,6 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         assignmentAdapter = new TeacherAssignmentAdapter(new TeacherAssignmentAdapter.OnAssignmentClickListener() {
             @Override
             public void onMenuClick(Assignment assignment) {
-                // Here you can add logic to handle the assignment menu (e.g., edit/delete)
                 Toast.makeText(TeacherAssignmentsActivity.this, "Menu clicked for: " + assignment.getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -140,8 +131,8 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                 showDatePicker();
             }
         });
-        dueDateInput.setFocusable(false); // Prevent keyboard from popping up
-        dueDateInput.setKeyListener(null); // Prevent manual input
+        dueDateInput.setFocusable(false);
+        dueDateInput.setKeyListener(null);
     }
 
     private void showDatePicker() {
@@ -159,8 +150,8 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        fetchClasses(); // Fetch classes from backend to populate the spinner
-        fetchSubjects(); // Fetch subjects from backend to populate the spinner
+        fetchClasses();
+        fetchSubjects();
     }
 
     private void fetchClasses() {
@@ -171,8 +162,15 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                 BufferedReader reader = null;
                 try {
                     URL url = new URL(GET_CLASSES_URL);
-                    conn = (HttpURLConnection) url.openConnection(); // Corrected line!
-                    conn.setRequestMethod("GET");
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    conn.setDoOutput(true);
+
+                    OutputStream os = conn.getOutputStream();
+                    os.write(new JSONObject().toString().getBytes("UTF-8"));
+                    os.flush();
+                    os.close();
 
                     int responseCode = conn.getResponseCode();
                     if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -185,45 +183,23 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                         String jsonResponse = response.toString();
                         Log.d("API_RESPONSE", "Classes Response: " + jsonResponse);
 
-                        JSONObject jsonObject = new JSONObject(jsonResponse);
-                        String status = jsonObject.getString("status");
-
-                        if ("success".equals(status)) {
-                            JSONArray classesJson = jsonObject.getJSONArray("classes");
-                            final List<String> fetchedClasses = new ArrayList<>();
-                            fetchedClasses.add("Select Class"); // Add default hint
-                            for (int i = 0; i < classesJson.length(); i++) {
-                                fetchedClasses.add(classesJson.getString(i));
-                            }
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ArrayAdapter<String> classAdapter = new ArrayAdapter<>(TeacherAssignmentsActivity.this,
-                                            android.R.layout.simple_spinner_item, fetchedClasses);
-                                    classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                    classSpinner.setAdapter(classAdapter);
-                                }
-                            });
-                        } else {
-                            final String message = jsonObject.optString("message", "Failed to fetch classes.");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(TeacherAssignmentsActivity.this, message, Toast.LENGTH_LONG).show();
-                                }
-                            });
+                        JSONArray classesJson = new JSONArray(jsonResponse);
+                        final List<String> fetchedClasses = new ArrayList<>();
+                        fetchedClasses.add("Select Class");
+                        for (int i = 0; i < classesJson.length(); i++) {
+                            fetchedClasses.add(classesJson.getString(i));
                         }
-                    } else {
-                        final String errorMessage = "Error fetching classes: " + responseCode;
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(TeacherAssignmentsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                                ArrayAdapter<String> classAdapter = new ArrayAdapter<>(TeacherAssignmentsActivity.this,
+                                        android.R.layout.simple_spinner_item, fetchedClasses);
+                                classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                classSpinner.setAdapter(classAdapter);
                             }
                         });
                     }
-
                 } catch (Exception e) {
                     Log.e("API_ERROR", "Error fetching classes", e);
                     final String errorMessage = "Network Error: " + e.getMessage();
@@ -234,9 +210,7 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                         }
                     });
                 } finally {
-                    if (conn != null) {
-                        conn.disconnect();
-                    }
+                    if (conn != null) conn.disconnect();
                     if (reader != null) {
                         try {
                             reader.close();
@@ -257,8 +231,15 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                 BufferedReader reader = null;
                 try {
                     URL url = new URL(GET_SUBJECTS_URL);
-                    conn = (HttpURLConnection) url.openConnection(); // Corrected line!
-                    conn.setRequestMethod("GET");
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    conn.setDoOutput(true);
+
+                    OutputStream os = conn.getOutputStream();
+                    os.write(new JSONObject().toString().getBytes("UTF-8"));
+                    os.flush();
+                    os.close();
 
                     int responseCode = conn.getResponseCode();
                     if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -271,45 +252,23 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                         String jsonResponse = response.toString();
                         Log.d("API_RESPONSE", "Subjects Response: " + jsonResponse);
 
-                        JSONObject jsonObject = new JSONObject(jsonResponse);
-                        String status = jsonObject.getString("status");
-
-                        if ("success".equals(status)) {
-                            JSONArray subjectsJson = jsonObject.getJSONArray("subjects");
-                            final List<String> fetchedSubjects = new ArrayList<>();
-                            fetchedSubjects.add("Select Subject"); // Add default hint
-                            for (int i = 0; i < subjectsJson.length(); i++) {
-                                fetchedSubjects.add(subjectsJson.getString(i));
-                            }
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(TeacherAssignmentsActivity.this,
-                                            android.R.layout.simple_spinner_item, fetchedSubjects);
-                                    subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                    subjectSpinner.setAdapter(subjectAdapter);
-                                }
-                            });
-                        } else {
-                            final String message = jsonObject.optString("message", "Failed to fetch subjects.");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(TeacherAssignmentsActivity.this, message, Toast.LENGTH_LONG).show();
-                                }
-                            });
+                        JSONArray subjectsJson = new JSONArray(jsonResponse);
+                        final List<String> fetchedSubjects = new ArrayList<>();
+                        fetchedSubjects.add("Select Subject");
+                        for (int i = 0; i < subjectsJson.length(); i++) {
+                            fetchedSubjects.add(subjectsJson.getString(i));
                         }
-                    } else {
-                        final String errorMessage = "Error fetching subjects: " + responseCode;
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(TeacherAssignmentsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                                ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(TeacherAssignmentsActivity.this,
+                                        android.R.layout.simple_spinner_item, fetchedSubjects);
+                                subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                subjectSpinner.setAdapter(subjectAdapter);
                             }
                         });
                     }
-
                 } catch (Exception e) {
                     Log.e("API_ERROR", "Error fetching subjects", e);
                     final String errorMessage = "Network Error: " + e.getMessage();
@@ -320,9 +279,7 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                         }
                     });
                 } finally {
-                    if (conn != null) {
-                        conn.disconnect();
-                    }
+                    if (conn != null) conn.disconnect();
                     if (reader != null) {
                         try {
                             reader.close();
@@ -339,10 +296,9 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         fabAddAssignment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Show the assignment creation form
                 assignmentFormLayout.setVisibility(View.VISIBLE);
-                fabAddAssignment.setVisibility(View.GONE); // Hide the add button
-                clearInputFields(); // Clear fields when opening the form
+                fabAddAssignment.setVisibility(View.GONE);
+                clearInputFields();
             }
         });
 
@@ -357,8 +313,8 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private void createAssignment() {
         String title = assignmentTitleInput.getText().toString().trim();
         String description = assignmentDescriptionInput.getText().toString().trim();
-        String assignmentClass = classSpinner.getSelectedItem().toString(); // Get selected class from Spinner
-        String assignmentSubject = subjectSpinner.getSelectedItem().toString(); // Get selected subject from Spinner
+        String assignmentClass = classSpinner.getSelectedItem().toString();
+        String assignmentSubject = subjectSpinner.getSelectedItem().toString();
         String dueDate = dueDateInput.getText().toString().trim();
 
         if (title.isEmpty() || description.isEmpty() || dueDate.isEmpty() ||
@@ -367,7 +323,6 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
             return;
         }
 
-        // Convert date from UI format (dd/MM/yyyy) to database format (yyyy-MM-dd)
         String dueDateForPhp;
         try {
             dueDateForPhp = phpDateFormat.format(dateFormatter.parse(dueDate));
@@ -382,9 +337,9 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
             postData.put("title", title);
             postData.put("description", description);
             postData.put("due_date", dueDateForPhp);
-            postData.put("class", assignmentClass); // Add class to POST data
-            postData.put("subject", assignmentSubject); // Add subject to POST data
-            postData.put("grade", teacherGrade); // Send teacher's grade with assignment (to link to teacher/students)
+            postData.put("class", assignmentClass);
+            postData.put("subject", assignmentSubject);
+            postData.put("grade", teacherGrade);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -426,25 +381,15 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                                 if ("success".equals(status)) {
                                     Toast.makeText(TeacherAssignmentsActivity.this, "Assignment created successfully!", Toast.LENGTH_SHORT).show();
                                     clearInputFields();
-                                    assignmentFormLayout.setVisibility(View.GONE); // Hide the form
-                                    fabAddAssignment.setVisibility(View.VISIBLE); // Show the add button
-                                    fetchAssignments(); // Re-fetch assignments after creation
+                                    assignmentFormLayout.setVisibility(View.GONE);
+                                    fabAddAssignment.setVisibility(View.VISIBLE);
+                                    fetchAssignments();
                                 } else {
                                     Toast.makeText(TeacherAssignmentsActivity.this, "Failed to create assignment: " + message, Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
-
-                    } else {
-                        final String errorMessage = "Error: " + responseCode;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(TeacherAssignmentsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                            }
-                        });
                     }
-
                 } catch (Exception e) {
                     Log.e("API_ERROR", "Error creating assignment", e);
                     final String errorMessage = "Network Error: " + e.getMessage();
@@ -455,17 +400,13 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                         }
                     });
                 } finally {
-                    if (conn != null) {
-                        conn.disconnect();
-                    }
+                    if (conn != null) conn.disconnect();
                 }
             }
         }).start();
     }
 
-    // Function to fetch assignments from the backend
     private void fetchAssignments() {
-        // If teacherGrade is not available, cannot fetch assignments
         if (teacherGrade == null || teacherGrade.isEmpty()) {
             Toast.makeText(this, "Failed to load assignments: Grade is required for fetching assignments.", Toast.LENGTH_LONG).show();
             return;
@@ -474,9 +415,6 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         JSONObject postData = new JSONObject();
         try {
             postData.put("grade", teacherGrade);
-            // If you want to fetch assignments for a specific class and subject, you can add it here
-            // postData.put("class", "some_class");
-            // postData.put("subject", "some_subject");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -521,8 +459,8 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                                 String title = assignmentJson.getString("title");
                                 String description = assignmentJson.getString("description");
                                 String dueDate = assignmentJson.getString("due_date");
-                                String assignmentClass = assignmentJson.getString("class"); // Get class value
-                                String assignmentSubject = assignmentJson.getString("subject"); // Get subject value
+                                String assignmentClass = assignmentJson.getString("class");
+                                String assignmentSubject = assignmentJson.getString("subject");
 
                                 fetchedAssignments.add(new Assignment(id, title, description, dueDate, assignmentClass, assignmentSubject));
                             }
@@ -538,25 +476,8 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                        } else {
-                            final String message = jsonObject.optString("message", "Failed to fetch assignments.");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(TeacherAssignmentsActivity.this, message, Toast.LENGTH_LONG).show();
-                                }
-                            });
                         }
-                    } else {
-                        final String errorMessage = "Error fetching assignments: " + responseCode;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(TeacherAssignmentsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                            }
-                        });
                     }
-
                 } catch (Exception e) {
                     Log.e("API_ERROR", "Error fetching assignments", e);
                     final String errorMessage = "Network Error: " + e.getMessage();
@@ -567,9 +488,7 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                         }
                     });
                 } finally {
-                    if (conn != null) {
-                        conn.disconnect();
-                    }
+                    if (conn != null) conn.disconnect();
                     if (reader != null) {
                         try {
                             reader.close();
@@ -585,8 +504,8 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private void clearInputFields() {
         assignmentTitleInput.setText("");
         assignmentDescriptionInput.setText("");
-        classSpinner.setSelection(0); // Reset class Spinner to default
-        subjectSpinner.setSelection(0); // Reset subject Spinner to default
+        classSpinner.setSelection(0);
+        subjectSpinner.setSelection(0);
         dueDateInput.setText("");
     }
 
