@@ -4,13 +4,25 @@
                     android:layout_height="match_parent"
                     android:padding="16dp">
 
+                    <TextView
+                        android:id="@+id/teacherLoginTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Teacher Login"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#3E206D"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="20dp"
+                        android:layout_alignParentTop="true"/>
+
                     <ImageView
                         android:id="@+id/backgroundImage"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:src="@drawable/login"
                         android:scaleType="centerCrop"
-                        android:layout_alignParentTop="true"
+                        android:layout_below="@id/teacherLoginTitle"
                         android:layout_marginBottom="20dp" />
 
                     <EditText

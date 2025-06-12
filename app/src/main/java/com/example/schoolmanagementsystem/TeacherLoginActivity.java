@@ -22,7 +22,7 @@ public class TeacherLoginActivity extends AppCompatActivity {
 
     EditText editTextUsername, editTextPassword;
     CheckBox checkboxRememberMe;
-    Button buttonLogin;
+    Button buttonLogin, buttonRegister;
 
     SharedPreferences sharedPreferences;
 
@@ -37,6 +37,7 @@ public class TeacherLoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
         buttonLogin = findViewById(R.id.buttonLogin);
+        buttonRegister = findViewById(R.id.buttonRegister);
 
         sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
@@ -57,6 +58,11 @@ public class TeacherLoginActivity extends AppCompatActivity {
 
              loginTeacher(email, password);
         });
+
+        buttonRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherLoginActivity.this, RegisterAdminLoginActivity.class);
+            startActivity(intent);
+        });
     }
 
      private void loginTeacher(String email, String password) {
@@ -69,20 +75,27 @@ public class TeacherLoginActivity extends AppCompatActivity {
                     response -> {
                          String status = response.optString("status");
                         if ("success".equals(status)) {
-                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            if (checkboxRememberMe.isChecked()) {
-                                editor.putString("username", email);
-                                editor.putString("password", password);
-                                editor.putBoolean("rememberMe", true);
-                            } else {
-                                editor.clear();
-                            }
-                            editor.apply();
-
                             try {
                                  JSONObject teacher = response.getJSONObject("teacher");
 
-                                 Intent intent = new Intent(TeacherLoginActivity.this, TeacherActivity.class);
+                                // Save teacher info to SharedPreferences
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                if (checkboxRememberMe.isChecked()) {
+                                    editor.putString("username", email);
+                                    editor.putString("password", password);
+                                    editor.putBoolean("rememberMe", true);
+                                } else {
+                                    editor.clear();
+                                }
+
+                                // Save teacher ID and other details from the 'teacher' JSONObject
+                                editor.putInt("current_teacher_id", teacher.getInt("id"));
+                                editor.putString("current_teacher_name", teacher.getString("name"));
+                                editor.putString("current_teacher_email", teacher.getString("email"));
+                                editor.putString("current_teacher_subject", teacher.getString("subject"));
+                                editor.apply();
+
+                                Intent intent = new Intent(TeacherLoginActivity.this, TeacherActivity.class);
                                 intent.putExtra("teacher_id", teacher.getInt("id"));
                                 intent.putExtra("teacher_name", teacher.getString("name"));
                                 intent.putExtra("teacher_email", teacher.getString("email"));
