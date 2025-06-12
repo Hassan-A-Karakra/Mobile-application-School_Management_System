@@ -3,7 +3,7 @@ package com.example.schoolmanagementsystem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem; // Import for MenuItem
-import android.widget.Button;
+import android.widget.TextView; // Added for TextView
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,10 +18,9 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
 
     private DrawerLayout drawerLayout;
     private int currentTeacherId; // متغير لتخزين teacher_id
-
-    // Original Button declarations - NOW RESTORED
-    Button buttonStudentList, buttonGradeInput, buttonAttendance,
-            buttonCommunicate, buttonSchedule, buttonAssignments, buttonProfile;
+    private String currentTeacherName; // متغير لتخزين اسم المعلم
+    private String currentTeacherEmail; // متغير لتخزين بريد المعلم الإلكتروني
+    private String currentTeacherSubject; // متغير لتخزين مادة المعلم
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +29,10 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
 
         // جلب teacher_id الذي تم تمريره من TeacherLoginActivity
         currentTeacherId = getIntent().getIntExtra("teacher_id", -1);
+        currentTeacherName = getIntent().getStringExtra("teacher_name");
+        currentTeacherEmail = getIntent().getStringExtra("teacher_email");
+        currentTeacherSubject = getIntent().getStringExtra("teacher_subject");
+
         if (currentTeacherId == -1) {
             // يمكنك إضافة رسالة Toast هنا إذا لم يتم جلب الـ ID
             // Toast.makeText(this, "خطأ: لم يتم جلب معرف المعلم.", Toast.LENGTH_SHORT).show();
@@ -44,28 +47,28 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // تحديث معلومات المعلم في رأس قائمة التنقل الجانبية
+        if (navigationView.getHeaderCount() > 0) {
+            android.view.View headerView = navigationView.getHeaderView(0);
+            TextView navTeacherName = headerView.findViewById(R.id.nav_teacher_name);
+            TextView navTeacherEmail = headerView.findViewById(R.id.nav_teacher_email);
+            TextView navTeacherSubject = headerView.findViewById(R.id.nav_teacher_subject);
+
+            if (navTeacherName != null && currentTeacherName != null) {
+                navTeacherName.setText(currentTeacherName);
+            }
+            if (navTeacherEmail != null && currentTeacherEmail != null) {
+                navTeacherEmail.setText(currentTeacherEmail);
+            }
+            if (navTeacherSubject != null && currentTeacherSubject != null) {
+                navTeacherSubject.setText("Subject: " + currentTeacherSubject);
+            }
+        }
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // These lines are now fully functional alongside the navigation drawer.
-        buttonStudentList = findViewById(R.id.buttonStudentList);
-        buttonGradeInput = findViewById(R.id.buttonGradeInput);
-        buttonAttendance = findViewById(R.id.buttonAttendance);
-        buttonCommunicate = findViewById(R.id.buttonCommunicate);
-        buttonSchedule = findViewById(R.id.buttonSchedule);
-        buttonAssignments = findViewById(R.id.buttonAssignments);
-        // buttonProfile = findViewById(R.id.buttonProfile); // This line is still commented out if it was before, assuming it's not implemented yet.
-
-        buttonStudentList.setOnClickListener(v -> navigateToActivity(TeacherStudentListActivity.class, currentTeacherId));
-        buttonGradeInput.setOnClickListener(v -> navigateToActivity(TeacherGradeInputActivity.class, currentTeacherId));
-        buttonAttendance.setOnClickListener(v -> navigateToActivity(TeacherAttendanceActivity.class, currentTeacherId));
-        buttonCommunicate.setOnClickListener(v -> navigateToActivity(TeacherCommunicateActivity.class, currentTeacherId));
-        // تم تصحيح هذا السطر: يفتح TeacherScheduleActivity ويمرر teacher_id
-        buttonSchedule.setOnClickListener(v -> navigateToActivity(TeacherScheduleActivity.class, currentTeacherId));
-        buttonAssignments.setOnClickListener(v -> navigateToActivity(TeacherAssignmentsActivity.class, currentTeacherId));
-        //buttonProfile.setOnClickListener(v -> navigateToActivity(TeacherProfileActivity.class, currentTeacherId)); // This line is still commented out if it was before, assuming it's not implemented yet.
-        // --- END RESTORED: Original Button Initializations and Listeners ---
     }
 
     // This method is called when an item in the navigation drawer is selected
@@ -73,21 +76,12 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_student_list) {
-            navigateToActivity(RegisterStudentListActivity.class, currentTeacherId);
-        } else if (id == R.id.nav_grade_input) {
-            navigateToActivity(TeacherGradeInputActivity.class, currentTeacherId);
-        } else if (id == R.id.nav_attendance) {
-            navigateToActivity(TeacherAttendanceActivity.class, currentTeacherId);
-        } else if (id == R.id.nav_communicate) {
-            navigateToActivity(TeacherCommunicateActivity.class, currentTeacherId);
-            // تم تصحيح هذا السطر: يفتح TeacherScheduleActivity ويمرر teacher_id
-        } else if (id == R.id.nav_schedule) {
-            navigateToActivity(TeacherScheduleActivity.class, currentTeacherId);
-        } else if (id == R.id.nav_assignments) {
-            navigateToActivity(TeacherAssignmentsActivity.class, currentTeacherId);
-        } else if (id == R.id.nav_profile) {
-            navigateToActivity(TeacherProfileActivity.class, currentTeacherId);
+        if (id == R.id.nav_logout) {
+            // توجيه المستخدم إلى شاشة تسجيل الدخول (TeacherLoginActivity)
+            Intent intent = new Intent(TeacherActivity.this, TeacherLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish(); // إغلاق النشاط الحالي
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
