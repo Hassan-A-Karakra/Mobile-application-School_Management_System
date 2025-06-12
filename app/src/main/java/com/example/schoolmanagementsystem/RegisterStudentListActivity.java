@@ -16,7 +16,7 @@ public class RegisterStudentListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private StudentAdapter adapter;
     private ArrayList<Student> studentList = new ArrayList<>();
-    private static final String URL = "http://10.0.2.2/student_system/view_students.php";
+    public static final String URL = "http://10.0.2.2/student_system/view_students.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +43,17 @@ public class RegisterStudentListActivity extends AppCompatActivity {
                             for (int i = 0; i < studentsArray.length(); i++) {
                                 JSONObject obj = studentsArray.getJSONObject(i);
 
-                               /* Student student = new Student(
+                               Student student = new Student(
                                         obj.getInt("id"),
                                         obj.getString("name"),
                                         obj.getString("email"),
-                                   //     obj.getInt("age")
+                                        obj.getInt("age")
                                 );
 
 
                                 studentList.add(student);
 
-                                */
+
                             }
                             adapter.notifyDataSetChanged();
                         } else {
