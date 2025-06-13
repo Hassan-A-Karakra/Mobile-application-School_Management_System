@@ -2,6 +2,7 @@ package com.example.schoolmanagementsystem;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,7 @@ public class RegistrarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
 
-         radioStudent = findViewById(R.id.radioStudent);
+        radioStudent = findViewById(R.id.radioStudent);
         radioTeacher = findViewById(R.id.radioTeacher);
         nameField = findViewById(R.id.editTextName);
         emailField = findViewById(R.id.editTextEmail);
@@ -39,25 +40,25 @@ public class RegistrarActivity extends AppCompatActivity {
         spinnerSubjects = findViewById(R.id.spinnerSubjects);
         registerBtn = findViewById(R.id.buttonRegister);
 
-         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSubjects.setAdapter(adapter);
 
-         radioStudent.setOnClickListener(v -> {
+        radioStudent.setOnClickListener(v -> {
             userType = "student";
             gradeField.setVisibility(View.VISIBLE);
             ageField.setVisibility(View.VISIBLE);
             spinnerSubjects.setVisibility(View.GONE);
         });
 
-         radioTeacher.setOnClickListener(v -> {
+        radioTeacher.setOnClickListener(v -> {
             userType = "teacher";
             gradeField.setVisibility(View.GONE);
             ageField.setVisibility(View.GONE);
             spinnerSubjects.setVisibility(View.VISIBLE);
         });
 
-         registerBtn.setOnClickListener(v -> {
+        registerBtn.setOnClickListener(v -> {
             String name = nameField.getText().toString().trim();
             String email = emailField.getText().toString().trim();
             String pass = passwordField.getText().toString().trim();
@@ -110,10 +111,19 @@ public class RegistrarActivity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(this, "Server response error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Server response error: Invalid JSON", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+                error -> {
+                    if (error.networkResponse != null) {
+                        String errorData = new String(error.networkResponse.data);
+                        Log.e("Volley Error", "Status Code: " + error.networkResponse.statusCode + ", Data: " + errorData);
+                        Toast.makeText(this, "Server Error: " + error.networkResponse.statusCode + " " + errorData, Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.e("Volley Error", "Network Error: " + error.getMessage(), error);
+                        Toast.makeText(this, "Network Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
         ) {
             @Override
             protected Map<String, String> getParams() {
