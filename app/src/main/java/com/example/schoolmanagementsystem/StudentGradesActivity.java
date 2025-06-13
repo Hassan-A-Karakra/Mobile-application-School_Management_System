@@ -90,16 +90,16 @@ public class StudentGradesActivity extends AppCompatActivity {
                             // Get attendance
                             JSONArray attendanceArray = response.getJSONArray("attendance");
                             Map<String, Integer> attendanceMap = new HashMap<>();
+                            int totalAbsences = 0; // Initialize total absences here
                             for (int i = 0; i < attendanceArray.length(); i++) {
                                 JSONObject attendance = attendanceArray.getJSONObject(i);
-                                attendanceMap.put(
-                                        attendance.getString("subject"),
-                                        attendance.getInt("absence_count")
-                                );
+                                String subject = attendance.getString("subject");
+                                int absenceCount = attendance.getInt("absence_count");
+                                attendanceMap.put(subject, absenceCount);
+                                totalAbsences += absenceCount; // Sum all absences
                             }
 
-                            // Process grades and calculate total absences
-                            int totalAbsences = 0;
+                            // Process grades (no longer calculating totalAbsences here)
                             for (int i = 0; i < gradesArray.length(); i++) {
                                 JSONObject grade = gradesArray.getJSONObject(i);
                                 String subject = grade.getString("subject_name");
@@ -108,9 +108,8 @@ public class StudentGradesActivity extends AppCompatActivity {
                                 String teacherName = grade.optString("teacher_name", "N/A");
 
                                 if ("1".equals(published)) {
-                                    int absences = attendanceMap.getOrDefault(subject, 0);
-                                    totalAbsences += absences;
-                                    studentGradeItems.add(new StudentGradeItem(subject, gradeValue, String.valueOf(absences), teacherName));
+                                    // int absences = attendanceMap.getOrDefault(subject, 0); // Commented out to use totalAbsences
+                                    studentGradeItems.add(new StudentGradeItem(subject, gradeValue, String.valueOf(totalAbsences), teacherName));
                                 }
                             }
 
@@ -118,7 +117,7 @@ public class StudentGradesActivity extends AppCompatActivity {
                             if (!studentGradeItems.isEmpty()) {
                                 double average = response.getDouble("average_grade");
                                 updateGradeStatus(average);
-                                absencesText.setText("Total Absences: " + totalAbsences);
+                                absencesText.setText("Total Absences: " + totalAbsences); // Display the calculated total absences
 
                                 Collections.sort(studentGradeItems, (a, b) ->
                                         a.getSubject().compareToIgnoreCase(b.getSubject()));
@@ -128,7 +127,7 @@ public class StudentGradesActivity extends AppCompatActivity {
                                 averageGradeText.setText("No grades available");
                                 statusText.setText("Status: Not Available");
                                 statusText.setTextColor(getResources().getColor(R.color.needs_improvement));
-                                absencesText.setText("No attendance records");
+                                absencesText.setText("Total Absences: " + totalAbsences); // Display total absences even if no grades
                                 studentGradeText.setText("Grade: N/A");
                             }
                         } else {
