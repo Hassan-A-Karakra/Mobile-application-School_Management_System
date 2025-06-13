@@ -3,8 +3,9 @@ package com.example.schoolmanagementsystem;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log; // Added for logging
+import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,18 +18,33 @@ import org.json.JSONException;
 public class StudentLoginActivity extends AppCompatActivity {
 
     private EditText emailInput, passwordInput;
-    private Button loginButton;
+    private Button loginButton, registerButton;
+    private CheckBox checkboxRememberMe;
     private static final String LOGIN_URL = "http://10.0.2.2/student_system/student_login_student.php";
     private static final String TAG = "StudentLogin";
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_login);
 
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
+
+        // Initialize views
         emailInput = findViewById(R.id.emailInput);
         passwordInput = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
+        registerButton = findViewById(R.id.buttonRegister);
+        checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
+
+        // Check if remember me was checked previously
+        if (sharedPreferences.getBoolean("rememberMe", false)) {
+            emailInput.setText(sharedPreferences.getString("email", ""));
+            passwordInput.setText(sharedPreferences.getString("password", ""));
+            checkboxRememberMe.setChecked(true);
+        }
 
         loginButton.setOnClickListener(v -> {
             String email = emailInput.getText().toString().trim().toLowerCase();
@@ -52,20 +68,33 @@ public class StudentLoginActivity extends AppCompatActivity {
                         if ("success".equals(response.optString("status"))) {
                             try {
                                 JSONObject student = response.getJSONObject("student");
-                                int studentId = student.getInt("id"); // Get student ID from JSON
-                                Log.d(TAG, "Student ID from JSON: " + studentId); // Log the student ID
+                                int studentId = student.getInt("id");
+                                Log.d(TAG, "Student ID from JSON: " + studentId);
 
                                 // Save student info to SharedPreferences
-                                SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = prefs.edit();
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                // Handle Remember Me
+                                if (checkboxRememberMe.isChecked()) {
+                                    editor.putString("email", email);
+                                    editor.putString("password", password);
+                                    editor.putBoolean("rememberMe", true);
+                                } else {
+                                    editor.remove("email");
+                                    editor.remove("password");
+                                    editor.putBoolean("rememberMe", false);
+                                }
+
+                                // Save student data
                                 editor.putInt("student_id", studentId);
                                 editor.putString("student_name", student.getString("name"));
                                 editor.putString("student_email", student.getString("email"));
                                 editor.putString("student_grade", student.getString("grade"));
-                                editor.putString("student_class", student.getString("grade")); // Add this line to save class
+                                editor.putString("student_class", student.getString("grade"));
                                 editor.putInt("student_age", student.getInt("age"));
                                 editor.apply();
-                                Log.d(TAG, "Student ID saved to SharedPreferences: " + studentId); // Log after saving
+
+                                Log.d(TAG, "Student data saved to SharedPreferences");
 
                                 // Launch dashboard
                                 Intent intent = new Intent(this, StudentDashboardActivity.class);
@@ -74,22 +103,27 @@ public class StudentLoginActivity extends AppCompatActivity {
                                 finish();
 
                             } catch (JSONException e) {
-                                Log.e(TAG, "JSON parsing error: " + e.getMessage(), e); // Log JSON error
+                                Log.e(TAG, "JSON parsing error: " + e.getMessage(), e);
                                 Toast.makeText(this, "Missing student data", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             String errorMessage = response.optString("message", "Invalid credentials");
                             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-                            Log.w(TAG, "Login failed: " + errorMessage); // Log login failure
+                            Log.w(TAG, "Login failed: " + errorMessage);
                         }
                     },
                     error -> {
-                        Log.e(TAG, "Volley error: " + error.getMessage(), error); // Log Volley error
+                        Log.e(TAG, "Volley error: " + error.getMessage(), error);
                         Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
             );
 
             Volley.newRequestQueue(this).add(request);
+        });
+
+        registerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RegisterAdminLoginActivity.class);
+            startActivity(intent);
         });
     }
 }
