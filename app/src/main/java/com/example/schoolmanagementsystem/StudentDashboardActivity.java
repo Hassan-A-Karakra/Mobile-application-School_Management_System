@@ -3,18 +3,28 @@ package com.example.schoolmanagementsystem;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
 
 public class StudentDashboardActivity extends AppCompatActivity {
 
-    private int studentId;
-    private String studentName;
-    private String studentEmail;
-    private String studentGrade;
-    private int studentAge;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
+    private NavigationView navigationView;
+
+    private TextView textWelcome;
+    private MaterialButton btnSchedule, btnGrades, btnAssignments, btnCommunicate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,68 +32,73 @@ public class StudentDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_dashboard);
 
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        studentId = prefs.getInt("student_id", -1);
-        studentName = prefs.getString("student_name", "Student");
-        studentEmail = prefs.getString("student_email", "unknown@example.com");
-        studentGrade = prefs.getString("student_grade", "N/A");
-        studentAge = prefs.getInt("student_age", -1);
+        int studentId = prefs.getInt("student_id", -1);
 
         if (studentId == -1) {
-            Toast.makeText(this, "Missing student data. Please login.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, StudentLoginActivity.class));
             finish();
             return;
         }
 
-        TextView welcomeText = findViewById(R.id.textWelcome);
-        welcomeText.setText("Welcome, " + studentName);
+        String studentName = prefs.getString("student_name", "Unknown");
+        String studentClass = prefs.getString("student_class", "N/A");
 
-        Button btnSchedule = findViewById(R.id.btnSchedule);
-        Button btnGrades = findViewById(R.id.btnGrades);
-        Button btnAssignments = findViewById(R.id.btnAssignments);
-        // Button btnSubmit = findViewById(R.id.btnSubmit); // Removed as it's no longer in the layout
-        Button btnCommunicate = findViewById(R.id.btnCommunicate);
-        Button btnLogout = findViewById(R.id.btnLogout);
+        // Toolbar setup
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        btnSchedule.setOnClickListener(v -> {
-            Intent intent = new Intent(this, studentClassScheduleActivity.class);
-            intent.putExtra("student_id", studentId);
-            startActivity(intent);
-        });
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navView);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
+        textWelcome = findViewById(R.id.textWelcome);
+        textWelcome.setText("Welcome, " + studentName);
+
+        btnSchedule = findViewById(R.id.btnSchedule);
+        btnGrades = findViewById(R.id.btnGrades);
+        btnAssignments = findViewById(R.id.btnAssignments);
+        btnCommunicate = findViewById(R.id.btnCommunicate);
+
+        btnSchedule.setOnClickListener(v -> startActivity(new Intent(this, StudentScheduleActivity.class)));
         btnGrades.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TeacherGradesActivity.class);
-            intent.putExtra("student_id", studentId);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("student_name", studentName);
-            editor.putString("student_class", studentGrade);
-            editor.apply();
-            startActivity(intent);
-        });
-
-        btnAssignments.setOnClickListener(v -> {
-            Intent intent = new Intent(this, StudentAssignmentsActivity.class);
+            Intent intent = new Intent(this, StudentGradesActivity.class);
             intent.putExtra("student_id", studentId);
             startActivity(intent);
         });
+        btnAssignments.setOnClickListener(v -> startActivity(new Intent(this, StudentAssignmentsActivity.class)));
+        btnCommunicate.setOnClickListener(v -> startActivity(new Intent(this, StudentMessagesActivity.class)));
 
-        // Removed the onClickListener for btnSubmit as the button no longer exists in the layout.
-        // The functionality to submit assignments is now handled within the AssignmentsActivity.
+        // Drawer header content
+        View headerView = navigationView.getHeaderView(0);
+        TextView navName = headerView.findViewById(R.id.navStudentName);
+        TextView navId = headerView.findViewById(R.id.navStudentId);
+        TextView navClass = headerView.findViewById(R.id.navStudentClass);
+        ImageView navImage = headerView.findViewById(R.id.navStudentImage);
 
-        btnCommunicate.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TeacherCommunicateActivity.class);
-            intent.putExtra("student_id", studentId);
-            startActivity(intent);
+        navName.setText(studentName);
+        navId.setText("ID: " + studentId);
+        navClass.setText("Class: " + studentClass);
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_edit_info) {
+                startActivity(new Intent(this, EditStudentInfoActivity.class));
+            } else if (itemId == R.id.nav_logout) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.clear();
+                editor.apply();
+                startActivity(new Intent(this, StudentLoginActivity.class));
+                finish();
+            }
+            drawerLayout.closeDrawers();
+            return true;
         });
+    }
 
-        btnLogout.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.clear();
-            editor.apply();
-
-            Intent intent = new Intent(this, StudentLoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 }

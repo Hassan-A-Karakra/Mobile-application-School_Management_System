@@ -1,5 +1,6 @@
 package com.example.schoolmanagementsystem;
 
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,9 +31,12 @@ public class StudentScheduleActivity extends AppCompatActivity {
 
         scheduleContainer = findViewById(R.id.scheduleContainer);
 
-        int studentId = getIntent().getIntExtra("student_id", -1);
+        // Get student ID from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        int studentId = prefs.getInt("student_id", -1);
         if (studentId == -1) {
-            showError("Invalid student ID");
+            showError("Please login again");
+            finish();
             return;
         }
 
@@ -40,7 +44,7 @@ public class StudentScheduleActivity extends AppCompatActivity {
     }
 
     private void fetchSchedule(int studentId) {
-        String url = BASE_URL + "get_schedule.php?student_id=" + studentId;
+        String url = BASE_URL + "student_get_schedule.php?student_id=" + studentId;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
@@ -54,6 +58,7 @@ public class StudentScheduleActivity extends AppCompatActivity {
                                 String subject = row.getString("subject");
                                 String day = row.getString("day");
                                 String time = row.getString("time");
+                                String teacher = row.optString("teacher", "Teacher not assigned");
 
                                 LinearLayout card = new LinearLayout(this);
                                 card.setOrientation(LinearLayout.VERTICAL);
@@ -79,6 +84,12 @@ public class StudentScheduleActivity extends AppCompatActivity {
                                 tvTime.setTextSize(14);
                                 tvTime.setTextColor(0xFF555555);
                                 card.addView(tvTime);
+
+                                TextView tvTeacher = new TextView(this);
+                                tvTeacher.setText("Teacher: " + teacher);
+                                tvTeacher.setTextSize(14);
+                                tvTeacher.setTextColor(0xFF555555);
+                                card.addView(tvTeacher);
 
                                 scheduleContainer.addView(card);
                             }

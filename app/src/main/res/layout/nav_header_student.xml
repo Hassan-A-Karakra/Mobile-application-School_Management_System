@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/purple_200"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/navStudentImage"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_student"
+        android:contentDescription="Student Image"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/navStudentName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Student Name"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/navStudentId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ID: 123"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/navStudentClass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Class: 10A"
+        android:textColor="@android:color/white" />
+</LinearLayout>

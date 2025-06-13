@@ -50,7 +50,6 @@ public class StudentActivity extends AppCompatActivity {
             btnGrades = findViewById(R.id.btnGrades);
             btnAssignments = findViewById(R.id.btnAssignments);
             btnCommunicate = findViewById(R.id.btnCommunicate);
-            btnLogout = findViewById(R.id.btnLogout);
         } catch (Exception e) {
             Log.e(TAG, "Error initializing views", e);
             Toast.makeText(this, "Error initializing views: " + e.getMessage(),
@@ -74,7 +73,7 @@ public class StudentActivity extends AppCompatActivity {
         // Grades Button
         btnGrades.setOnClickListener(v -> {
             try {
-                Intent intent = new Intent(this, TeacherGradesActivity.class);
+                Intent intent = new Intent(this, StudentGradesActivity.class);
                 intent.putExtra("student_id", studentId);
                 startActivity(intent);
             } catch (Exception e) {

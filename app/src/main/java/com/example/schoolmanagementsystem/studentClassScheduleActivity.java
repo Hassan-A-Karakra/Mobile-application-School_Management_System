@@ -44,7 +44,7 @@ public class studentClassScheduleActivity extends AppCompatActivity {
     }
 
     private void loadSchedule(int studentId) {
-        String url = BASE_URL + "get_schedule.php?student_id=" + studentId;
+        String url = BASE_URL + "student_get_schedule.php?student_id=" + studentId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {

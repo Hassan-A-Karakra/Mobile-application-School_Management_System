@@ -20,6 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".StudentMessagesActivity"
+            android:exported="false" />
+        <activity
             android:name=".TeacherAssignmentsActivity"
             android:exported="false" />
         <activity
@@ -40,7 +43,6 @@
         <activity
             android:name=".StudentSubmitAssignmentActivity"
             android:exported="false" />
-        <activity android:name=".AddSubjectActivity" />
         <activity android:name=".studentClassScheduleActivity" />
         <activity android:name=".StudentDashboardActivity" />
         <activity android:name=".StudentLoginActivity" />
@@ -60,7 +62,7 @@
             android:name=".TeacherLoginActivity"
             android:exported="true" />
         <activity
-            android:name=".TeacherGradesActivity"
+            android:name=".StudentGradesActivity"
             android:exported="false" />
         <activity
             android:name=".TeacherScheduleActivity"
@@ -83,6 +85,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditStudentInfoActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />

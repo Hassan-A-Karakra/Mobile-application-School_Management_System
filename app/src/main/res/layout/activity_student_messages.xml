@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:padding="16dp">
+
+    <Spinner
+        android:id="@+id/teacherSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMessages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <EditText
+        android:id="@+id/editMessage"
+        android:hint="Type your message..."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnSendMessage"
+        android:layout_width="381dp"
+        android:layout_height="wrap_content"
+        android:text="Send" />
+</LinearLayout>

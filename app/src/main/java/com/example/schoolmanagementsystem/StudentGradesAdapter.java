@@ -1,7 +1,7 @@
 package com.example.schoolmanagementsystem;
 
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable; // Import for rounded corners without drawable files
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +9,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class TeacherGradesAdapter extends RecyclerView.Adapter<TeacherGradesAdapter.GradeViewHolder> {
+public class StudentGradesAdapter extends RecyclerView.Adapter<StudentGradesAdapter.GradeViewHolder> {
     private List<StudentGradeItem> grades;
 
-    public TeacherGradesAdapter(List<StudentGradeItem> grades) {
+    public StudentGradesAdapter(List<StudentGradeItem> grades) {
         this.grades = grades;
     }
 
@@ -29,11 +29,11 @@ public class TeacherGradesAdapter extends RecyclerView.Adapter<TeacherGradesAdap
         holder.gradeTextView.setText(item.getGrade());
         holder.teacherTextView.setText("Teacher: " + item.getTeacher());
 
-        // Set status indicator (no drawables used)
+        // Set status indicator
         try {
             int gradeValue = Integer.parseInt(item.getGrade());
             GradientDrawable bg = new GradientDrawable();
-            bg.setCornerRadius(dpToPx(16, holder.itemView.getContext())); // Convert dp to px for rounded corners
+            bg.setCornerRadius(dpToPx(16, holder.itemView.getContext()));
 
             if (gradeValue >= 60) {
                 holder.statusIndicator.setText("Passing");
@@ -66,7 +66,6 @@ public class TeacherGradesAdapter extends RecyclerView.Adapter<TeacherGradesAdap
         }
     }
 
-    // Helper method to convert dp to pixels for dynamic drawables
     private int dpToPx(int dp, android.content.Context context) {
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float) dp * density);

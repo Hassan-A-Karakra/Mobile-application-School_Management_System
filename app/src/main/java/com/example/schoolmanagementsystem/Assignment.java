@@ -1,14 +1,24 @@
 package com.example.schoolmanagementsystem;
 
 public class Assignment {
-    private int id; // Assignment ID, integer type
-    private String title; // Assignment title
-    private String description; // Assignment description
-    private String dueDate; // Assignment due date
-    private String assignmentClass; // Class to which the assignment belongs
-    private String assignmentSubject; // Subject to which the assignment belongs
+    private int id; // Assignment ID
+    private String title; // Title of the assignment
+    private String description; // Description of the assignment
+    private String dueDate; // Due date of the assignment
+    private String assignmentClass; // Class info (optional)
+    private String assignmentSubject; // Subject info (optional)
+    private String grade; // Grade (nullable)
 
-    // Constructor for the Assignment class with all fields
+    // Full constructor
+    public Assignment(int id, String title, String description, String dueDate, String assignmentClass, String assignmentSubject, String grade) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.assignmentClass = assignmentClass;
+        this.assignmentSubject = assignmentSubject;
+        this.grade = grade;
+    }
     public Assignment(int id, String title, String description, String dueDate, String assignmentClass, String assignmentSubject) {
         this.id = id;
         this.title = title;
@@ -16,19 +26,25 @@ public class Assignment {
         this.dueDate = dueDate;
         this.assignmentClass = assignmentClass;
         this.assignmentSubject = assignmentSubject;
+        this.grade = "Not graded yet"; // Default value
     }
 
-    // Second constructor for Assignment (e.g., for backward compatibility if class/subject are optional)
+
+    // Constructor without class/subject/grade
     public Assignment(int id, String title, String description, String dueDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.assignmentClass = "";  // Can be left empty or assigned a default value
-        this.assignmentSubject = ""; // Can be left empty or assigned a default value
+        this.assignmentClass = "";
+        this.assignmentSubject = "";
+        this.grade = "Not graded yet";
     }
 
-    // Getter methods to access properties
+    // Empty constructor (for parsing flexibility)
+    public Assignment() {}
+
+    // Getter methods
     public int getId() {
         return id;
     }
@@ -53,7 +69,11 @@ public class Assignment {
         return assignmentSubject;
     }
 
-    // Setter methods to set properties
+    public String getGrade() {
+        return grade;
+    }
+
+    // Setter methods
     public void setId(int id) {
         this.id = id;
     }
@@ -76,5 +96,9 @@ public class Assignment {
 
     public void setAssignmentSubject(String assignmentSubject) {
         this.assignmentSubject = assignmentSubject;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }
