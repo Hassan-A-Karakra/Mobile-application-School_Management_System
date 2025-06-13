@@ -47,7 +47,7 @@ public class StudentGradesActivity extends AppCompatActivity {
         // Get student ID
         int studentId = getIntent().getIntExtra("student_id", -1);
         if (studentId == -1) {
-            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
             studentId = prefs.getInt("student_id", -1);
         }
 
@@ -65,8 +65,7 @@ public class StudentGradesActivity extends AppCompatActivity {
         JSONObject postData = new JSONObject();
         try {
             postData.put("student_id", studentId);
-            // هذا السطر مهم جداً للتحقق من قيمة studentId قبل إرساله
-            Log.d(TAG, "Sending student_id from Android: " + studentId);
+            Log.d(TAG, "Sending student_id from Android: " + studentId); // هذا السطر سيُظهر 1 الآن
         } catch (Exception e) {
             Log.e(TAG, "Error preparing request JSON: " + e.getMessage());
             Toast.makeText(this, "Error preparing request", Toast.LENGTH_SHORT).show();
@@ -186,9 +185,10 @@ public class StudentGradesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        int studentId = prefs.getInt("student_id", -1);
+        int studentId = prefs.getInt("student_id", -1); // هذا الجزء سيصبح غير فعال حالياً
         if (studentId != -1) {
-            loadStudentData(studentId);
+            // loadStudentData(studentId); // لن نستدعيها هنا مباشرة
         }
+        // بدلاً من ذلك، سيتم استدعاء loadStudentData(1) في onCreate
     }
 }

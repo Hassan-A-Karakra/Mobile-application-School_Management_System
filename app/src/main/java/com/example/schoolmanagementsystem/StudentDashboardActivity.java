@@ -31,7 +31,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_dashboard);
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
         int studentId = prefs.getInt("student_id", -1);
 
         if (studentId == -1) {
