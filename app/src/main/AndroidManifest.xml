@@ -66,7 +66,7 @@
             android:exported="false" />
         <activity
             android:name=".TeacherScheduleActivity"
-            android:exported="false" /> <!-- Admin related activities -->
+            android:exported="false" />
         <activity
             android:name=".RegisterAdminLoginActivity"
             android:exported="true" />

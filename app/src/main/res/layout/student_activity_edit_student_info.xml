@@ -9,19 +9,29 @@
         android:id="@+id/editStudentName"
         android:hint="Enter your name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/editStudentClass"
-        android:hint="Enter your class"
+        android:id="@+id/editStudentPassword"
+        android:hint="New Password (leave blank to keep current)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp" />
+        android:inputType="textPassword"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/editStudentConfirmPassword"
+        android:hint="Confirm New Password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btnSaveChanges"
-        android:text="Save"
-        android:layout_marginTop="20dp"
+        android:text="Save Changes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

@@ -1,27 +1,55 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="16dp">
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
     <Spinner
         android:id="@+id/teacherSpinner"
         android:layout_width="match_parent"
-        android:layout_height="54dp" />
+        android:layout_height="54dp"
+        android:layout_alignParentTop="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_above="@+id/messageInputLayout"
+        android:layout_below="@+id/teacherSpinner"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
-    <EditText
-        android:id="@+id/editMessage"
-        android:hint="Type your message..."
+    <LinearLayout
+        android:id="@+id/messageInputLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btnSendMessage"
-        android:layout_width="381dp"
         android:layout_height="wrap_content"
-        android:text="Send" />
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type your message..."
+            android:minLines="2"
+            android:maxLines="4"
+            android:gravity="top|start"
+            android:padding="8dp"
+            android:background="@drawable/edit_text_background" />
+
+        <Button
+            android:id="@+id/btnSendMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>
