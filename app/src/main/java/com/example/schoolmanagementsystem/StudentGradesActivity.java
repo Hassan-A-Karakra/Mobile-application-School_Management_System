@@ -185,10 +185,10 @@ public class StudentGradesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        int studentId = prefs.getInt("student_id", -1); // هذا الجزء سيصبح غير فعال حالياً
+        int studentId = prefs.getInt("student_id", -1);
         if (studentId != -1) {
-            // loadStudentData(studentId); // لن نستدعيها هنا مباشرة
+            // loadStudentData(studentId);
+
         }
-        // بدلاً من ذلك، سيتم استدعاء loadStudentData(1) في onCreate
     }
 }

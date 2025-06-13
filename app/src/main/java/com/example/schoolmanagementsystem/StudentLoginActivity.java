@@ -124,6 +124,6 @@ public class StudentLoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterAdminLoginActivity.class);
             startActivity(intent);
-        });
-    }
-} 
+   });
+}
+}

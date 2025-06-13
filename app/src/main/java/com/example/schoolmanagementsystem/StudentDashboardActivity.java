@@ -70,7 +70,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         btnAssignments.setOnClickListener(v -> startActivity(new Intent(this, StudentAssignmentsActivity.class)));
         btnCommunicate.setOnClickListener(v -> startActivity(new Intent(this, StudentMessagesActivity.class)));
 
-        // Drawer header content
+        // Drawer header
         View headerView = navigationView.getHeaderView(0);
         TextView navName = headerView.findViewById(R.id.navStudentName);
         TextView navId = headerView.findViewById(R.id.navStudentId);
@@ -100,5 +100,5 @@ public class StudentDashboardActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-    }
+}
 }
