@@ -16,7 +16,7 @@ public class RegisterStudentListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private StudentAdapter adapter;
     private ArrayList<Student> studentList = new ArrayList<>();
-    public static final String URL = "http://10.0.2.2/student_system/view_students.php";
+    public static final String URL = "http://10.0.2.2/student_system/register_view_students.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

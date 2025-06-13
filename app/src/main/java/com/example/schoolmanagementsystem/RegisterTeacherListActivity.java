@@ -24,7 +24,7 @@ public class RegisterTeacherListActivity extends AppCompatActivity {
     ArrayList<String> teacherList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
-    String url = "http://10.0.2.2/student_system/view_teachers.php"; // عدلها إذا كنت تستخدم جهاز فعلي
+    String url = "http://10.0.2.2/student_system/register_view_teachers.php"; // عدلها إذا كنت تستخدم جهاز فعلي
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
