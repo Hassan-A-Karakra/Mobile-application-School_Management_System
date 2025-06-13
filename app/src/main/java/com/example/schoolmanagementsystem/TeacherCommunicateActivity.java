@@ -281,7 +281,6 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
                     jsonBody.put("student_ids", jsonStudentIds);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    // Handle error if JSON conversion fails
                 }
                 return jsonBody.toString().getBytes(StandardCharsets.UTF_8);
             }

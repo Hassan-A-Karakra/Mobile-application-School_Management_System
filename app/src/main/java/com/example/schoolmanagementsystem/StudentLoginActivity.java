@@ -19,7 +19,7 @@ public class StudentLoginActivity extends AppCompatActivity {
     private EditText emailInput, passwordInput;
     private Button loginButton;
     private static final String LOGIN_URL = "http://10.0.2.2/student_system/student_login_student.php";
-    private static final String TAG = "StudentLogin"; // Added TAG for logging
+    private static final String TAG = "StudentLogin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

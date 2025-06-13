@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class StudentMessageAdapter extends RecyclerView.Adapter<StudentMessageAdapter.ViewHolder> {
 
-    private final List<Message> messages;
+    private final List<StudentMessage> messages;
 
-    public MessageAdapter(List<Message> messages) {
+    public StudentMessageAdapter(List<StudentMessage> messages) {
         this.messages = messages;
     }
 
@@ -41,15 +41,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @NonNull
     @Override
-    public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StudentMessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_message, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-        Message message = messages.get(position);
+    public void onBindViewHolder(@NonNull StudentMessageAdapter.ViewHolder holder, int position) {
+        StudentMessage message = messages.get(position);
 
         holder.textContent.setText(message.getMessageContent());
         holder.textTimestamp.setText(message.getTimestamp());

@@ -74,13 +74,6 @@ public class RegistrarActivity extends AppCompatActivity {
             spinnerTime.setVisibility(View.VISIBLE);
         });
 
-        radioStudent.setChecked(true);
-        userType = "student";
-        gradeField.setVisibility(View.VISIBLE);
-        ageField.setVisibility(View.VISIBLE);
-        spinnerSubjects.setVisibility(View.GONE);
-        spinnerDay.setVisibility(View.GONE);
-        spinnerTime.setVisibility(View.GONE);
 
         registerBtn.setOnClickListener(v -> {
             String name = nameField.getText().toString().trim();

@@ -17,7 +17,7 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
     // Interface for listening to click events on list items
     public interface OnAssignmentClickListener {
         void onMenuClick(Assignment assignment);
-        // You can add other methods here like onEditClick, onDeleteClick
+
     }
 
     public TeacherAssignmentAdapter(OnAssignmentClickListener listener) {
@@ -42,28 +42,31 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
     class AssignmentViewHolder extends RecyclerView.ViewHolder {
         private final TextView assignmentTitle;
         private final TextView assignmentDescription;
-        private final TextView assignmentClass; // TextView for Class
-        private final TextView assignmentSubject; // TextView for Subject
+        private final TextView assignmentClass;
+        private final TextView assignmentSubject;
         private final TextView dueDate;
-        private final ImageButton menuButton; // Menu button in the item
-        private final MaterialButton submitButton; // Submit assignment button (if used by students)
+        private final ImageButton menuButton;
+        private final MaterialButton submitButton;
 
         AssignmentViewHolder(View itemView) {
+
             super(itemView);
+
             assignmentTitle = itemView.findViewById(R.id.assignmentTitle);
             assignmentDescription = itemView.findViewById(R.id.assignmentDescription);
             assignmentClass = itemView.findViewById(R.id.assignmentClass);
             assignmentSubject = itemView.findViewById(R.id.assignmentSubject);
             dueDate = itemView.findViewById(R.id.dueDate);
             menuButton = itemView.findViewById(R.id.menuButton);
-            submitButton = itemView.findViewById(R.id.button_submit_assignment); // Bind submit button
+            submitButton = itemView.findViewById(R.id.button_submit_assignment);
+
         }
 
         void bind(Assignment assignment) {
             assignmentTitle.setText(assignment.getTitle());
             assignmentDescription.setText(assignment.getDescription());
-            assignmentClass.setText("Class: " + assignment.getAssignmentClass()); // Display class
-            assignmentSubject.setText("Subject: " + assignment.getAssignmentSubject()); // Display subject
+            assignmentClass.setText("Class: " + assignment.getAssignmentClass());
+            assignmentSubject.setText("Subject: " + assignment.getAssignmentSubject());
             dueDate.setText(assignment.getDueDate());
 
             menuButton.setOnClickListener(new View.OnClickListener() {
@@ -75,17 +78,14 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
                 }
             });
 
-            // This button is usually for students, but it was added in item_assignment layout.
-            // You can hide it for teachers or customize it.
-            submitButton.setVisibility(View.GONE); // Hide it for teachers for now, can be enabled for students
+            submitButton.setVisibility(View.GONE);
         }
     }
 
-    // DiffUtil.ItemCallback for optimizing RecyclerView performance
     private static class AssignmentDiffCallback extends DiffUtil.ItemCallback<Assignment> {
         @Override
         public boolean areItemsTheSame(@NonNull Assignment oldItem, @NonNull Assignment newItem) {
-            return oldItem.getId() == newItem.getId(); // Compare by ID
+            return oldItem.getId() == newItem.getId();
         }
 
         @Override

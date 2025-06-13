@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -40,9 +39,9 @@ public class StudentMessagesActivity extends AppCompatActivity {
     private EditText messageInput;
     private Button sendButton;
     private RecyclerView recyclerView;
-    private MessageAdapter adapter;
-    private List<Message> allStudentMessages = new ArrayList<>();
-    private List<Message> displayedMessages = new ArrayList<>();
+    private StudentMessageAdapter adapter;
+    private List<StudentMessage> allStudentMessages = new ArrayList<>();
+    private List<StudentMessage> displayedMessages = new ArrayList<>();
     private List<Teacher> teacherList = new ArrayList<>();
     private int studentId;
     private String selectedTeacherName = "";
@@ -67,7 +66,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewMessages);
         progressBar = findViewById(R.id.progressBar);
 
-        adapter = new MessageAdapter(displayedMessages); // Pass the filtered list to adapter
+        adapter = new StudentMessageAdapter(displayedMessages); // Pass the filtered list to adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
@@ -219,7 +218,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
 
                                 boolean isSentByMe = title.startsWith("Message from Student"); // Check if title starts with this
                                 Log.d("StudentMessages", "Processing message: Title='" + title + "', isSentByMe=" + isSentByMe);
-                                allStudentMessages.add(new Message(title, messageContent, timestamp, isSentByMe));
+                                allStudentMessages.add(new StudentMessage(title, messageContent, timestamp, isSentByMe));
                             }
                             Log.d("StudentMessages", "Total messages loaded into allStudentMessages: " + allStudentMessages.size());
                             filterAndDisplayMessages();
@@ -254,7 +253,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
         Log.d("StudentMessages", "Starting filter for selected teacher: '" + selectedTeacherName + "' (trimmed)");
         Log.d("StudentMessages", "Total messages in allStudentMessages before filter: " + allStudentMessages.size());
 
-        for (Message msg : allStudentMessages) {
+        for (StudentMessage msg : allStudentMessages) {
             Log.d("StudentMessages", "Filtering check: Message Title='" + msg.getTitle() + "' (trimmed: '" + msg.getTitle().trim() + "'), isSentByMe: " + msg.isSentByMe());
 
             if (msg.isSentByMe()) {

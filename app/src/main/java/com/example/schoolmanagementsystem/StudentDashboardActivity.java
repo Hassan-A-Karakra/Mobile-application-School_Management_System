@@ -84,7 +84,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_edit_info) {
-                startActivity(new Intent(this, EditStudentInfoActivity.class));
+                startActivity(new Intent(this, StudentEditStudentInfoActivity.class));
             } else if (itemId == R.id.nav_logout) {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.clear();

@@ -85,7 +85,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditStudentInfoActivity" />
+        <activity android:name=".StudentEditStudentInfoActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />

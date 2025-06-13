@@ -30,14 +30,14 @@ public class TeacherAttendanceAdapter extends RecyclerView.Adapter<TeacherAttend
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Student student = studentList.get(position);
         holder.studentName.setText(student.getName());
-        holder.absenceCount.setText("عدد الغيابات: " + student.getAbsenceCount());
+        holder.absenceCount.setText("Number of absences: " + student.getAbsenceCount());
         holder.attendanceCheckBox.setChecked(student.isPresent());
         
         holder.attendanceCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             student.setPresent(isChecked);
             if (!isChecked) {
                 student.incrementAbsenceCount();
-                holder.absenceCount.setText("عدد الغيابات: " + student.getAbsenceCount());
+                holder.absenceCount.setText("Number of absences: " + student.getAbsenceCount());
             }
         });
     }

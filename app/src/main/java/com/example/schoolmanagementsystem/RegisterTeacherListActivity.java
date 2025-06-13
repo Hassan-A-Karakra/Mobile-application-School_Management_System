@@ -24,12 +24,12 @@ public class RegisterTeacherListActivity extends AppCompatActivity {
     ArrayList<String> teacherList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
-    String url = "http://10.0.2.2/student_system/register_view_teachers.php"; // عدلها إذا كنت تستخدم جهاز فعلي
+    String url = "http://10.0.2.2/student_system/register_view_teachers.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_teacher_list); // تأكد من أن الملف xml موجود
+        setContentView(R.layout.activity_register_teacher_list);
 
         teacherListView = findViewById(R.id.teacherListView);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teacherList);
@@ -41,7 +41,7 @@ public class RegisterTeacherListActivity extends AppCompatActivity {
     private void loadTeachers() {
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
-                    Log.d("ServerResponse", response); // للطباعة في Logcat
+                    Log.d("ServerResponse", response);
 
                     try {
                         JSONObject jsonObject = new JSONObject(response);

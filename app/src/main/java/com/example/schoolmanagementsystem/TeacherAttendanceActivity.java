@@ -115,9 +115,9 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
     }
 
     private void fetchSubjects() {
-        String grade = spinnerGrade.getSelectedItem().toString(); // This value is no longer used in teacher_get_subjects.php
+        String grade = spinnerGrade.getSelectedItem().toString();
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
-                API_URL + "teacher_get_subjects.php", null, // Removed grade parameter here
+                API_URL + "teacher_get_subjects.php", null,
                 response -> {
                     List<String> subjects = new ArrayList<>();
                     try {

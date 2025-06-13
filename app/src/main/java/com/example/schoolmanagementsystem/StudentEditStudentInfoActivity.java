@@ -12,7 +12,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditStudentInfoActivity extends AppCompatActivity {
+public class StudentEditStudentInfoActivity extends AppCompatActivity {
 
     private EditText editName, editPassword, editConfirmPassword;
     private Button btnSave;

@@ -23,14 +23,14 @@ import android.util.Log; // Import for Log
 
 public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "TeacherActivity"; // Add TAG for logging
+    private static final String TAG = "TeacherActivity";
     private DrawerLayout drawerLayout;
-    private int currentTeacherId; // متغير لتخزين teacher_id
-    private String currentTeacherName; // متغير لتخزين اسم المعلم
-    private String currentTeacherEmail; // متغير لتخزين بريد المعلم الإلكتروني
-    private String currentTeacherSubject; // متغير لتخزين مادة المعلم
+    private int currentTeacherId;
+    private String currentTeacherName;
+    private String currentTeacherEmail;
+    private String currentTeacherSubject;
 
-    private SharedPreferences sharedPreferences; // إضافة SharedPreferences
+    private SharedPreferences sharedPreferences;
 
     // Button declarations
     private Button buttonStudentList;
@@ -45,7 +45,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
 
-        sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE); // تهيئة SharedPreferences
+        sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
         // Initialize toolbar and navigation drawer
         setupNavigationDrawer();
@@ -131,8 +131,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
 
     private void updateNavigationHeader() {
         Log.d(TAG, "Updating navigation header..."); // Log message
-        // جلب teacher_id الذي تم تمريره من TeacherLoginActivity
-        // الأولوية للـ Intent، إذا لم يكن موجودًا فمن SharedPreferences
+
         currentTeacherId = getIntent().getIntExtra("teacher_id", -1);
         if (currentTeacherId == -1) {
             currentTeacherId = sharedPreferences.getInt("current_teacher_id", -1);
@@ -167,9 +166,8 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
             return;
         }
 
-        // تحديث معلومات المعلم في رأس قائمة التنقل الجانبية
         NavigationView navigationView = findViewById(R.id.nav_view);
-        Log.d(TAG, "Navigation View Header Count: " + navigationView.getHeaderCount()); // Log header count
+        Log.d(TAG, "Navigation View Header Count: " + navigationView.getHeaderCount());
         if (navigationView.getHeaderCount() > 0) {
             View headerView = navigationView.getHeaderView(0);
             TextView navTeacherName = headerView.findViewById(R.id.teacherNameTextView);
@@ -246,11 +244,10 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         }
     }
 
-    // Original method to navigate to another activity, used by both buttons and navigation drawer items
-    // تم تعديل هذه الدالة لتقبل teacherId
+
     private void navigateToActivity(Class<?> activityClass, int teacherId) {
         Intent intent = new Intent(TeacherActivity.this, activityClass);
-        // تمرير teacher_id إلى النشاط الجديد
+
         if (teacherId != -1) {
             intent.putExtra("teacher_id", teacherId);
         }

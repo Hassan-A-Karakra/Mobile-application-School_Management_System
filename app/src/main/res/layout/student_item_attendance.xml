@@ -17,7 +17,7 @@
             android:id="@+id/studentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="اسم الطالب"
+            android:text="Student name"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -25,7 +25,7 @@
             android:id="@+id/absenceCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="عدد الغيابات: 0"
+            android:text="Number of absences: 0"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
     </LinearLayout>
@@ -34,5 +34,5 @@
         android:id="@+id/attendanceCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="حاضر" />
+        android:text="present" />
 </LinearLayout>

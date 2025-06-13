@@ -2,12 +2,11 @@ package com.example.schoolmanagementsystem;
 
 public class TeacherAssignment {
 
-        private int id; // معرف الواجب، من نوع int
-        private String title; // عنوان الواجب
-        private String description; // وصف الواجب
-        private String dueDate; // تاريخ استحقاق الواجب
+        private int id;
+        private String title;
+        private String description;
+        private String dueDate;
 
-        // المُنشئ (Constructor) لكلاس Assignment
         public TeacherAssignment(int id, String title, String description, String dueDate) {
             this.id = id;
             this.title = title;
@@ -15,7 +14,6 @@ public class TeacherAssignment {
             this.dueDate = dueDate;
         }
 
-        // دوال الجلب (Getters) للوصول إلى بيانات الواجب
         public int getId() {
             return id;
         }
@@ -32,7 +30,6 @@ public class TeacherAssignment {
             return dueDate;
         }
 
-        // دوال التعديل (Setters) إذا أردت تغيير قيم الواجب بعد إنشائه
         public void setId(int id) {
             this.id = id;
         }
