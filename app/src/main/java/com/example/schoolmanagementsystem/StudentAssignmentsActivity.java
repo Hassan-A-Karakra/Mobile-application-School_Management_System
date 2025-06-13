@@ -38,7 +38,7 @@ public class StudentAssignmentsActivity extends AppCompatActivity {
         assignmentsRecyclerView = findViewById(R.id.assignmentsRecyclerView);
         assignmentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
         studentId = prefs.getInt("student_id", -1); // Retrieve studentId here
 
         if (studentId == -1) {

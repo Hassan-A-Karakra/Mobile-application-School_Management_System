@@ -32,8 +32,7 @@ public class StudentScheduleActivity extends AppCompatActivity {
         scheduleContainer = findViewById(R.id.scheduleContainer);
 
         // Get student ID from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        int studentId = prefs.getInt("student_id", -1);
+        SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);        int studentId = prefs.getInt("student_id", -1);
         if (studentId == -1) {
             showError("Please login again");
             finish();

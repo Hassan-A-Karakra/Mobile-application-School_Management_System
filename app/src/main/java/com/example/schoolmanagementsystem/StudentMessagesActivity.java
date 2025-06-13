@@ -52,7 +52,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_messages);
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
         studentId = prefs.getInt("student_id", -1);
         if (studentId == -1) {
             Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
