@@ -113,6 +113,26 @@
             android:background="@drawable/edittext_background"
             android:padding="12dp" />
 
+        <!-- New: Only for teachers - Day Spinner -->
+        <Spinner
+            android:id="@+id/spinnerDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp" />
+
+        <!-- New: Only for teachers - Time Spinner -->
+        <Spinner
+            android:id="@+id/spinnerTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp" />
+
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"

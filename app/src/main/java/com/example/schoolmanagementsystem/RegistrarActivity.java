@@ -20,10 +20,12 @@ public class RegistrarActivity extends AppCompatActivity {
 
     RadioButton radioStudent, radioTeacher;
     EditText nameField, emailField, passwordField, gradeField, ageField;
-    Spinner spinnerSubjects;
+    Spinner spinnerSubjects, spinnerDay, spinnerTime;
     Button registerBtn;
     String userType = "";
-    String[] subjects = {"Math", "Science", "English", "Physics", "Chemistry", "Biology", "History"};
+    String[] subjects = {"Select Subject", "Math", "Science", "English", "Physics", "Chemistry", "Biology", "History"};
+    String[] days = {"Select Day", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    String[] times = {"Select Time", "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,25 +40,47 @@ public class RegistrarActivity extends AppCompatActivity {
         gradeField = findViewById(R.id.editTextGrade);
         ageField = findViewById(R.id.editTextAge);
         spinnerSubjects = findViewById(R.id.spinnerSubjects);
+        spinnerDay = findViewById(R.id.spinnerDay);
+        spinnerTime = findViewById(R.id.spinnerTime);
         registerBtn = findViewById(R.id.buttonRegister);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSubjects.setAdapter(adapter);
+        ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
+        subjectsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSubjects.setAdapter(subjectsAdapter);
+
+        ArrayAdapter<String> daysAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
+        daysAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDay.setAdapter(daysAdapter);
+
+        ArrayAdapter<String> timesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, times);
+        timesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTime.setAdapter(timesAdapter);
 
         radioStudent.setOnClickListener(v -> {
             userType = "student";
             gradeField.setVisibility(View.VISIBLE);
             ageField.setVisibility(View.VISIBLE);
             spinnerSubjects.setVisibility(View.GONE);
+            spinnerDay.setVisibility(View.GONE);
+            spinnerTime.setVisibility(View.GONE);
         });
 
         radioTeacher.setOnClickListener(v -> {
             userType = "teacher";
-            gradeField.setVisibility(View.GONE);
+            gradeField.setVisibility(View.VISIBLE);
             ageField.setVisibility(View.GONE);
             spinnerSubjects.setVisibility(View.VISIBLE);
+            spinnerDay.setVisibility(View.VISIBLE);
+            spinnerTime.setVisibility(View.VISIBLE);
         });
+
+        radioStudent.setChecked(true);
+        userType = "student";
+        gradeField.setVisibility(View.VISIBLE);
+        ageField.setVisibility(View.VISIBLE);
+        spinnerSubjects.setVisibility(View.GONE);
+        spinnerDay.setVisibility(View.GONE);
+        spinnerTime.setVisibility(View.GONE);
 
         registerBtn.setOnClickListener(v -> {
             String name = nameField.getText().toString().trim();
@@ -64,7 +88,17 @@ public class RegistrarActivity extends AppCompatActivity {
             String pass = passwordField.getText().toString().trim();
             String grade = gradeField.getText().toString().trim();
             String age = ageField.getText().toString().trim();
-            String subject = spinnerSubjects.getSelectedItem().toString();
+            String subject = "";
+            String day = "";
+            String time = "";
+
+            if (userType.equals("teacher")) {
+                subject = spinnerSubjects.getSelectedItem().toString();
+                day = spinnerDay.getSelectedItem().toString();
+                time = spinnerTime.getSelectedItem().toString();
+            } else {
+                subject = spinnerSubjects.getSelectedItem().toString();
+            }
 
             if (userType.isEmpty()) {
                 Toast.makeText(this, "Please select user type", Toast.LENGTH_SHORT).show();
@@ -81,16 +115,30 @@ public class RegistrarActivity extends AppCompatActivity {
                 return;
             }
 
-            if (userType.equals("teacher") && subject.isEmpty()) {
-                Toast.makeText(this, "Please select subject", Toast.LENGTH_SHORT).show();
-                return;
+            if (userType.equals("teacher")) {
+                if (subject.isEmpty() || subject.equals("Select Subject")) {
+                    Toast.makeText(this, "Please select subject", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (day.isEmpty() || day.equals("Select Day")) {
+                    Toast.makeText(this, "Please select day", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (time.isEmpty() || time.equals("Select Time")) {
+                    Toast.makeText(this, "Please select time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (grade.isEmpty()) {
+                    Toast.makeText(this, "Please enter grade for teacher", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
-            sendRegistrationRequest(name, email, pass, grade, subject, age);
+            sendRegistrationRequest(name, email, pass, grade, subject, age, day, time);
         });
     }
 
-    private void sendRegistrationRequest(String name, String email, String password, String grade, String subject, String age) {
+    private void sendRegistrationRequest(String name, String email, String password, String grade, String subject, String age, String day, String time) {
         String url = "http://10.0.2.2/student_system/" +
                 (userType.equals("student") ? "register_student.php" : "register_teacher.php");
 
@@ -136,6 +184,9 @@ public class RegistrarActivity extends AppCompatActivity {
                     params.put("age", age);
                 } else {
                     params.put("subject", subject);
+                    params.put("day", day);
+                    params.put("time", time);
+                    params.put("grade", grade);
                 }
                 return params;
             }
