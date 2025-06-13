@@ -33,7 +33,7 @@
                 android:id="@+id/studentNameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Student Name"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#3E206D"/>
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Class: 10"
+                android:text=""
                 android:textSize="14sp"
                 android:textColor="#666666"/>
 
@@ -65,7 +65,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Average: 85%"
+                    android:text=""
                     android:textSize="16sp"
                     android:textColor="#3E206D"/>
 
@@ -73,9 +73,39 @@
                     android:id="@+id/statusText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Status: Good Standing"
+                    android:text=""
                     android:textSize="16sp"
                     android:textColor="#4CAF50"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="#E0E0E0"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/studentGradeText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textColor="#3E206D"/>
+
+                <TextView
+                    android:id="@+id/absencesText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textColor="#FF5722"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

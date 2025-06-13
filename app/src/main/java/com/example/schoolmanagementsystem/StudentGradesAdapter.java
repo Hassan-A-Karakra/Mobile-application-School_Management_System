@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
@@ -16,18 +17,20 @@ public class StudentGradesAdapter extends RecyclerView.Adapter<StudentGradesAdap
         this.grades = grades;
     }
 
+    @NonNull
     @Override
-    public GradeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GradeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grade, parent, false);
         return new GradeViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(GradeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GradeViewHolder holder, int position) {
         StudentGradeItem item = grades.get(position);
         holder.subjectTextView.setText(item.getSubject());
-        holder.gradeTextView.setText(item.getGrade());
-        holder.teacherTextView.setText("Teacher: " + item.getTeacher());
+        holder.gradeTextView.setText("Grade: " + item.getGrade());
+        holder.absencesTextView.setText("Absences: " + item.getAbsences());
+        holder.teacherNameTextView.setText("Teacher: " + item.getTeacherName());
 
         // Set status indicator
         try {
@@ -55,14 +58,15 @@ public class StudentGradesAdapter extends RecyclerView.Adapter<StudentGradesAdap
     }
 
     static class GradeViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectTextView, gradeTextView, teacherTextView, statusIndicator;
+        TextView subjectTextView, gradeTextView, absencesTextView, teacherNameTextView, statusIndicator;
 
-        GradeViewHolder(View view) {
-            super(view);
-            subjectTextView = view.findViewById(R.id.subjectTextView);
-            gradeTextView = view.findViewById(R.id.gradeTextView);
-            teacherTextView = view.findViewById(R.id.teacherTextView);
-            statusIndicator = view.findViewById(R.id.statusIndicator);
+        GradeViewHolder(@NonNull View itemView) {
+            super(itemView);
+            subjectTextView = itemView.findViewById(R.id.subjectTextView);
+            gradeTextView = itemView.findViewById(R.id.gradeTextView);
+            absencesTextView = itemView.findViewById(R.id.absencesTextView);
+            teacherNameTextView = itemView.findViewById(R.id.teacherNameTextView);
+            statusIndicator = itemView.findViewById(R.id.statusIndicator);
         }
     }
 

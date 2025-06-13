@@ -2,7 +2,7 @@ package com.example.schoolmanagementsystem;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log; // Added for logging
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,64 +25,50 @@ public class StudentGradesActivity extends AppCompatActivity {
     private TextView studentClassText;
     private TextView averageGradeText;
     private TextView statusText;
+    private TextView studentGradeText;
+    private TextView absencesText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_grades);
 
+        // Initialize views
         gradesRecyclerView = findViewById(R.id.gradesRecyclerView);
         studentNameText = findViewById(R.id.studentNameText);
         studentClassText = findViewById(R.id.studentClassText);
         averageGradeText = findViewById(R.id.averageGradeText);
         statusText = findViewById(R.id.statusText);
+        studentGradeText = findViewById(R.id.studentGradeText);
+        absencesText = findViewById(R.id.absencesText);
 
         gradesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // First try to get student ID from intent extras
+        // Get student ID
         int studentId = getIntent().getIntExtra("student_id", -1);
-        Log.d(TAG, "Student ID from Intent: " + studentId); // Log ID from Intent
-
-        // If not found in intent, try SharedPreferences
         if (studentId == -1) {
             SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             studentId = prefs.getInt("student_id", -1);
-            Log.d(TAG, "Student ID from SharedPreferences: " + studentId); // Log ID from SharedPreferences
         }
 
-        // If still not found, show error and finish
         if (studentId == -1) {
             Toast.makeText(this, "Please login again", Toast.LENGTH_LONG).show();
             finish();
-            Log.e(TAG, "Student ID is still -1. Finishing activity."); // Log the final state
             return;
         }
 
-        // Get student info from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String studentName = prefs.getString("student_name", "Student");
-        String studentGrade = prefs.getString("student_grade", "");
-        String studentClass = prefs.getString("student_class", "");
-
-        studentNameText.setText(studentName);
-        if (!studentClass.isEmpty()) {
-            studentClassText.setText("Class: " + studentClass);
-        } else if (!studentGrade.isEmpty()) {
-            studentClassText.setText("Grade: " + studentGrade);
-        } else {
-            studentClassText.setVisibility(View.GONE);
-        }
-
-        loadGrades(studentId);
+        loadStudentData(studentId);
     }
 
-    private void loadGrades(int studentId) {
+    private void loadStudentData(int studentId) {
         String url = BASE_URL + "student_get_grades.php";
         JSONObject postData = new JSONObject();
         try {
             postData.put("student_id", studentId);
+            // هذا السطر مهم جداً للتحقق من قيمة studentId قبل إرساله
+            Log.d(TAG, "Sending student_id from Android: " + studentId);
         } catch (Exception e) {
-            Log.e(TAG, "Error preparing request JSON: " + e.getMessage(), e);
+            Log.e(TAG, "Error preparing request JSON: " + e.getMessage());
             Toast.makeText(this, "Error preparing request", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -90,53 +76,83 @@ public class StudentGradesActivity extends AppCompatActivity {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
                 response -> {
                     try {
-                        if ("success".equals(response.optString("status"))) {
+                        String status = response.getString("status");
+
+                        if (status.equals("success")) {
+                            // Get student info
+                            JSONObject studentInfo = response.getJSONObject("student_info");
+                            studentNameText.setText(studentInfo.getString("name"));
+                            studentClassText.setText("Grade: " + studentInfo.getString("grade"));
+
+                            // Get grades
                             JSONArray gradesArray = response.getJSONArray("grades");
                             List<StudentGradeItem> studentGradeItems = new ArrayList<>();
-                            double totalGrade = 0;
-                            int gradeCount = 0;
 
+                            // Get attendance
+                            JSONArray attendanceArray = response.getJSONArray("attendance");
+                            Map<String, Integer> attendanceMap = new HashMap<>();
+                            for (int i = 0; i < attendanceArray.length(); i++) {
+                                JSONObject attendance = attendanceArray.getJSONObject(i);
+                                attendanceMap.put(
+                                        attendance.getString("subject"),
+                                        attendance.getInt("absence_count")
+                                );
+                            }
+
+                            // Process grades and calculate total absences
+                            int totalAbsences = 0;
                             for (int i = 0; i < gradesArray.length(); i++) {
-                                JSONObject row = gradesArray.getJSONObject(i);
-                                String subject = row.getString("subject_name");
-                                String grade = row.getString("grade");
-                                String published = row.optString("published", "0");
+                                JSONObject grade = gradesArray.getJSONObject(i);
+                                String subject = grade.getString("subject_name");
+                                String gradeValue = grade.getString("grade");
+                                String published = grade.optString("published", "0");
+                                String teacherName = grade.optString("teacher_name", "N/A");
 
                                 if ("1".equals(published)) {
-                                    studentGradeItems.add(new StudentGradeItem(subject, grade, ""));
-                                    try {
-                                        totalGrade += Double.parseDouble(grade);
-                                        gradeCount++;
-                                    } catch (NumberFormatException e) {
-                                        Log.w(TAG, "Invalid grade format for subject " + subject + ": " + grade);
-                                    }
+                                    int absences = attendanceMap.getOrDefault(subject, 0);
+                                    totalAbsences += absences;
+                                    studentGradeItems.add(new StudentGradeItem(subject, gradeValue, String.valueOf(absences), teacherName));
                                 }
                             }
 
-                            if (gradeCount > 0) {
-                                double average = totalGrade / gradeCount;
+                            // Update UI with grades and absences
+                            if (!studentGradeItems.isEmpty()) {
+                                double average = response.getDouble("average_grade");
                                 updateGradeStatus(average);
+                                absencesText.setText("Total Absences: " + totalAbsences);
+
+                                Collections.sort(studentGradeItems, (a, b) ->
+                                        a.getSubject().compareToIgnoreCase(b.getSubject()));
+
+                                gradesRecyclerView.setAdapter(new StudentGradesAdapter(studentGradeItems));
                             } else {
                                 averageGradeText.setText("No grades available");
                                 statusText.setText("Status: Not Available");
                                 statusText.setTextColor(getResources().getColor(R.color.needs_improvement));
+                                absencesText.setText("No attendance records");
+                                studentGradeText.setText("Grade: N/A");
                             }
-
-                            Collections.sort(studentGradeItems, (a, b) ->
-                                    a.getSubject().compareToIgnoreCase(b.getSubject()));
-
-                            gradesRecyclerView.setAdapter(new StudentGradesAdapter(studentGradeItems));
                         } else {
-                            String errorMessage = response.optString("message", "Failed to load grades");
-                            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+                            // If status is "error", display the error message from the PHP script
+                            String errorMessage = response.getString("message");
+                            Toast.makeText(StudentGradesActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                            // You might also want to clear existing data or show an empty state
+                            studentNameText.setText("Error");
+                            studentClassText.setText("");
+                            averageGradeText.setText("");
+                            statusText.setText("Status: Error");
+                            statusText.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                            absencesText.setText("");
+                            studentGradeText.setText("");
+                            gradesRecyclerView.setAdapter(null); // Clear the RecyclerView
                         }
                     } catch (Exception e) {
-                        Log.e(TAG, "Error parsing grades JSON response: " + e.getMessage(), e);
-                        Toast.makeText(this, "Error processing grades data", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "Error parsing response: " + e.getMessage(), e);
+                        Toast.makeText(StudentGradesActivity.this, "Error processing data", Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> {
-                    Log.e(TAG, "Network error during grade fetch: " + error.getMessage(), error);
+                    Log.e(TAG, "Network error: " + error.getMessage(), error);
                     Toast.makeText(this, "Network error: Could not connect to server", Toast.LENGTH_LONG).show();
                 });
 
@@ -172,7 +188,7 @@ public class StudentGradesActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         int studentId = prefs.getInt("student_id", -1);
         if (studentId != -1) {
-            loadGrades(studentId);
+            loadStudentData(studentId);
         }
     }
 }

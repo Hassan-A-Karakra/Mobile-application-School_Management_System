@@ -126,4 +126,4 @@ public class StudentLoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-}
+} 
