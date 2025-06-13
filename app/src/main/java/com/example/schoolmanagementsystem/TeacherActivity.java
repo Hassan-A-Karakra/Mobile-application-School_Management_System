@@ -119,6 +119,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         buttonAssignments.setOnClickListener(v -> {
             Intent intent = new Intent(TeacherActivity.this, TeacherAssignmentsActivity.class);
             intent.putExtra("teacher_id", currentTeacherId);
+            intent.putExtra("TEACHER_GRADE", currentTeacherSubject);
             startActivity(intent);
         });
     }

@@ -41,22 +41,22 @@ public class TeacherLoginActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
-         if (sharedPreferences.getBoolean("rememberMe", false)) {
+        if (sharedPreferences.getBoolean("rememberMe", false)) {
             editTextUsername.setText(sharedPreferences.getString("username", ""));
             editTextPassword.setText(sharedPreferences.getString("password", ""));
             checkboxRememberMe.setChecked(true);
         }
 
-         buttonLogin.setOnClickListener(v -> {
+        buttonLogin.setOnClickListener(v -> {
             String email = editTextUsername.getText().toString().trim().toLowerCase();
             String password = editTextPassword.getText().toString().trim();
 
-             if (email.isEmpty() || password.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(TeacherLoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-             loginTeacher(email, password);
+            loginTeacher(email, password);
         });
 
         buttonRegister.setOnClickListener(v -> {
@@ -65,18 +65,18 @@ public class TeacherLoginActivity extends AppCompatActivity {
         });
     }
 
-     private void loginTeacher(String email, String password) {
+    private void loginTeacher(String email, String password) {
         try {
-             JSONObject params = new JSONObject();
+            JSONObject params = new JSONObject();
             params.put("email", email);
             params.put("password", password);
 
-             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, params,
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, params,
                     response -> {
-                         String status = response.optString("status");
+                        String status = response.optString("status");
                         if ("success".equals(status)) {
                             try {
-                                 JSONObject teacher = response.getJSONObject("teacher");
+                                JSONObject teacher = response.getJSONObject("teacher");
 
                                 // Save teacher info to SharedPreferences
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -108,17 +108,17 @@ public class TeacherLoginActivity extends AppCompatActivity {
                                 Toast.makeText(TeacherLoginActivity.this, "Error: Teacher data not found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                             Toast.makeText(TeacherLoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TeacherLoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
                         }
                     },
                     error -> {
-                         Toast.makeText(TeacherLoginActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TeacherLoginActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     });
 
-             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(request);
         } catch (JSONException e) {
-             Toast.makeText(TeacherLoginActivity.this, "Error creating JSON request: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(TeacherLoginActivity.this, "Error creating JSON request: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

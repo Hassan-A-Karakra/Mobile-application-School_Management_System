@@ -39,7 +39,7 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private EditText assignmentTitleInput;
     private EditText assignmentDescriptionInput;
-    private Spinner classSpinner;
+    private Spinner gradeSpinner;
     private Spinner subjectSpinner;
     private EditText dueDateInput;
     private Button createAssignmentButton;
@@ -55,7 +55,7 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private static final String BASE_URL = "http://10.0.2.2/student_system/";
     private static final String CREATE_ASSIGNMENT_URL = BASE_URL + "teacher_create_assignment.php";
     private static final String GET_ASSIGNMENTS_URL = BASE_URL + "teacher_get_teacher_assignments.php";
-    private static final String GET_CLASSES_URL = BASE_URL + "teacher_get_grades.php";
+    private static final String GET_GRADES_URL = BASE_URL + "teacher_get_grades.php";
     private static final String GET_SUBJECTS_URL = BASE_URL + "teacher_get_subjects.php";
 
     @Override
@@ -96,7 +96,7 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         assignmentTitleInput = findViewById(R.id.assignmentTitleInput);
         assignmentDescriptionInput = findViewById(R.id.assignmentDescriptionInput);
-        classSpinner = findViewById(R.id.classSpinner);
+        gradeSpinner = findViewById(R.id.classSpinner);
         subjectSpinner = findViewById(R.id.subjectSpinner);
         dueDateInput = findViewById(R.id.dueDateInput);
         createAssignmentButton = findViewById(R.id.createAssignmentButton);
@@ -150,18 +150,18 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        fetchClasses();
+        fetchGrades();
         fetchSubjects();
     }
 
-    private void fetchClasses() {
+    private void fetchGrades() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 HttpURLConnection conn = null;
                 BufferedReader reader = null;
                 try {
-                    URL url = new URL(GET_CLASSES_URL);
+                    URL url = new URL(GET_GRADES_URL);
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -181,27 +181,27 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                             response.append(line);
                         }
                         String jsonResponse = response.toString();
-                        Log.d("API_RESPONSE", "Classes Response: " + jsonResponse);
+                        Log.d("API_RESPONSE", "Grades Response: " + jsonResponse);
 
-                        JSONArray classesJson = new JSONArray(jsonResponse);
-                        final List<String> fetchedClasses = new ArrayList<>();
-                        fetchedClasses.add("Select Class");
-                        for (int i = 0; i < classesJson.length(); i++) {
-                            fetchedClasses.add(classesJson.getString(i));
+                        JSONArray gradesJson = new JSONArray(jsonResponse);
+                        final List<String> fetchedGrades = new ArrayList<>();
+                        fetchedGrades.add("Select Grade");
+                        for (int i = 0; i < gradesJson.length(); i++) {
+                            fetchedGrades.add(gradesJson.getString(i));
                         }
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ArrayAdapter<String> classAdapter = new ArrayAdapter<>(TeacherAssignmentsActivity.this,
-                                        android.R.layout.simple_spinner_item, fetchedClasses);
-                                classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                classSpinner.setAdapter(classAdapter);
+                                ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(TeacherAssignmentsActivity.this,
+                                        android.R.layout.simple_spinner_item, fetchedGrades);
+                                gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                gradeSpinner.setAdapter(gradeAdapter);
                             }
                         });
                     }
                 } catch (Exception e) {
-                    Log.e("API_ERROR", "Error fetching classes", e);
+                    Log.e("API_ERROR", "Error fetching grades", e);
                     final String errorMessage = "Network Error: " + e.getMessage();
                     runOnUiThread(new Runnable() {
                         @Override
@@ -313,13 +313,13 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private void createAssignment() {
         String title = assignmentTitleInput.getText().toString().trim();
         String description = assignmentDescriptionInput.getText().toString().trim();
-        String assignmentClass = classSpinner.getSelectedItem().toString();
+        String assignmentGrade = gradeSpinner.getSelectedItem().toString();
         String assignmentSubject = subjectSpinner.getSelectedItem().toString();
         String dueDate = dueDateInput.getText().toString().trim();
 
         if (title.isEmpty() || description.isEmpty() || dueDate.isEmpty() ||
-                assignmentClass.equals("Select Class") || assignmentSubject.equals("Select Subject")) {
-            Toast.makeText(this, "Please fill all fields and select Class/Subject.", Toast.LENGTH_SHORT).show();
+                assignmentGrade.equals("Select Grade") || assignmentSubject.equals("Select Subject")) {
+            Toast.makeText(this, "Please fill all fields and select Grade/Subject.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -337,9 +337,8 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
             postData.put("title", title);
             postData.put("description", description);
             postData.put("due_date", dueDateForPhp);
-            postData.put("class", assignmentClass);
             postData.put("subject", assignmentSubject);
-            postData.put("grade", teacherGrade);
+            postData.put("grade", assignmentGrade);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -459,10 +458,10 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                                 String title = assignmentJson.getString("title");
                                 String description = assignmentJson.getString("description");
                                 String dueDate = assignmentJson.getString("due_date");
-                                String assignmentClass = assignmentJson.getString("class");
                                 String assignmentSubject = assignmentJson.getString("subject");
+                                String assignmentGrade = assignmentJson.getString("grade");
 
-                                fetchedAssignments.add(new Assignment(id, title, description, dueDate, assignmentClass, assignmentSubject));
+                                fetchedAssignments.add(new Assignment(id, title, description, dueDate, assignmentSubject, assignmentGrade));
                             }
 
                             runOnUiThread(new Runnable() {
@@ -504,7 +503,7 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private void clearInputFields() {
         assignmentTitleInput.setText("");
         assignmentDescriptionInput.setText("");
-        classSpinner.setSelection(0);
+        gradeSpinner.setSelection(0);
         subjectSpinner.setSelection(0);
         dueDateInput.setText("");
     }

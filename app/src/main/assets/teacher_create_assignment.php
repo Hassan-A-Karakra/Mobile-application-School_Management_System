@@ -6,6 +6,9 @@ require 'db.php';
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
+// Log the received data for debugging
+error_log("Received data for assignment creation: " . print_r($data, true));
+
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo json_encode(["status" => "error", "message" => "Invalid JSON input."]);
     exit();
@@ -15,18 +18,18 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 $title = $data['title'] ?? '';
 $description = $data['description'] ?? '';
 $dueDate = $data['due_date'] ?? '';
-$class = $data['class'] ?? '';
+// $class = $data['class'] ?? ''; // Removed: Class info is no longer used
 $subject = $data['subject'] ?? '';
 $grade = $data['grade'] ?? '';
 
 // Basic validation
-if (empty($title) || empty($description) || empty($dueDate) || empty($class) || empty($subject) || empty($grade)) {
+if (empty($title) || empty($description) || empty($dueDate) || empty($subject) || empty($grade)) {
     echo json_encode(["status" => "error", "message" => "All fields are required."]);
     exit();
 }
 
 // Prepare SQL statement
-$stmt = $conn->prepare("INSERT INTO assignments (title, description, due_date, class, subject, grade) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO assignments (title, description, due_date, subject, grade) VALUES (?, ?, ?, ?, ?)");
 
 if ($stmt === false) {
     echo json_encode(["status" => "error", "message" => "Failed to prepare statement: " . $conn->error]);
@@ -34,7 +37,7 @@ if ($stmt === false) {
 }
 
 // Bind parameters
-$stmt->bind_param("ssssss", $title, $description, $dueDate, $class, $subject, $grade);
+$stmt->bind_param("sssss", $title, $description, $dueDate, $subject, $grade);
 
 if ($stmt->execute()) {
     echo json_encode([

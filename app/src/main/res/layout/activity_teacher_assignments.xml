@@ -55,7 +55,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Select Class:"
+                            android:text="Select Grade:"
                             android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                         <Spinner

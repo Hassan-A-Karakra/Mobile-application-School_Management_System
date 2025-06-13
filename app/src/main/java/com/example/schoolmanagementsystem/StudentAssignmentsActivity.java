@@ -85,7 +85,6 @@ public class StudentAssignmentsActivity extends AppCompatActivity {
                                             obj.getString("title"),
                                             obj.getString("description"),
                                             obj.getString("due_date"),
-                                            obj.optString("assignment_class", ""),
                                             obj.optString("assignment_subject", ""),
                                             obj.optString("grade", "Not graded yet")
                                     );

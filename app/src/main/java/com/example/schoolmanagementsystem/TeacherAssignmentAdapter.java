@@ -42,7 +42,6 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
     class AssignmentViewHolder extends RecyclerView.ViewHolder {
         private final TextView assignmentTitle;
         private final TextView assignmentDescription;
-        private final TextView assignmentClass;
         private final TextView assignmentSubject;
         private final TextView dueDate;
         private final ImageButton menuButton;
@@ -54,7 +53,6 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
 
             assignmentTitle = itemView.findViewById(R.id.assignmentTitle);
             assignmentDescription = itemView.findViewById(R.id.assignmentDescription);
-            assignmentClass = itemView.findViewById(R.id.assignmentClass);
             assignmentSubject = itemView.findViewById(R.id.assignmentSubject);
             dueDate = itemView.findViewById(R.id.dueDate);
             menuButton = itemView.findViewById(R.id.menuButton);
@@ -65,7 +63,6 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
         void bind(Assignment assignment) {
             assignmentTitle.setText(assignment.getTitle());
             assignmentDescription.setText(assignment.getDescription());
-            assignmentClass.setText("Class: " + assignment.getAssignmentClass());
             assignmentSubject.setText("Subject: " + assignment.getAssignmentSubject());
             dueDate.setText(assignment.getDueDate());
 
@@ -94,7 +91,6 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
             return oldItem.getTitle().equals(newItem.getTitle()) &&
                     oldItem.getDescription().equals(newItem.getDescription()) &&
                     oldItem.getDueDate().equals(newItem.getDueDate()) &&
-                    oldItem.getAssignmentClass().equals(newItem.getAssignmentClass()) &&
                     oldItem.getAssignmentSubject().equals(newItem.getAssignmentSubject());
         }
     }
