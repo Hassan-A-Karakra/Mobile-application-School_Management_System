@@ -39,7 +39,7 @@ public class StudentAssignmentsActivity extends AppCompatActivity {
         assignmentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SharedPreferences prefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
-        studentId = prefs.getInt("student_id", -1); // Retrieve studentId here
+        studentId = prefs.getInt("student_id", -1);
 
         if (studentId == -1) {
             Toast.makeText(this, "Student not logged in", Toast.LENGTH_SHORT).show();
@@ -51,16 +51,36 @@ public class StudentAssignmentsActivity extends AppCompatActivity {
         adapter = new StudentAssignmentAdapter(this, assignmentList, assignment -> {
             Intent intent = new Intent(this, StudentSubmitAssignmentActivity.class);
             intent.putExtra("assignment_id", assignment.getId());
-            intent.putExtra("student_id", studentId); // FIX: Pass studentId here
+            intent.putExtra("student_id", studentId);
             intent.putExtra("title", assignment.getTitle());
             intent.putExtra("description", assignment.getDescription());
             intent.putExtra("due_date", assignment.getDueDate());
             intent.putExtra("grade", assignment.getGrade());
-            startActivity(intent);
+            startActivityForResult(intent, 1);
         });
         assignmentsRecyclerView.setAdapter(adapter);
 
         loadAssignments();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            int assignmentId = data.getIntExtra("assignment_id", -1);
+            boolean submitted = data.getBooleanExtra("submitted", false);
+            
+            if (assignmentId != -1 && submitted) {
+                // Find and update the assignment in the list
+                for (Assignment assignment : assignmentList) {
+                    if (assignment.getId() == assignmentId) {
+                        assignment.setSubmitted(true);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void loadAssignments() {

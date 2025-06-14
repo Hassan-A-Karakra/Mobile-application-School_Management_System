@@ -9,6 +9,7 @@ public class Assignment {
     private String grade;
     private String fileName; // New field for file name
     private String filePath; // New field for file path (or URL to download)
+    private boolean submitted;
 
     // Constructor with all fields including new file details
     public Assignment(int id, String title, String description, String dueDate, String subject, String grade, String fileName, String filePath) {
@@ -20,6 +21,7 @@ public class Assignment {
         this.grade = grade;
         this.fileName = fileName;
         this.filePath = filePath;
+        this.submitted = false;
     }
 
     // Constructor without file details (if still needed)
@@ -60,6 +62,10 @@ public class Assignment {
         return filePath;
     }
 
+    public boolean isSubmitted() {
+        return submitted;
+    }
+
     // You can add setters if you need to modify these properties after creation
     public void setId(int id) {
         this.id = id;
@@ -91,5 +97,9 @@ public class Assignment {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
     }
 }

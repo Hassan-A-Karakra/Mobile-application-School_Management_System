@@ -12,6 +12,11 @@ import com.android.volley.toolbox.Volley;
 import com.android.volley.NetworkResponse; // Import NetworkResponse
 import com.android.volley.VolleyError; // Import VolleyError
 import org.json.JSONObject;
+import android.app.AlertDialog;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.ImageView;
+import android.content.Intent;
 
 import java.nio.charset.StandardCharsets; // Import StandardCharsets
 
@@ -57,8 +62,27 @@ public class StudentSubmitAssignmentActivity extends AppCompatActivity {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SUBMIT_URL, data,
                     response -> {
                         Log.d(TAG, "Submission successful. Response: " + response.toString());
-                        Toast.makeText(this, "Submitted!", Toast.LENGTH_SHORT).show();
-                        finish();
+                        
+                        // Create success dialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        View dialogView = getLayoutInflater().inflate(R.layout.dialog_success, null);
+                        builder.setView(dialogView);
+                        
+                        AlertDialog dialog = builder.create();
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        dialog.show();
+                        
+                        // Set result to indicate successful submission
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("assignment_id", assignmentId);
+                        resultIntent.putExtra("submitted", true);
+                        setResult(RESULT_OK, resultIntent);
+                        
+                        // Auto dismiss after 2 seconds
+                        dialog.getWindow().getDecorView().postDelayed(() -> {
+                            dialog.dismiss();
+                            finish();
+                        }, 2000);
                     },
                     error -> {
                         // Detailed error logging

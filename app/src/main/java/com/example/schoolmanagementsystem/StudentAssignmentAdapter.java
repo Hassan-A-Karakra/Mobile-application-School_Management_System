@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
@@ -40,6 +42,15 @@ public class StudentAssignmentAdapter extends RecyclerView.Adapter<StudentAssign
         holder.desc.setText(assignment.getDescription());
         holder.due.setText("Due: " + assignment.getDueDate());
 
+        // Show completion indicator if assignment is submitted
+        if (assignment.isSubmitted()) {
+            holder.completionIndicator.setVisibility(View.VISIBLE);
+            holder.submitButton.setVisibility(View.GONE);
+        } else {
+            holder.completionIndicator.setVisibility(View.GONE);
+            holder.submitButton.setVisibility(View.VISIBLE);
+        }
+
         // Clicking the whole item view also works
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -63,6 +74,9 @@ public class StudentAssignmentAdapter extends RecyclerView.Adapter<StudentAssign
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, desc, due;
         Button submitButton;
+        LinearLayout completionIndicator;
+        ImageView checkmarkIcon;
+        TextView completedText;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +84,9 @@ public class StudentAssignmentAdapter extends RecyclerView.Adapter<StudentAssign
             desc = itemView.findViewById(R.id.assignmentDescription);
             due = itemView.findViewById(R.id.dueDate);
             submitButton = itemView.findViewById(R.id.button_submit_assignment);
+            completionIndicator = itemView.findViewById(R.id.completionIndicator);
+            checkmarkIcon = itemView.findViewById(R.id.checkmarkIcon);
+            completedText = itemView.findViewById(R.id.completedText);
         }
     }
 }
