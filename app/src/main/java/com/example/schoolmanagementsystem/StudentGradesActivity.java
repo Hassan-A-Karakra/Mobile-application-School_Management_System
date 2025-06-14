@@ -65,7 +65,7 @@ public class StudentGradesActivity extends AppCompatActivity {
         JSONObject postData = new JSONObject();
         try {
             postData.put("student_id", studentId);
-            Log.d(TAG, "Sending student_id from Android: " + studentId); // هذا السطر سيُظهر 1 الآن
+            Log.d(TAG, "Sending student_id from Android: " + studentId);
         } catch (Exception e) {
             Log.e(TAG, "Error preparing request JSON: " + e.getMessage());
             Toast.makeText(this, "Error preparing request", Toast.LENGTH_SHORT).show();

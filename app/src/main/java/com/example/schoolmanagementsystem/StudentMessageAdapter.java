@@ -16,34 +16,38 @@ public class StudentMessageAdapter extends RecyclerView.Adapter<StudentMessageAd
 
     private final List<StudentMessage> messages;
 
+     private static final int VIEW_TYPE_SENT = 1;
+    private static final int VIEW_TYPE_RECEIVED = 2;
+
     public StudentMessageAdapter(List<StudentMessage> messages) {
         this.messages = messages;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textSender, textContent, textTimestamp;
-        LinearLayout messageBubbleLayout;
+        TextView messageContentTextView, timestampTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            textSender = itemView.findViewById(R.id.textSender);
-            textContent = itemView.findViewById(R.id.textContent);
-            textTimestamp = itemView.findViewById(R.id.textTimestamp);
-            // Ensure the root of item_message.xml is a LinearLayout when casting
-            messageBubbleLayout = (LinearLayout) itemView;
+            messageContentTextView = itemView.findViewById(R.id.messageContentTextView);
+            timestampTextView = itemView.findViewById(R.id.timestampTextView);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return messages.get(position).isSentByMe() ? 0 : 1;
+        // استخدام isSentByMe لتحديد نوع العرض
+        return messages.get(position).isSentByMe() ? VIEW_TYPE_SENT : VIEW_TYPE_RECEIVED;
     }
 
     @NonNull
     @Override
     public StudentMessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_message, parent, false);
+        View view;
+        if (viewType == VIEW_TYPE_SENT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_sent, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_received, parent, false);
+        }
         return new ViewHolder(view);
     }
 
@@ -51,33 +55,10 @@ public class StudentMessageAdapter extends RecyclerView.Adapter<StudentMessageAd
     public void onBindViewHolder(@NonNull StudentMessageAdapter.ViewHolder holder, int position) {
         StudentMessage message = messages.get(position);
 
-        holder.textContent.setText(message.getMessageContent());
-        holder.textTimestamp.setText(message.getTimestamp());
+        holder.messageContentTextView.setText(message.getMessageContent());
+         holder.timestampTextView.setText(message.getTimestamp());
 
-        // Create new LinearLayout.LayoutParams instead of trying to cast existing ones
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-
-        if (message.isSentByMe()) {
-            holder.textSender.setText("You");
-            holder.messageBubbleLayout.setBackgroundResource(R.drawable.bubble_sent);
-            layoutParams.gravity = Gravity.END;
-            holder.textSender.setTextColor(0xFFFFFFFF);
-            holder.textContent.setTextColor(0xFFFFFFFF);
-            holder.textTimestamp.setTextColor(0xFFC0C0C0);
-        } else {
-            holder.textSender.setText(message.getTitle());
-            holder.messageBubbleLayout.setBackgroundResource(R.drawable.bubble_received);
-            layoutParams.gravity = Gravity.START;
-            holder.textSender.setTextColor(0xFF3E206D);
-            holder.textContent.setTextColor(0xFF333333);
-            holder.textTimestamp.setTextColor(0xFF888888);
-        }
-
-        holder.messageBubbleLayout.setLayoutParams(layoutParams);
-    }
+     }
 
     @Override
     public int getItemCount() {

@@ -18,8 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest; // تم التعديل هنا: استخدام JsonObjectRequest
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -45,6 +44,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
     private List<Teacher> teacherList = new ArrayList<>();
     private int studentId;
     private String selectedTeacherName = "";
+    private int selectedTeacherId = -1;
     private ProgressBar progressBar;
 
     @Override
@@ -66,7 +66,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewMessages);
         progressBar = findViewById(R.id.progressBar);
 
-        adapter = new StudentMessageAdapter(displayedMessages); // Pass the filtered list to adapter
+        adapter = new StudentMessageAdapter(displayedMessages);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
@@ -74,8 +74,10 @@ public class StudentMessagesActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(v -> {
             String message = messageInput.getText().toString().trim();
-            if (!message.isEmpty()) { // No need to check selectedTeacherId here
-                sendMessage(message);
+            if (selectedTeacherId != -1 && !message.isEmpty()) {
+                sendMessage(message, selectedTeacherId);
+            } else if (selectedTeacherId == -1) {
+                Toast.makeText(this, "Please select a teacher", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show();
             }
@@ -83,13 +85,14 @@ public class StudentMessagesActivity extends AppCompatActivity {
 
         teacherSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                // Correctly get the original name, not the display name from the spinner
                 selectedTeacherName = teacherList.get(pos).getOriginalName();
-                Log.d("StudentMessages", "Spinner selected teacher: " + selectedTeacherName);
+                selectedTeacherId = teacherList.get(pos).getId();
+                Log.d("StudentMessages", "Spinner selected teacher: " + selectedTeacherName + ", ID: " + selectedTeacherId);
                 filterAndDisplayMessages(); // Filter messages when a teacher is selected
             }
             public void onNothingSelected(AdapterView<?> parent) {
                 selectedTeacherName = ""; // No teacher selected, show all student messages (or empty)
+                selectedTeacherId = -1;
                 filterAndDisplayMessages();
             }
         });
@@ -145,9 +148,10 @@ public class StudentMessagesActivity extends AppCompatActivity {
                                 teacherSpinner.setAdapter(spinnerAdapter);
 
                                 // Set initial selection and load messages
-                                // Ensure we set selectedTeacherName from the original name of the first teacher
+                                // Ensure we set selectedTeacherName and selectedTeacherId from the original name/ID of the first teacher
                                 selectedTeacherName = teacherList.get(0).getOriginalName();
-                                Log.d("StudentMessages", "Initial selected teacher name: " + selectedTeacherName);
+                                selectedTeacherId = teacherList.get(0).getId();
+                                Log.d("StudentMessages", "Initial selected teacher name: " + selectedTeacherName + ", ID: " + selectedTeacherId);
                                 loadAllStudentMessages();
                             } else {
                                 Toast.makeText(this, "No teachers available", Toast.LENGTH_SHORT).show();
@@ -194,12 +198,15 @@ public class StudentMessagesActivity extends AppCompatActivity {
     }
 
     private void loadAllStudentMessages() {
-        String url = BASE_URL + "student_get_messages.php";
+        String url = BASE_URL + "student_get_chat_messages.php";
 
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("student_id", studentId);
-        } catch (JSONException e) {
+            jsonBody.put("teacher_id", selectedTeacherId);
+        }
+
+        catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -212,13 +219,20 @@ public class StudentMessagesActivity extends AppCompatActivity {
                             Log.d("StudentMessages", "Received " + messagesArray.length() + " messages from server for student ID " + studentId);
                             for (int i = 0; i < messagesArray.length(); i++) {
                                 JSONObject obj = messagesArray.getJSONObject(i);
-                                String title = obj.getString("title");
-                                String messageContent = obj.getString("message");
+                                String messageContent = obj.getString("message_content");
                                 String timestamp = obj.getString("created_at");
 
-                                boolean isSentByMe = title.startsWith("Message from Student"); // Check if title starts with this
-                                Log.d("StudentMessages", "Processing message: Title='" + title + "', isSentByMe=" + isSentByMe);
-                                allStudentMessages.add(new StudentMessage(title, messageContent, timestamp, isSentByMe));
+                                boolean isSentByMe = obj.getBoolean("is_sent_by_me");
+                                Log.d("StudentMessages", "Message ID: " + obj.optInt("id", -1) + ", isSentByMe: " + isSentByMe + ", Content: " + messageContent);
+
+                                String displayTitle;
+                                if (isSentByMe) {
+                                    displayTitle = "me";
+                                } else {
+                                    displayTitle = selectedTeacherName; // If message is from teacher, use selected teacher's name
+                                }
+
+                                allStudentMessages.add(new StudentMessage(displayTitle, messageContent, timestamp, isSentByMe));
                             }
                             Log.d("StudentMessages", "Total messages loaded into allStudentMessages: " + allStudentMessages.size());
                             filterAndDisplayMessages();
@@ -279,18 +293,34 @@ public class StudentMessagesActivity extends AppCompatActivity {
         }
     }
 
-    private void sendMessage(String content) {
-        String url = BASE_URL + "student_send_message.php";
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+     private void sendMessage(String content, int teacherId) {
+        String url = BASE_URL + "student_send_chat_message.php";
+
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("sender_id", studentId);
+            postData.put("sender_type", "student");
+            postData.put("receiver_id", teacherId);
+            postData.put("receiver_type", "teacher");
+            postData.put("message_content", content);
+
+            Log.d("StudentMessages", "Sending message. JSON data: " + postData.toString());
+
+        } catch (JSONException e) {
+            Log.e("StudentMessages", "Error creating JSON for message: " + e.getMessage());
+            Toast.makeText(this, "Error preparing message data.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
                 response -> {
                     try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        if (jsonResponse.getBoolean("success")) {
+                         if (response.getString("status").equals("success")) {
                             messageInput.setText("");
-                            loadAllStudentMessages(); // Reload all messages and then filter
+                            loadAllStudentMessages();
                             Toast.makeText(this, "Message sent successfully!", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(this, "Failed to send message: " + jsonResponse.optString("message", "Unknown error"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Failed to send message: " + response.optString("message", "Unknown error"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         Log.e("StudentMessages", "Error parsing send message response: " + e.getMessage());
@@ -314,40 +344,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
                     }
                     Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
                 }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("student_id", String.valueOf(studentId));
-                // It seems student_send_message.php expects teacher_id and message content
-                // based on previous analysis of the PHP side.
-                // Ensure selectedTeacherId is valid before sending.
-                if (selectedTeacherName != null && !selectedTeacherName.isEmpty() && !teacherList.isEmpty()) {
-                    // Find the ID for the selected teacher name
-                    int teacherIdToSend = -1;
-                    for (Teacher teacher : teacherList) {
-                        if (teacher.getOriginalName().equalsIgnoreCase(selectedTeacherName)) {
-                            teacherIdToSend = teacher.getId();
-                            break;
-                        }
-                    }
-                    if (teacherIdToSend != -1) {
-                        params.put("teacher_id", String.valueOf(teacherIdToSend));
-                    } else {
-                        Log.e("StudentMessages", "Could not find teacher ID for selected teacher name: " + selectedTeacherName);
-                        // Handle error, maybe don't send message or show a toast
-                    }
-                } else {
-                    Log.e("StudentMessages", "No teacher selected or teacher list is empty when trying to send message.");
-                }
-                params.put("content", content);
-                // Also sending 'title' to match what the PHP script expects, even though it's
-                // primarily used for *teacher* messages and will be overridden by teacher's name.
-                // For student messages, this title isn't critical for filtering, but good to send.
-                params.put("title", "Message from Student " + studentId);
-                return params;
-            }
-        };
+        );
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10000,
@@ -356,10 +353,9 @@ public class StudentMessagesActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
-    // Helper class for Teacher object to store original name for filtering
-    private static class Teacher {
+     private static class Teacher {
         private final int id;
-        private final String originalName; // Stores "Mr. Hassan"
+        private final String originalName;
         private final String subject;
 
         public Teacher(int id, String originalName, String subject) {
@@ -380,8 +376,7 @@ public class StudentMessagesActivity extends AppCompatActivity {
             return subject;
         }
 
-        // This method will be used for display in the spinner
-        @Override
+         @Override
         public String toString() {
             return originalName + " (" + subject + ")";
         }

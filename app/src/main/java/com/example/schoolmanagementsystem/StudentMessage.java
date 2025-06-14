@@ -1,10 +1,10 @@
 package com.example.schoolmanagementsystem;
 
 public class StudentMessage {
-    private final String title; // This will hold the sender's name or "Message from Student X"
+    private final String title;
     private final String messageContent;
     private final String timestamp;
-    private boolean isSentByMe; // True if sent by the logged-in student
+    private boolean isSentByMe;
 
     public StudentMessage(String title, String messageContent, String timestamp, boolean isSentByMe) {
         this.title = title;
