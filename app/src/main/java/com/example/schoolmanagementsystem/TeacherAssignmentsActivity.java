@@ -1,7 +1,11 @@
 package com.example.schoolmanagementsystem;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64; // Import for Base64 encoding
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,8 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView; // Import for TextView
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher; // Import for ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts; // Import for ActivityResultContracts
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream; // Import for ByteArrayOutputStream
+import java.io.InputStream; // Import for InputStream
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -51,6 +60,14 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat phpDateFormat;
     private String teacherGrade;
+
+    // New variables for file selection
+    private Button buttonChooseFile;
+    private TextView textViewFileName;
+    private Uri selectedFileUri = null;
+    private String selectedFileName = "";
+    private String selectedFileBase64 = "";
+    private ActivityResultLauncher<Intent> filePickerLauncher;
 
     private static final String BASE_URL = "http://10.0.2.2/student_system/";
     private static final String CREATE_ASSIGNMENT_URL = BASE_URL + "teacher_create_assignment.php";
@@ -90,6 +107,43 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         fabAddAssignment.setVisibility(View.GONE);
 
         fetchAssignments();
+
+        // Initialize file picker launcher
+        filePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        selectedFileUri = result.getData().getData();
+                        if (selectedFileUri != null) {
+                            try {
+                                InputStream inputStream = getContentResolver().openInputStream(selectedFileUri);
+                                ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+                                int bufferSize = 1024;
+                                byte[] buffer = new byte[bufferSize];
+                                int len;
+                                while ((len = inputStream.read(buffer)) != -1) {
+                                    byteBuffer.write(buffer, 0, len);
+                                }
+                                selectedFileBase64 = Base64.encodeToString(byteBuffer.toByteArray(), Base64.DEFAULT);
+
+                                // Get file name from URI
+                                String path = selectedFileUri.getPath();
+                                selectedFileName = path.substring(path.lastIndexOf("/") + 1); // Get filename from path
+
+                                textViewFileName.setText(selectedFileName);
+                                Toast.makeText(this, "File selected: " + selectedFileName, Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Log.e("FilePicker", "Error reading file: " + e.getMessage());
+                                Toast.makeText(this, "Error reading file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                selectedFileUri = null;
+                                selectedFileName = "";
+                                selectedFileBase64 = "";
+                                textViewFileName.setText("No file selected");
+                            }
+                        }
+                    }
+                }
+        );
     }
 
     private void initializeViews() {
@@ -103,6 +157,10 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         assignmentsRecyclerView = findViewById(R.id.assignmentsRecyclerView);
         fabAddAssignment = findViewById(R.id.fabAddAssignment);
         assignmentFormLayout = findViewById(R.id.createAssignmentCard);
+
+        // Initialize new views for file selection
+        buttonChooseFile = findViewById(R.id.buttonChooseFile);
+        textViewFileName = findViewById(R.id.textViewFileName);
     }
 
     private void setupToolbar() {
@@ -308,6 +366,21 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                 createAssignment();
             }
         });
+
+        // Set up click listener for choose file button
+        buttonChooseFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFilePicker();
+            }
+        });
+    }
+
+    private void openFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*"); // Allow all file types
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        filePickerLauncher.launch(Intent.createChooser(intent, "Select a File"));
     }
 
     private void createAssignment() {
@@ -339,6 +412,11 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
             postData.put("due_date", dueDateForPhp);
             postData.put("subject", assignmentSubject);
             postData.put("grade", assignmentGrade);
+            // Add file data if selected
+            if (selectedFileUri != null && !selectedFileBase64.isEmpty()) {
+                postData.put("file_name", selectedFileName);
+                postData.put("file_content", selectedFileBase64);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -460,8 +538,13 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
                                 String dueDate = assignmentJson.getString("due_date");
                                 String assignmentSubject = assignmentJson.getString("subject");
                                 String assignmentGrade = assignmentJson.getString("grade");
+                                // Retrieve file_name and file_path (if available)
+                                String fileName = assignmentJson.optString("file_name", null);
+                                String filePath = assignmentJson.optString("file_path", null);
 
-                                fetchedAssignments.add(new Assignment(id, title, description, dueDate, assignmentSubject, assignmentGrade));
+
+                                // Assuming Assignment constructor can handle file_name and file_path
+                                fetchedAssignments.add(new Assignment(id, title, description, dueDate, assignmentSubject, assignmentGrade, fileName, filePath));
                             }
 
                             runOnUiThread(new Runnable() {
@@ -506,6 +589,11 @@ public class TeacherAssignmentsActivity extends AppCompatActivity {
         gradeSpinner.setSelection(0);
         subjectSpinner.setSelection(0);
         dueDateInput.setText("");
+        // Clear file selection
+        selectedFileUri = null;
+        selectedFileName = "";
+        selectedFileBase64 = "";
+        textViewFileName.setText("No file selected");
     }
 
     @Override

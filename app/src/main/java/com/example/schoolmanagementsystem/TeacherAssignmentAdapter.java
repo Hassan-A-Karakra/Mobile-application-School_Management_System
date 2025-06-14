@@ -63,7 +63,7 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
         void bind(Assignment assignment) {
             assignmentTitle.setText(assignment.getTitle());
             assignmentDescription.setText(assignment.getDescription());
-            assignmentSubject.setText("Subject: " + assignment.getAssignmentSubject());
+            assignmentSubject.setText("Subject: " + assignment.getSubject());
             dueDate.setText(assignment.getDueDate());
 
             menuButton.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,7 @@ public class TeacherAssignmentAdapter extends ListAdapter<Assignment, TeacherAss
             return oldItem.getTitle().equals(newItem.getTitle()) &&
                     oldItem.getDescription().equals(newItem.getDescription()) &&
                     oldItem.getDueDate().equals(newItem.getDueDate()) &&
-                    oldItem.getAssignmentSubject().equals(newItem.getAssignmentSubject());
+                    oldItem.getSubject().equals(newItem.getSubject());
         }
     }
 }

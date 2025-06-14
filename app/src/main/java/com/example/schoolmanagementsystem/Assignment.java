@@ -1,46 +1,33 @@
 package com.example.schoolmanagementsystem;
 
 public class Assignment {
-    private int id; // Assignment ID
-    private String title; // Title of the assignment
-    private String description; // Description of the assignment
-    private String dueDate; // Due date of the assignment
-    private String assignmentSubject; // Subject info (optional)
-    private String grade; // Grade (nullable)
+    private int id;
+    private String title;
+    private String description;
+    private String dueDate;
+    private String subject;
+    private String grade;
+    private String fileName; // New field for file name
+    private String filePath; // New field for file path (or URL to download)
 
-    // Full constructor
-    public Assignment(int id, String title, String description, String dueDate, String assignmentSubject, String grade) {
+    // Constructor with all fields including new file details
+    public Assignment(int id, String title, String description, String dueDate, String subject, String grade, String fileName, String filePath) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.assignmentSubject = assignmentSubject;
+        this.subject = subject;
         this.grade = grade;
-    }
-    public Assignment(int id, String title, String description, String dueDate, String assignmentSubject) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.assignmentSubject = assignmentSubject;
-        this.grade = "Not graded yet"; // Default value
+        this.fileName = fileName;
+        this.filePath = filePath;
     }
 
-
-    // Constructor without subject/grade
-    public Assignment(int id, String title, String description, String dueDate) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.assignmentSubject = "";
-        this.grade = "Not graded yet";
+    // Constructor without file details (if still needed)
+    public Assignment(int id, String title, String description, String dueDate, String subject, String grade) {
+        this(id, title, description, dueDate, subject, grade, null, null); // Call the main constructor with null for file fields
     }
 
-    // Empty constructor (for parsing flexibility)
-    public Assignment() {}
-
-    // Getter methods
+    // Getters
     public int getId() {
         return id;
     }
@@ -57,15 +44,23 @@ public class Assignment {
         return dueDate;
     }
 
-    public String getAssignmentSubject() {
-        return assignmentSubject;
+    public String getSubject() {
+        return subject;
     }
 
     public String getGrade() {
         return grade;
     }
 
-    // Setter methods
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    // You can add setters if you need to modify these properties after creation
     public void setId(int id) {
         this.id = id;
     }
@@ -82,11 +77,19 @@ public class Assignment {
         this.dueDate = dueDate;
     }
 
-    public void setAssignmentSubject(String assignmentSubject) {
-        this.assignmentSubject = assignmentSubject;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

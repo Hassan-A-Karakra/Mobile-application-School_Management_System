@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ public class RegistrarActivity extends AppCompatActivity {
     EditText nameField, emailField, passwordField, gradeField, ageField;
     Spinner spinnerSubjects, spinnerDay, spinnerTime;
     Button registerBtn;
+    MaterialButton addScheduleButton;
     String userType = "";
     String[] subjects = {"Select Subject", "Math", "Science", "English", "Arabic" };
     String[] days = {"Select Day", "Monday", "Tuesday", "Wednesday", "Thursday", "Sunday"};
@@ -134,6 +136,8 @@ public class RegistrarActivity extends AppCompatActivity {
 
             sendRegistrationRequest(name, email, pass, grade, subject, age, day, time);
         });
+
+
     }
 
     private void sendRegistrationRequest(String name, String email, String password, String grade, String subject, String age, String day, String time) {

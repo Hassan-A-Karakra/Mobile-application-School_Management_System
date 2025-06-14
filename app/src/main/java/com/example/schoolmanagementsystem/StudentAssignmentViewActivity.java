@@ -79,19 +79,22 @@ public class StudentAssignmentViewActivity extends AppCompatActivity {
 
                             for (int i = 0; i < assignments.length(); i++) {
                                 JSONObject jsonObject = assignments.getJSONObject(i);
-                                Assignment assignment = new Assignment();
 
-                                assignment.setId(jsonObject.getInt("id"));
-                                assignment.setTitle(jsonObject.getString("title"));
-                                assignment.setDescription(jsonObject.getString("description"));
-                                assignment.setDueDate(jsonObject.getString("due_date"));
-
+                                int id = jsonObject.getInt("id");
+                                String title = jsonObject.getString("title");
+                                String description = jsonObject.getString("description");
+                                String dueDate = jsonObject.getString("due_date");
+                                String subject = jsonObject.optString("subject", "");
+                                String grade;
                                 if (jsonObject.has("grade") && !jsonObject.isNull("grade")) {
-                                    assignment.setGrade(jsonObject.getString("grade"));
+                                    grade = jsonObject.getString("grade");
                                 } else {
-                                    assignment.setGrade("Not graded yet");
+                                    grade = "Not graded yet";
                                 }
 
+                                // Create Assignment object using the 6-argument constructor
+                                Assignment assignment = new Assignment(id, title, description, dueDate, subject, grade);
+                                
                                 assignmentList.add(assignment);
                             }
 

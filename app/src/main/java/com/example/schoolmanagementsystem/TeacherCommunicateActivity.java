@@ -110,6 +110,7 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
                 response -> {
                     showLoading(false);
                     List<String> grades = new ArrayList<>();
+                    grades.add("Select Class"); // Add default option
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             grades.add(response.getString(i));
@@ -133,11 +134,12 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
 
     private void loadSubjects(String grade) {
         showLoading(true);
-        String url = "http://10.0.2.2/student_system/teacher_get_subjects.php?grade=" + grade;
+        String url = "http://10.0.2.2/student_system/teacher_get_subjects.php"; // Removed grade parameter for now
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     showLoading(false);
                     List<String> subjects = new ArrayList<>();
+                    subjects.add("Select Subject"); // Add default option
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             subjects.add(response.getString(i));
@@ -160,8 +162,19 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
     }
 
     private void loadStudents(String grade) {
-        String selectedSubject = spinnerSubject.getSelectedItem() != null ? 
+        String selectedSubject = spinnerSubject.getSelectedItem() != null ?
             spinnerSubject.getSelectedItem().toString() : "";
+        String selectedGrade = spinnerGrade.getSelectedItem() != null ?
+            spinnerGrade.getSelectedItem().toString() : "";
+
+        // Add validation for default selections
+        if (selectedGrade.equals("Select Class") || selectedSubject.equals("Select Subject")) {
+            studentsContainer.removeAllViews(); // Clear existing students
+            studentCheckboxes.clear();
+            checkBoxSelectAll.setChecked(false);
+            Toast.makeText(this, "Please select both a class and a subject.", Toast.LENGTH_SHORT).show();
+            return;
+        }
             
         if (selectedSubject.isEmpty()) {
             return;
@@ -217,6 +230,17 @@ public class TeacherCommunicateActivity extends AppCompatActivity {
         String title = editTextTitle.getText().toString().trim();
         String message = editTextMessage.getText().toString().trim();
         List<Integer> selectedStudentIds = new ArrayList<>();
+
+        String selectedClass = spinnerGrade.getSelectedItem() != null ?
+            spinnerGrade.getSelectedItem().toString() : "";
+        String selectedSubject = spinnerSubject.getSelectedItem() != null ?
+            spinnerSubject.getSelectedItem().toString() : "";
+
+        // Add validation for default selections
+        if (selectedClass.equals("Select Class") || selectedSubject.equals("Select Subject")) {
+            Toast.makeText(this, "Please select both a class and a subject first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (title.isEmpty()) {
             Toast.makeText(this, "Please enter a title", Toast.LENGTH_SHORT).show();
