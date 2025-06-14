@@ -92,6 +92,7 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
                 API_URL + "teacher_get_grades.php", null,
                 response -> {
                     List<String> grades = new ArrayList<>();
+                    grades.add("Select Class");
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             grades.add(response.getString(i));
@@ -120,6 +121,7 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
                 API_URL + "teacher_get_subjects.php", null,
                 response -> {
                     List<String> subjects = new ArrayList<>();
+                    subjects.add("Select Subject");
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             subjects.add(response.getString(i));
@@ -145,6 +147,12 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
     private void fetchStudents() {
         String selectedGrade = spinnerGrade.getSelectedItem().toString();
         String selectedSubject = spinnerSubject.getSelectedItem().toString();
+
+        // Add validation for selected class and subject
+        if (selectedGrade.equals("Select Class") || selectedSubject.equals("Select Subject")) {
+            Toast.makeText(this, "Please select both a class and a subject.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Log.d("TeacherAttendance", "Selected Grade: " + selectedGrade);
         Log.d("TeacherAttendance", "Selected Subject: " + selectedSubject);
@@ -206,6 +214,14 @@ public class TeacherAttendanceActivity extends AppCompatActivity {
 
     private void saveAttendance() {
         String subject = spinnerSubject.getSelectedItem().toString();
+        String grade = spinnerGrade.getSelectedItem().toString(); // Get grade for validation
+
+        // Add validation for selected class and subject before saving
+        if (subject.equals("Select Subject") || grade.equals("Select Class")) {
+            Toast.makeText(this, "Please select both a class and a subject before submitting.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         JSONObject requestBody = new JSONObject();
         try {
             requestBody.put("subject", subject);

@@ -1,7 +1,6 @@
 package com.example.schoolmanagementsystem;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,9 +27,26 @@ public class RegisterStudentListActivity extends AppCompatActivity {
         adapter = new StudentAdapter(this, studentList);
         recyclerView.setAdapter(adapter);
 
-        Button showStudentsBtn = findViewById(R.id.buttonShowStudents);
-        showStudentsBtn.setOnClickListener(v -> loadStudentData());
+        // Load student data when activity starts
+        loadStudentData();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void loadStudentData() {
         com.android.volley.toolbox.JsonObjectRequest request = new com.android.volley.toolbox.JsonObjectRequest(
@@ -42,18 +58,13 @@ public class RegisterStudentListActivity extends AppCompatActivity {
                             org.json.JSONArray studentsArray = response.getJSONArray("students");
                             for (int i = 0; i < studentsArray.length(); i++) {
                                 JSONObject obj = studentsArray.getJSONObject(i);
-
-                               Student student = new Student(
-                                        obj.getInt("id"),
-                                        obj.getString("name"),
-                                        obj.getString("email"),
-                                        obj.getInt("age")
+                                Student student = new Student(
+                                    obj.getInt("id"),
+                                    obj.getString("name"),
+                                    obj.getString("email"),
+                                    obj.getInt("age")
                                 );
-
-
                                 studentList.add(student);
-
-
                             }
                             adapter.notifyDataSetChanged();
                         } else {
@@ -69,5 +80,4 @@ public class RegisterStudentListActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
-
 }

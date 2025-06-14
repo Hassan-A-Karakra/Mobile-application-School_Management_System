@@ -23,9 +23,9 @@ public class RegistrarActivity extends AppCompatActivity {
     Spinner spinnerSubjects, spinnerDay, spinnerTime;
     Button registerBtn;
     String userType = "";
-    String[] subjects = {"Select Subject", "Math", "Science", "English", "Physics", "Chemistry", "Biology", "History"};
-    String[] days = {"Select Day", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-    String[] times = {"Select Time", "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"};
+    String[] subjects = {"Select Subject", "Math", "Science", "English", "Arabic" };
+    String[] days = {"Select Day", "Monday", "Tuesday", "Wednesday", "Thursday", "Sunday"};
+    String[] times = {"Select Time", "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class RegistrarActivity extends AppCompatActivity {
             userType = "student";
             gradeField.setVisibility(View.VISIBLE);
             ageField.setVisibility(View.VISIBLE);
-            spinnerSubjects.setVisibility(View.GONE);
+            spinnerSubjects.setVisibility(View.VISIBLE);
             spinnerDay.setVisibility(View.GONE);
             spinnerTime.setVisibility(View.GONE);
         });
@@ -89,7 +89,7 @@ public class RegistrarActivity extends AppCompatActivity {
                 subject = spinnerSubjects.getSelectedItem().toString();
                 day = spinnerDay.getSelectedItem().toString();
                 time = spinnerTime.getSelectedItem().toString();
-            } else {
+            } else if (userType.equals("student")) {
                 subject = spinnerSubjects.getSelectedItem().toString();
             }
 
@@ -105,6 +105,11 @@ public class RegistrarActivity extends AppCompatActivity {
 
             if (userType.equals("student") && (grade.isEmpty() || age.isEmpty())) {
                 Toast.makeText(this, "Please enter grade and age", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (userType.equals("student") && (subject.isEmpty() || subject.equals("Select Subject"))) {
+                Toast.makeText(this, "Please select a subject for the student", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -143,10 +148,20 @@ public class RegistrarActivity extends AppCompatActivity {
                         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
                         if (jsonObject.getString("status").equals("success")) {
+                            // Clear all input fields
+                            nameField.setText("");
+                            emailField.setText("");
+                            passwordField.setText("");
+                            gradeField.setText("");
+                            ageField.setText("");
+                            spinnerSubjects.setSelection(0);
+                            spinnerDay.setSelection(0);
+                            spinnerTime.setSelection(0);
+
+                            // Send broadcast to refresh student list
                             if (userType.equals("student")) {
-                                startActivity(new Intent(RegistrarActivity.this, StudentActivity.class));
-                            } else {
-                                startActivity(new Intent(RegistrarActivity.this, TeacherActivity.class));
+                                Intent refreshIntent = new Intent("STUDENT_ADDED");
+                                sendBroadcast(refreshIntent);
                             }
                         }
 
@@ -175,6 +190,7 @@ public class RegistrarActivity extends AppCompatActivity {
                 if (userType.equals("student")) {
                     params.put("grade", grade);
                     params.put("age", age);
+                    params.put("subject", subject);
                 } else {
                     params.put("subject", subject);
                     params.put("day", day);
