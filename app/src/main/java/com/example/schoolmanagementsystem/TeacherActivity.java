@@ -50,7 +50,6 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         // Initialize toolbar and navigation drawer
         setupNavigationDrawer();
 
-        // Initialize buttons
         initializeButtons();
 
         // Set up button click listeners
